@@ -1,0 +1,30 @@
+server:
+    AppVersion: 1.0.0
+    Port: 5001
+    Mode: Development
+    JwtSecretKey: secretkey
+    ReadTimeout: 5
+    WriteTimeout: 5
+    SSL: false
+    CtxDefaultTimeout: 12
+    Debug: true
+
+postgreSQL:
+    Host: localhost
+    Port: 5432
+    User: postgres
+    Password: 123
+    DBName: initia_re
+
+redis:
+    Host: localhost
+    Port: 6379
+    MinIdleConns: 10
+    PoolSize: 10
+    PoolTimeout: 60
+
+auth:
+    JWTSecret: 123456
+    Expire: 3600
+    Issuer: go_demo
+    Audience: go_demo

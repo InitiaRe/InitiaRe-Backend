@@ -1,0 +1,23 @@
+package http
+
+import (
+	"github.com/Ho-Minh/InitiaRe-website/internal/auth"
+
+	"github.com/labstack/echo/v4"
+)
+
+// Map auth routes
+func MapAuthRoutes(authGroup *echo.Group, h auth.Handlers) {
+	authGroup.POST("/sign-up", h.SignUp())
+	authGroup.POST("/sign-in", h.SignIn())
+	// authGroup.POST("/logout", h.Logout())
+	// authGroup.GET("/find", h.FindByName())
+	// authGroup.GET("/all", h.GetUsers())
+	// authGroup.GET("/:user_id", h.GetUserByID())
+	// authGroup.Use(middleware.AuthJWTMiddleware(authUC, cfg))
+	// authGroup.GET("/me", h.GetMe())
+	// authGroup.GET("/token", h.GetCSRFToken())
+	// authGroup.POST("/:user_id/avatar", h.UploadAvatar(), mw.CSRF)
+	// authGroup.PUT("/:user_id", h.Update(), mw.OwnerOrAdminMiddleware(), mw.CSRF)
+	// authGroup.DELETE("/:user_id", h.Delete(), mw.CSRF, mw.RoleBasedAuthMiddleware([]string{"admin"}))
+}

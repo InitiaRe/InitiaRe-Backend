@@ -25,4 +25,9 @@ func main() {
 	// Migrate the schema
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Todo{})
+	db.AutoMigrate(&models.UserInfo{})
+	db.AutoMigrate(&models.Articles{})
+	db.AutoMigrate(&models.Rating{})
+	db.AutoMigrate(&models.Category{})
+	db.AutoMigrate(&models.Status{})
 }

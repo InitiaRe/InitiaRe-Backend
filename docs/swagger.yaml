@@ -1,5 +1,39 @@
 basePath: api/v1
 definitions:
+  github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging:
+    properties:
+      page:
+        type: integer
+      records:
+        items:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+        type: array
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response:
+    properties:
+      category_id:
+        type: integer
+      content:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      id:
+        type: integer
+      publish_date:
+        type: string
+      status_id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response:
     properties:
       email:
@@ -16,6 +50,34 @@ definitions:
         type: string
       user_id:
         type: string
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging:
+    properties:
+      page:
+        type: integer
+      records:
+        items:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+        type: array
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response:
+    properties:
+      category:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging:
     properties:
@@ -61,6 +123,53 @@ info:
   title: InitiaRe API
   version: "1.0"
 paths:
+  /articles:
+    get:
+      consumes:
+      - application/json
+      description: Get list article with paging and filter
+      parameters:
+      - description: Page
+        in: query
+        name: Page
+        required: true
+        type: integer
+      - description: Size
+        in: query
+        name: Size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging'
+      summary: Get list article
+      tags:
+      - Article
+    post:
+      consumes:
+      - application/json
+      description: Create new article
+      parameters:
+      - description: Content
+        in: body
+        name: Content
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+      summary: Create article
+      tags:
+      - Article
   /auth/login:
     post:
       consumes:
@@ -145,7 +254,54 @@ paths:
       summary: Create new user
       tags:
       - Auth
-  /todo:
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: Get list category with paging and filter
+      parameters:
+      - description: Page
+        in: query
+        name: Page
+        required: true
+        type: integer
+      - description: Size
+        in: query
+        name: Size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging'
+      summary: Get list category
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Create new category
+      parameters:
+      - description: Content
+        in: body
+        name: Content
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+      summary: Create category
+      tags:
+      - Category
+  /todos:
     get:
       consumes:
       - application/json

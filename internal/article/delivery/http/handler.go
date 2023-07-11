@@ -8,8 +8,8 @@ import (
 	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
-	"github.com/Ho-Minh/InitiaRe-website/internal/todo/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/todo/usecase"
+	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/article/usecase"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
@@ -32,21 +32,21 @@ func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMid
 }
 
 // Map routes
-func (h Handler) MapRoutes(todoGroup *echo.Group) {
-	todoGroup.POST("", h.Create(), h.mw.AuthJWTMiddleware())
-	todoGroup.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
+func (h Handler) MapRoutes(group *echo.Group) {
+	group.POST("", h.Create(), h.mw.AuthJWTMiddleware())
+	group.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
 //
-//	@Summary		Create todo
-//	@Description	Create new todo
-//	@Tags			Todo
+//	@Summary		Create article
+//	@Description	Create new article
+//	@Tags			Article
 //	@Accept			json
 //	@Produce		json
 //	@Param			Content	body		string	true	"Content"
 //	@Success		201		{object}	models.Response
-//	@Router			/todo [post]
+//	@Router			/article [post]
 func (h Handler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
@@ -71,15 +71,15 @@ func (h Handler) Create() echo.HandlerFunc {
 
 // GetListPaging godoc
 //
-//	@Summary		Get list todo
-//	@Description	Get list todo with paging and filter
-//	@Tags			Todo
+//	@Summary		Get list article
+//	@Description	Get list article with paging and filter
+//	@Tags			Article
 //	@Accept			json
 //	@Produce		json
 //	@Param			Page	query		int	true	"Page"
 //	@Param			Size	query		int	true	"Size"
 //	@Success		200		{object}	models.ListPaging
-//	@Router			/todo [get]
+//	@Router			/article [get]
 func (h Handler) GetListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)

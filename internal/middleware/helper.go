@@ -2,11 +2,8 @@ package middleware
 
 import (
 	"errors"
-	"net/http"
-	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
 
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
@@ -15,36 +12,7 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-// JWT way of auth using Authorization header
-func (mw *MiddlewareManager) AuthJWTMiddleware() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			bearerHeader := c.Request().Header.Get("Authorization")
-
-			if bearerHeader != "" {
-				log.Infof("auth middleware bearerHeader %s", bearerHeader)
-				headerParts := strings.Split(bearerHeader, " ")
-				if len(headerParts) != 2 {
-					log.Errorf("auth middleware: %s", len(headerParts) != 2)
-					return c.JSON(http.StatusOK, httpResponse.NewUnauthorizedError(nil))
-				}
-				tokenString := headerParts[1]
-
-				if err := mw.validateJWTToken(c, tokenString); err != nil {
-					log.Errorf("middleware validateJWTToken: %s", err.Error())
-					return c.JSON(http.StatusUnauthorized, httpResponse.NewUnauthorizedError(nil))
-				}
-
-				return next(c)
-			} else {
-				log.Errorf("Invalid Authorization header")
-				return c.JSON(http.StatusOK, httpResponse.NewUnauthorizedError(nil))
-			}
-		}
-	}
-}
-
-func (mw *MiddlewareManager) validateJWTToken(c echo.Context, tokenString string) error {
+func (mw *middlewareManager) validateJWTToken(c echo.Context, tokenString string) error {
 	if tokenString == "" {
 		return errors.New(constants.STATUS_MESSAGE_INVALID_JWT_TOKEN)
 	}

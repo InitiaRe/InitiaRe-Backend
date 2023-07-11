@@ -3,7 +3,7 @@ package server
 import (
 	_ "github.com/Ho-Minh/InitiaRe-website/docs"
 	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
-	apiMiddlewares "github.com/Ho-Minh/InitiaRe-website/internal/middleware"
+	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
 	initTodo "github.com/Ho-Minh/InitiaRe-website/internal/todo/init"
 
 	"github.com/labstack/echo/v4"
@@ -18,7 +18,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	auth := initAuth.NewInit(s.db, s.cfg, s.redisClient)
 
 	// Init middlewares
-	mw := apiMiddlewares.NewMiddlewareManager(s.cfg, auth.Repository)
+	mw := initMW.NewInit(s.cfg, auth)
 
 	// Init Todo
 	todo := initTodo.NewInit(s.db, s.cfg, mw)
@@ -29,8 +29,8 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	authGroup := v1.Group("/auth")
 	todoGroup := v1.Group("/todo")
 
-	auth.Handler.MapAuthRoutes(authGroup)
-	todo.Handler.MapTodoRoutes(todoGroup)
+	auth.Handler.MapRoutes(authGroup)
+	todo.Handler.MapRoutes(todoGroup)
 
 	if s.cfg.Server.Debug {
 		log.SetLevel(log.DEBUG)

@@ -27,10 +27,10 @@ func NewHandler(cfg *config.Config, usecase usecase.IUseCase) IHandler {
 	}
 }
 
-// Map auth routes
-func (h Handler) MapAuthRoutes(authGroup *echo.Group) {
-	authGroup.POST("/register", h.Register())
-	authGroup.POST("/login", h.Login())
+// Map routes
+func (h Handler) MapRoutes(group *echo.Group) {
+	group.POST("/register", h.Register())
+	group.POST("/login", h.Login())
 }
 
 // Login godoc
@@ -47,18 +47,18 @@ func (h Handler) MapAuthRoutes(authGroup *echo.Group) {
 func (h Handler) Login() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		params := &models.LoginRequest{}
-		if err := utils.ReadBodyRequest(c, params); err != nil {
+		req := &models.LoginRequest{}
+		if err := utils.ReadBodyRequest(c, req); err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
-		userWithToken, err := h.usecase.Login(ctx, params)
+		res, err := h.usecase.Login(ctx, req)
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, "Success", userWithToken))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, "Success", res))
 	}
 }
 
@@ -81,13 +81,13 @@ func (h Handler) Login() echo.HandlerFunc {
 func (h Handler) Register() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		user := &models.SaveRequest{}
-		if err := utils.ReadBodyRequest(c, user); err != nil {
+		req := &models.SaveRequest{}
+		if err := utils.ReadBodyRequest(c, req); err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
-		createdUser, err := h.usecase.Register(ctx, user)
+		res, err := h.usecase.Register(ctx, req)
 		if err != nil {
 			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
 				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
@@ -95,6 +95,6 @@ func (h Handler) Register() echo.HandlerFunc {
 				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 			}
 		}
-		return c.JSON(http.StatusCreated, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, createdUser))
+		return c.JSON(http.StatusCreated, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
 	}
 }

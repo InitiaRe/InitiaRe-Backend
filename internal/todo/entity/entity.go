@@ -11,10 +11,10 @@ import (
 type Todo struct {
 	Id        int       `gorm:"primarykey;column:id" json:"id" redis:"id"`
 	Content   string    `gorm:"column:content" json:"content,omitempty" redis:"content"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at,omitempty" redis:"created_at"`
 	CreatedBy int       `gorm:"column:created_by" json:"created_by,omitempty" redis:"created_by"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime;default:(-)" json:"updated_at,omitempty" redis:"updated_at"`
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at,omitempty" redis:"created_at"`
 	UpdatedBy int       `gorm:"column:update_by;default:(-)" json:"update_by,omitempty" redis:"update_by"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime;default:(-)" json:"updated_at,omitempty" redis:"updated_at"`
 }
 
 func (t *Todo) TableName() string {

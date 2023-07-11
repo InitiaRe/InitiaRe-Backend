@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
 )
 
@@ -24,17 +26,22 @@ func (r *RequestList) ToMap() map[string]interface{} {
 }
 
 type Response struct {
-	Id        int    `json:"id"`
-	Content   string `json:"content,omitempty"`
-	CreatedBy int    `json:"created_by,omitempty"`
-	CreatedAt string `json:"created_at,omitempty"`
-	UpdateBy  int    `json:"update_by,omitempty"`
-	UpdatedAt string `json:"updated_at,omitempty"`
+	Id          int    `json:"id"`
+	CategoryId  int    `json:"category_id"`
+	StatusId    int    `json:"status_id"`
+	Content     string `json:"content"`
+	PublishDate string `json:"publish_date"`
+	CreatedAt   string `json:"created_at"`
+	CreatedBy   int    `json:"created_by"`
+	UpdatedAt   string `json:"updated_at"`
+	UpdatedBy   int    `json:"updated_by"`
 }
 
 type SaveRequest struct {
-	Id      int  `json:"id"`
-	Content string `json:"content"`
+	Id          int       `json:"id"`
+	CategoryId  int       `json:"category_id"`
+	Content     string    `json:"content"`
+	PublishDate time.Time `json:"publish_date"`
 }
 
 type ListPaging struct {

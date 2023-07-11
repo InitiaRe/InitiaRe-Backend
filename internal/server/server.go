@@ -3,13 +3,12 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/Ho-Minh/InitiaRe-website/config"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/Ho-Minh/InitiaRe-website/config"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
@@ -37,13 +36,13 @@ func NewServer(cfg *config.Config, db *gorm.DB, redisClient *redis.Client) *Serv
 func (s *Server) Run() error {
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", s.cfg.Server.Port),
+		Addr:         fmt.Sprintf(":%s", s.cfg.Server.Port),
 		ReadTimeout:  time.Second * s.cfg.Server.ReadTimeout,
 		WriteTimeout: time.Second * s.cfg.Server.WriteTimeout,
 	}
 
 	go func() {
-		log.Infof("Server is listening on PORT: %d", s.cfg.Server.Port)
+		log.Infof("Server is listening on PORT: %v", s.cfg.Server.Port)
 		if err := s.echo.StartServer(server); err != nil {
 			log.Fatalf("Error starting Server: ", err)
 		}

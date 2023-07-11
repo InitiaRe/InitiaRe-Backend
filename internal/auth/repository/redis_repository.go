@@ -5,17 +5,17 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
 )
 
 // Get user by id
-func (a *authRedisRepo) GetByID(ctx context.Context, key string) (*models.User, error) {
+func (r *redisRepo) GetById(ctx context.Context, key string) (*entity.User, error) {
 
-	userBytes, err := a.redisClient.Get(ctx, key).Bytes()
+	userBytes, err := r.redisClient.Get(ctx, key).Bytes()
 	if err != nil {
 		return nil, err
 	}
-	user := &models.User{}
+	user := &entity.User{}
 	if err = json.Unmarshal(userBytes, user); err != nil {
 		return nil, err
 	}
@@ -23,13 +23,13 @@ func (a *authRedisRepo) GetByID(ctx context.Context, key string) (*models.User, 
 }
 
 // Cache user with duration in seconds
-func (a *authRedisRepo) SetUser(ctx context.Context, key string, seconds int, user *models.User) error {
+func (r *redisRepo) SetUser(ctx context.Context, key string, seconds int, user *entity.User) error {
 
 	userBytes, err := json.Marshal(user)
 	if err != nil {
 		return err
 	}
-	if err = a.redisClient.Set(ctx, key, userBytes, (time.Second * time.Duration(seconds))).Err(); err != nil {
+	if err = r.redisClient.Set(ctx, key, userBytes, (time.Second * time.Duration(seconds))).Err(); err != nil {
 		return err
 	}
 	return nil

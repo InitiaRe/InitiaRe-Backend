@@ -1,8 +1,6 @@
 server:
     AppVersion: 1.0.0
-    Port: 5001
     Mode: Development
-    JwtSecretKey: secretkey
     ReadTimeout: 5
     WriteTimeout: 5
     SSL: false
@@ -10,21 +8,23 @@ server:
     Debug: true
 
 postgreSQL:
-    Host: localhost
+    Host: arjuna.db.elephantsql.com
     Port: 5432
-    User: postgres
-    Password: 123
-    DBName: initia_re
+    User: kgpkfsjq
+    Password: RWOBbnsLzIdMdOFB424lbGRxSxiSAZNE
+    DBName: kgpkfsjq
 
 redis:
-    Host: localhost
-    Port: 6379
-    MinIdleConns: 10
+    Host: redis-14027.c1.ap-southeast-1-1.ec2.cloud.redislabs.com
+    Port: 14027
+    DB: 0
+    Username: default
+    Password: gb1ad1PWZbkAPWwrsbLScNNUmGYWtXNI
     PoolSize: 10
-    PoolTimeout: 60
+    PoolTimeout: 30
 
 auth:
-    JWTSecret: 123456
+    JWTSecret: jwt_vukynpro_secret
     Expire: 3600
     Issuer: go_demo
     Audience: go_demo

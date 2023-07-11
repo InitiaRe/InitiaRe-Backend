@@ -3,30 +3,36 @@ package utils
 import (
 	"time"
 
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	"github.com/Ho-Minh/InitiaRe-website/internal/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 
 	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // JWT Claims struct
 type Claims struct {
-	Id    string
+	Id    int
 	Email string
 	jwt.StandardClaims
 }
 
 // Generate new JWT Token
-func GenerateJWTToken(user *models.User, config *config.Config) (string, error) {
+func GenerateJWTToken(user *models.Response, secret string, ttl int) (string, error) {
 	claims := Claims{
-		Id:    user.UserId.String(),
+		Id:    user.Id,
 		Email: user.Email,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+			ExpiresAt: time.Now().Add(time.Second * time.Duration(ttl)).Unix(),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(secret))
+}
 
-	return token.SignedString([]byte(config.Auth.JWTSecret))
+func ComparePasswords(hashedPwd string, plainPwd string) error {
+	if err := bcrypt.CompareHashAndPassword([]byte(hashedPwd), []byte(plainPwd)); err != nil {
+		return err
+	}
+	return nil
 }

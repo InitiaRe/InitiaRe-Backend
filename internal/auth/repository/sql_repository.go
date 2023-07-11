@@ -2,37 +2,66 @@ package repository
 
 import (
 	"context"
-	"time"
+	"fmt"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
+	"github.com/Ho-Minh/InitiaRe-website/pkg/utils/conversion"
 
-	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
-func (a *authRepo) SignUp(ctx context.Context, user *models.User) (int64, error) {
-
-	if user.Birthday.IsZero() {
-		user.Birthday = time.Now().Truncate(24 * time.Hour)
-	}
-
-	if err := a.db.Create(&user).Error; err != nil {
-		return 0, err
-	}
-	return 1, nil
+func (r *repo) dbWithContext(ctx context.Context) *gorm.DB {
+	return r.db.WithContext(ctx)
 }
 
-func (a *authRepo) FindByEmail(ctx context.Context, email string) (*models.User, error) {
-	user := &models.User{}
-	if err := a.db.Where("email = ?", email).Find(&user).Limit(1).Error; err != nil {
-		return nil, err
-	}
-	return user, nil
-}
-
-func (a *authRepo) GetByID(ctx context.Context, userID uuid.UUID) (*models.User, error) {
-	var user models.User
-	if result := a.db.Where("id = ?", userID).First(&user); result.Error != nil {
+func (r *repo) Create(ctx context.Context, obj *entity.User) (*entity.User, error) {
+	result := r.dbWithContext(ctx).Create(obj)
+	if result.Error != nil {
 		return nil, result.Error
 	}
-	return &user, nil
+	return obj, nil
+}
+
+func (r *repo) GetById(ctx context.Context, id int) (*entity.User, error) {
+	record := &entity.User{}
+	result := r.dbWithContext(ctx).Find(&record, id).Limit(1)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return record, nil
+}
+
+func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.User, error) {
+	record := &entity.User{}
+	query := r.initQuery(ctx, queries)
+	result := query.Offset(0).Limit(1).Find(&record)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return record, nil
+}
+
+func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *gorm.DB {
+	query := r.dbWithContext(ctx).Model(&entity.User{})
+	query = r.join(query, queries)
+	query = r.filter(query, queries)
+	return query
+}
+
+func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
+	query = query.Select(
+		"users.*",
+	)
+	return query
+}
+
+func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
+
+	userTbName := (&entity.User{}).TableName()
+	email := conversion.GetFromInterface(queries, "email", "").(string)
+
+	if email != "" {
+		query = query.Where(fmt.Sprintf("%s.email = ?", userTbName), email)
+	}
+	return query
 }

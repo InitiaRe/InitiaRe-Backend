@@ -1,0 +1,59 @@
+package main
+
+import (
+	"fmt"
+
+	"github.com/Ho-Minh/InitiaRe-website/config"
+	articleEntity "github.com/Ho-Minh/InitiaRe-website/internal/article/entity"
+	userEntity "github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
+	categoryEntity "github.com/Ho-Minh/InitiaRe-website/internal/category/entity"
+	"github.com/Ho-Minh/InitiaRe-website/internal/models"
+	todoEntity "github.com/Ho-Minh/InitiaRe-website/internal/todo/entity"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+func main() {
+
+	// Connect to database
+	c := config.GetConfig()
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", c.PostgreSQL.Host, c.PostgreSQL.User, c.PostgreSQL.Password, c.PostgreSQL.DBName, c.PostgreSQL.Port)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	fmt.Println("Connect to database successfully")
+
+	fmt.Println("Run migrate ...")
+	// Migrate the schema
+	db.AutoMigrate(&userEntity.User{})
+	db.AutoMigrate(&todoEntity.Todo{})
+	db.AutoMigrate(&models.UserInfo{})
+	db.AutoMigrate(&articleEntity.Article{})
+	db.AutoMigrate(&models.Rating{})
+	db.AutoMigrate(&categoryEntity.Category{})
+	db.AutoMigrate(&models.Status{})
+	fmt.Println("Migrate successfully")
+
+	fmt.Println("Seeding data ...")
+	// Seeding data
+	seedingCategory(db)
+	fmt.Println("Seeding successfully")
+}
+
+func seedingCategory(db *gorm.DB) {
+	objs := []*categoryEntity.Category{
+		{Id: 1, Category: "Công nghệ thông tin"},
+		{Id: 2, Category: "Kinh tế"},
+		{Id: 3, Category: "Khoa học"},
+		{Id: 4, Category: "Xã hội"},
+	}
+	result := db.Create(&objs)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+}

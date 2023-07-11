@@ -1,20 +1,20 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Example Golang REST API.",
-        "title": "Swagger Clean Architecture API",
+        "description": "InitiaRe REST API.",
+        "title": "InitiaRe API",
         "contact": {
-            "name": "Vu Ky",
-            "url": "https://github.com/vukyn",
-            "email": "vukynpro@gmailcom"
+            "name": "Someone here",
+            "url": "contact.here",
+            "email": "email@here.com"
         },
         "version": "1.0"
     },
     "basePath": "api/v1",
     "paths": {
-        "/auth/sign-in": {
+        "/auth/login": {
             "post": {
-                "description": "Sign in and return token",
+                "description": "Login and return token",
                 "consumes": [
                     "application/json"
                 ],
@@ -24,7 +24,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Sign in",
+                "summary": "Login",
                 "parameters": [
                     {
                         "description": "Email",
@@ -49,15 +49,15 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserWithToken"
                         }
                     }
                 }
             }
         },
-        "/auth/sign-up": {
+        "/auth/register": {
             "post": {
-                "description": "Sign up new user, returns user and token",
+                "description": "Create new user, returns user and token",
                 "consumes": [
                     "application/json"
                 ],
@@ -67,7 +67,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Sign up new user",
+                "summary": "Create new user",
                 "parameters": [
                     {
                         "description": "First name",
@@ -115,16 +115,8 @@
                         }
                     },
                     {
-                        "description": "City",
-                        "name": "City",
-                        "in": "body",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Country",
-                        "name": "Country",
+                        "description": "School",
+                        "name": "School",
                         "in": "body",
                         "schema": {
                             "type": "string"
@@ -143,15 +135,52 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response"
                         }
                     }
                 }
             }
         },
         "/todo": {
+            "get": {
+                "description": "Get list todo with paging and filter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Todo"
+                ],
+                "summary": "Get list todo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "Page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size",
+                        "name": "Size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging"
+                        }
+                    }
+                }
+            },
             "post": {
-                "description": "Create todo handler",
+                "description": "Create new todo",
                 "consumes": [
                     "application/json"
                 ],
@@ -177,7 +206,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.Todo"
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
                         }
                     }
                 }
@@ -185,115 +214,83 @@
         }
     },
     "definitions": {
-        "models.Todo": {
+        "github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response": {
             "type": "object",
-            "required": [
-                "content",
-                "created_at",
-                "created_by"
-            ],
             "properties": {
-                "content": {
-                    "type": "string",
-                    "maxLength": 1024
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "created_by": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "update_by": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/models.User"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.User": {
-            "type": "object",
-            "required": [
-                "first_name",
-                "last_name",
-                "password"
-            ],
-            "properties": {
-                "about": {
-                    "type": "string",
-                    "maxLength": 1024
-                },
-                "address": {
-                    "type": "string",
-                    "maxLength": 250
-                },
-                "avatar": {
-                    "type": "string",
-                    "maxLength": 512
-                },
-                "birthday": {
-                    "type": "string",
-                    "maxLength": 10
-                },
-                "city": {
-                    "type": "string",
-                    "maxLength": 24
-                },
-                "country": {
-                    "type": "string",
-                    "maxLength": 24
-                },
-                "created_at": {
-                    "type": "string"
-                },
                 "email": {
-                    "type": "string",
-                    "maxLength": 60
+                    "type": "string"
                 },
                 "first_name": {
-                    "type": "string",
-                    "maxLength": 30
+                    "type": "string"
                 },
                 "gender": {
-                    "type": "string",
-                    "maxLength": 10
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "last_name": {
-                    "type": "string",
-                    "maxLength": 30
-                },
-                "login_date": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string",
-                    "minLength": 6
-                },
-                "phone_number": {
-                    "type": "string",
-                    "maxLength": 20
-                },
-                "role": {
-                    "type": "string",
-                    "maxLength": 10
-                },
-                "updated_at": {
+                "school": {
                     "type": "string"
                 },
                 "user_id": {
                     "type": "string"
+                }
+            }
+        },
+        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                    }
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "update_by": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserWithToken": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response"
                 }
             }
         }

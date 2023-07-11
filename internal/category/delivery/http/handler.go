@@ -8,8 +8,8 @@ import (
 	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/usecase"
+	"github.com/Ho-Minh/InitiaRe-website/internal/category/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/category/usecase"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
@@ -39,14 +39,14 @@ func (h Handler) MapRoutes(group *echo.Group) {
 
 // Create godoc
 //
-//	@Summary		Create article
-//	@Description	Create new article
-//	@Tags			Article
+//	@Summary		Create category
+//	@Description	Create new category
+//	@Tags			Category
 //	@Accept			json
 //	@Produce		json
 //	@Param			Content	body		string	true	"Content"
 //	@Success		201		{object}	models.Response
-//	@Router			/articles [post]
+//	@Router			/categories [post]
 func (h Handler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
@@ -71,15 +71,15 @@ func (h Handler) Create() echo.HandlerFunc {
 
 // GetListPaging godoc
 //
-//	@Summary		Get list article
-//	@Description	Get list article with paging and filter
-//	@Tags			Article
+//	@Summary		Get list category
+//	@Description	Get list category with paging and filter
+//	@Tags			Category
 //	@Accept			json
 //	@Produce		json
 //	@Param			Page	query		int	true	"Page"
 //	@Param			Size	query		int	true	"Size"
 //	@Success		200		{object}	models.ListPaging
-//	@Router			/articles [get]
+//	@Router			/categories [get]
 func (h Handler) GetListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)

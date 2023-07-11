@@ -6,6 +6,7 @@ import (
 	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
 	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
 	initTodo "github.com/Ho-Minh/InitiaRe-website/internal/todo/init"
+	initCategory "github.com/Ho-Minh/InitiaRe-website/internal/category/init"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
@@ -26,17 +27,22 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 
 	// Init Article
 	article := initArticle.NewInit(s.db, s.cfg, mw)
+	
+	// Init Category
+	category := initCategory.NewInit(s.db, s.cfg, mw)
 
 	v1 := e.Group("/api/v1")
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	authGroup := v1.Group("/auth")
-	todoGroup := v1.Group("/todo")
-	articleGroup := v1.Group("/article")
+	todoGroup := v1.Group("/todos")
+	articleGroup := v1.Group("/articles")
+	categoryGroup := v1.Group("/categories")
 
 	auth.Handler.MapRoutes(authGroup)
 	todo.Handler.MapRoutes(todoGroup)
 	article.Handler.MapRoutes(articleGroup)
+	category.Handler.MapRoutes(categoryGroup)
 
 	if s.cfg.Server.Debug {
 		log.SetLevel(log.DEBUG)

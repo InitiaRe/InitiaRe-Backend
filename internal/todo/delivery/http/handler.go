@@ -46,7 +46,7 @@ func (h Handler) MapRoutes(todoGroup *echo.Group) {
 //	@Produce		json
 //	@Param			Content	body		string	true	"Content"
 //	@Success		201		{object}	models.Response
-//	@Router			/todo [post]
+//	@Router			/todos [post]
 func (h Handler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
@@ -79,7 +79,7 @@ func (h Handler) Create() echo.HandlerFunc {
 //	@Param			Page	query		int	true	"Page"
 //	@Param			Size	query		int	true	"Size"
 //	@Success		200		{object}	models.ListPaging
-//	@Router			/todo [get]
+//	@Router			/todos [get]
 func (h Handler) GetListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)

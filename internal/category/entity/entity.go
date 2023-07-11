@@ -17,7 +17,7 @@ type Category struct {
 }
 
 func (c *Category) TableName() string {
-	return "articles"
+	return "categories"
 }
 
 func (c *Category) Export() *models.Response {

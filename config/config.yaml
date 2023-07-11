@@ -8,18 +8,18 @@ server:
     Debug: true
 
 postgreSQL:
-    Host: 
-    Port:
-    User:
-    Password:
-    DBName:
+    Host: arjuna.db.elephantsql.com
+    Port: 5432
+    User: yvcdxyzf
+    Password: 1galqec--Jgc41gI9pNr6IrP36_CCNVD
+    DBName: yvcdxyzf
 
 redis:
-    Host:
-    Port:
+    Host: redis-14027.c1.ap-southeast-1-1.ec2.cloud.redislabs.com
+    Port: 14027
     DB: 0
-    Username:
-    Password:
+    Username: default
+    Password: gb1ad1PWZbkAPWwrsbLScNNUmGYWtXNI
     PoolSize: 10
     PoolTimeout: 60
 

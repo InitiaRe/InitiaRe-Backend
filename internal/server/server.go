@@ -3,12 +3,13 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/Ho-Minh/InitiaRe-website/config"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/Ho-Minh/InitiaRe-website/config"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
@@ -28,7 +29,6 @@ type Server struct {
 	redisClient *redis.Client
 }
 
-// constructor
 func NewServer(cfg *config.Config, db *gorm.DB, redisClient *redis.Client) *Server {
 	return &Server{echo: echo.New(), cfg: cfg, db: db, redisClient: redisClient}
 }

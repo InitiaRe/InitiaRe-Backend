@@ -34,7 +34,7 @@ type Response struct {
 }
 
 type SaveRequest struct {
-	Id        int64     `json:"id"`
+	Id        int     `json:"id"`
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
 	Email     string    `json:"email"`

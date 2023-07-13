@@ -20,7 +20,6 @@ type usecase struct {
 	redisRepo repository.IRedisRepository
 }
 
-// Constructor
 func NewUseCase(cfg *config.Config, repo repository.IRepository, redisRepo repository.IRedisRepository) IUseCase {
 	return &usecase{
 		cfg:       cfg,

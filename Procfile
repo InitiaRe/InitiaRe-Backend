@@ -1,1 +1,1 @@
-web: go-clean-arch
+web: initiare-website

@@ -17,7 +17,6 @@ type usecase struct {
 	repo repository.IRepository
 }
 
-// Constructor
 func NewUseCase(repo repository.IRepository) IUseCase {
 	return &usecase{
 		repo: repo,

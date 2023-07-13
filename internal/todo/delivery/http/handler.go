@@ -20,10 +20,10 @@ import (
 type Handler struct {
 	cfg     *config.Config
 	usecase usecase.IUseCase
-	mw      *middleware.MiddlewareManager
+	mw      middleware.IMiddlewareManager
 }
 
-func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw *middleware.MiddlewareManager) IHandler {
+func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMiddlewareManager) IHandler {
 	return Handler{
 		cfg:     cfg,
 		usecase: usecase,
@@ -31,8 +31,8 @@ func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw *middleware.Mid
 	}
 }
 
-// Map todo routes
-func (h Handler) MapTodoRoutes(todoGroup *echo.Group) {
+// Map routes
+func (h Handler) MapRoutes(todoGroup *echo.Group) {
 	todoGroup.POST("", h.Create(), h.mw.AuthJWTMiddleware())
 	todoGroup.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
 }
@@ -46,17 +46,17 @@ func (h Handler) MapTodoRoutes(todoGroup *echo.Group) {
 //	@Produce		json
 //	@Param			Content	body		string	true	"Content"
 //	@Success		201		{object}	models.Response
-//	@Router			/todo [post]
+//	@Router			/todos [post]
 func (h Handler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		todo := &models.SaveRequest{}
-		if err := utils.ReadBodyRequest(c, todo); err != nil {
+		req := &models.SaveRequest{}
+		if err := utils.ReadBodyRequest(c, req); err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 		user := c.Get("user").(*userModel.Response)
-		createdTodo, err := h.usecase.Create(ctx, user.Id, todo)
+		res, err := h.usecase.Create(ctx, user.Id, req)
 		if err != nil {
 			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
 				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
@@ -65,7 +65,7 @@ func (h Handler) Create() echo.HandlerFunc {
 			}
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, createdTodo))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
 	}
 }
 
@@ -79,7 +79,7 @@ func (h Handler) Create() echo.HandlerFunc {
 //	@Param			Page	query		int	true	"Page"
 //	@Param			Size	query		int	true	"Size"
 //	@Success		200		{object}	models.ListPaging
-//	@Router			/todo [get]
+//	@Router			/todos [get]
 func (h Handler) GetListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
@@ -89,7 +89,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
-		listTodo, err := h.usecase.GetListPaging(ctx, req)
+		res, err := h.usecase.GetListPaging(ctx, req)
 		if err != nil {
 			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
 				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
@@ -98,6 +98,6 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 			}
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, listTodo))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))
 	}
 }

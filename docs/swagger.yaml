@@ -1,99 +1,180 @@
 basePath: api/v1
 definitions:
-  models.Todo:
+  github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging:
     properties:
+      page:
+        type: integer
+      records:
+        items:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+        type: array
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response:
+    properties:
+      category_id:
+        type: integer
       content:
-        maxLength: 1024
         type: string
       created_at:
         type: string
       created_by:
-        type: string
+        type: integer
       id:
         type: integer
-      update_by:
+      publish_date:
         type: string
+      status_id:
+        type: integer
       updated_at:
         type: string
-      user:
-        $ref: '#/definitions/models.User'
-      user_id:
+      updated_by:
         type: integer
-    required:
-    - content
-    - created_at
-    - created_by
     type: object
-  models.User:
+  github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response:
     properties:
-      about:
-        maxLength: 1024
-        type: string
-      address:
-        maxLength: 250
-        type: string
-      avatar:
-        maxLength: 512
-        type: string
-      birthday:
-        maxLength: 10
-        type: string
-      city:
-        maxLength: 24
-        type: string
-      country:
-        maxLength: 24
-        type: string
-      created_at:
-        type: string
       email:
-        maxLength: 60
         type: string
       first_name:
-        maxLength: 30
         type: string
       gender:
-        maxLength: 10
         type: string
       id:
         type: integer
       last_name:
-        maxLength: 30
         type: string
-      login_date:
-        type: string
-      password:
-        minLength: 6
-        type: string
-      phone_number:
-        maxLength: 20
-        type: string
-      role:
-        maxLength: 10
-        type: string
-      updated_at:
+      school:
         type: string
       user_id:
         type: string
-    required:
-    - first_name
-    - last_name
-    - password
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging:
+    properties:
+      page:
+        type: integer
+      records:
+        items:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+        type: array
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response:
+    properties:
+      category:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      id:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging:
+    properties:
+      page:
+        type: integer
+      records:
+        items:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+        type: array
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      id:
+        type: integer
+      update_by:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  models.UserWithToken:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response'
     type: object
 info:
   contact:
-    email: vukynpro@gmailcom
-    name: Vu Ky
-    url: https://github.com/vukyn
-  description: Example Golang REST API.
-  title: Swagger Clean Architecture API
+    email: email@here.com
+    name: Someone here
+    url: contact.here
+  description: InitiaRe REST API.
+  title: InitiaRe API
   version: "1.0"
 paths:
-  /auth/sign-in:
+  /articles:
+    get:
+      consumes:
+      - application/json
+      description: Get list article with paging and filter
+      parameters:
+      - description: Page
+        in: query
+        name: Page
+        required: true
+        type: integer
+      - description: Size
+        in: query
+        name: Size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging'
+      summary: Get list article
+      tags:
+      - Article
     post:
       consumes:
       - application/json
-      description: Sign in and return token
+      description: Create new article
+      parameters:
+      - description: Content
+        in: body
+        name: Content
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+      summary: Create article
+      tags:
+      - Article
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login and return token
       parameters:
       - description: Email
         in: body
@@ -113,15 +194,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
-      summary: Sign in
+            $ref: '#/definitions/models.UserWithToken'
+      summary: Login
       tags:
       - Auth
-  /auth/sign-up:
+  /auth/register:
     post:
       consumes:
       - application/json
-      description: Sign up new user, returns user and token
+      description: Create new user, returns user and token
       parameters:
       - description: First name
         in: body
@@ -153,14 +234,9 @@ paths:
         required: true
         schema:
           type: string
-      - description: City
+      - description: School
         in: body
-        name: City
-        schema:
-          type: string
-      - description: Country
-        in: body
-        name: Country
+        name: School
         schema:
           type: string
       - description: Gender
@@ -174,15 +250,40 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.User'
-      summary: Sign up new user
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response'
+      summary: Create new user
       tags:
       - Auth
-  /todo:
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: Get list category with paging and filter
+      parameters:
+      - description: Page
+        in: query
+        name: Page
+        required: true
+        type: integer
+      - description: Size
+        in: query
+        name: Size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging'
+      summary: Get list category
+      tags:
+      - Category
     post:
       consumes:
       - application/json
-      description: Create todo handler
+      description: Create new category
       parameters:
       - description: Content
         in: body
@@ -196,7 +297,54 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.Todo'
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+      summary: Create category
+      tags:
+      - Category
+  /todos:
+    get:
+      consumes:
+      - application/json
+      description: Get list todo with paging and filter
+      parameters:
+      - description: Page
+        in: query
+        name: Page
+        required: true
+        type: integer
+      - description: Size
+        in: query
+        name: Size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging'
+      summary: Get list todo
+      tags:
+      - Todo
+    post:
+      consumes:
+      - application/json
+      description: Create new todo
+      parameters:
+      - description: Content
+        in: body
+        name: Content
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
       summary: Create todo
       tags:
       - Todo

@@ -15,11 +15,11 @@ postgreSQL:
     DBName: yvcdxyzf
 
 redis:
-    Host: redis-10954.c252.ap-southeast-1-1.ec2.cloud.redislabs.com
-    Port: 10954
+    Host: redis-15716.c252.ap-southeast-1-1.ec2.cloud.redislabs.com
+    Port: 15716
     DB: 0
     Username: default
-    Password: qj9RWGxmoV09JDAxYwXK1NCIgL0Rnntj
+    Password: cDtQlY5Roe07LvchSQeF1MAygQljA8aj
     PoolSize: 10
     PoolTimeout: 60
 

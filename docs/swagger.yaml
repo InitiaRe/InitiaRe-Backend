@@ -348,4 +348,19 @@ paths:
       summary: Create todo
       tags:
       - Todo
+  /users/me:
+    get:
+      consumes:
+      - application/json
+      description: Get user info by token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response'
+      summary: Get user info
+      tags:
+      - User
 swagger: "2.0"

@@ -11,9 +11,10 @@ import (
 )
 
 type Init struct {
-	Repository repository.IRepository
-	Usecase    usecase.IUseCase
-	Handler    handler.IHandler
+	RedisRepository repository.IRedisRepository
+	Repository      repository.IRepository
+	Usecase         usecase.IUseCase
+	Handler         handler.IHandler
 }
 
 func NewInit(
@@ -26,8 +27,9 @@ func NewInit(
 	usecase := usecase.NewUseCase(cfg, repo, redisRepo)
 	handler := handler.NewHandler(cfg, usecase)
 	return &Init{
-		Repository: repo,
-		Usecase:    usecase,
-		Handler:    handler,
+		RedisRepository: redisRepo,
+		Repository:      repo,
+		Usecase:         usecase,
+		Handler:         handler,
 	}
 }

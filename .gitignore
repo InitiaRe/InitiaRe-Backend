@@ -3,4 +3,4 @@
 *.out
 
 # Ignore config
-config.yaml
+config/config.yaml

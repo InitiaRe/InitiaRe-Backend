@@ -13,13 +13,13 @@ import (
 
 type middlewareManager struct {
 	cfg      *config.Config
-	authRepo authRepo.IRepository
+	authRedisRepo authRepo.IRedisRepository
 }
 
-func NewMiddlewareManager(cfg *config.Config, authRepo authRepo.IRepository) IMiddlewareManager {
+func NewMiddlewareManager(cfg *config.Config, authRedisRepo authRepo.IRedisRepository) IMiddlewareManager {
 	return &middlewareManager{
 		cfg:      cfg,
-		authRepo: authRepo,
+		authRedisRepo: authRedisRepo,
 	}
 }
 

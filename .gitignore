@@ -1,6 +1,22 @@
+# private
 .env
+config/*.yml
+config/*.yaml
+
+# logs
+logs
+logs/*
+tmp
+
+# binaries
 *.exe
 *.out
 
-# Ignore config
-config/config.yaml
+# Test coverage
+*.out
+# Test build
+*.test
+count.txt
+
+# vscode
+.vscode

@@ -42,15 +42,35 @@ func main() {
 	fmt.Println("Seeding data ...")
 	// Seeding data
 	seedingCategory(db)
+	seedingStatus(db)
 	fmt.Println("Seeding successfully")
 }
 
 func seedingCategory(db *gorm.DB) {
 	objs := []*categoryEntity.Category{
-		{Id: 1, Category: "Công nghệ thông tin"},
-		{Id: 2, Category: "Kinh tế"},
-		{Id: 3, Category: "Khoa học"},
-		{Id: 4, Category: "Xã hội"},
+		{Id: 1, Category: "Mathematics"},
+		{Id: 2, Category: "English Literature"},
+		{Id: 3, Category: "Vietnamese Literature"},
+		{Id: 4, Category: "Physics"},
+		{Id: 5, Category: "Chemistry"},
+		{Id: 6, Category: "Biology"},
+		{Id: 7, Category: "Social Study"},
+		{Id: 8, Category: "History"},
+		{Id: 9, Category: "IR & Politics"},
+	}
+	result := db.Create(&objs)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+}
+
+func seedingStatus(db *gorm.DB) {
+	objs := []*models.Status{
+		{Id: 1, Category: "article", StatusName: "Pending"},
+		{Id: 2, Category: "article", StatusName: "Approved"},
+		{Id: 3, Category: "article", StatusName: "Hidden"},
+		{Id: 1, Category: "user", StatusName: "Active"},
+		{Id: 2, Category: "user", StatusName: "Inactive"},
 	}
 	result := db.Create(&objs)
 	if result.Error != nil {

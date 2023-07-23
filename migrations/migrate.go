@@ -12,6 +12,7 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func main() {
@@ -21,7 +22,9 @@ func main() {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", c.PostgreSQL.Host, c.PostgreSQL.User, c.PostgreSQL.Password, c.PostgreSQL.DBName, c.PostgreSQL.Port)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Error),
+	})
 	if err != nil {
 		panic("failed to connect database")
 	}
@@ -42,15 +45,35 @@ func main() {
 	fmt.Println("Seeding data ...")
 	// Seeding data
 	seedingCategory(db)
+	seedingStatus(db)
 	fmt.Println("Seeding successfully")
 }
 
 func seedingCategory(db *gorm.DB) {
 	objs := []*categoryEntity.Category{
-		{Id: 1, Category: "Công nghệ thông tin"},
-		{Id: 2, Category: "Kinh tế"},
-		{Id: 3, Category: "Khoa học"},
-		{Id: 4, Category: "Xã hội"},
+		{Category: "Mathematics"},
+		{Category: "English Literature"},
+		{Category: "Vietnamese Literature"},
+		{Category: "Physics"},
+		{Category: "Chemistry"},
+		{Category: "Biology"},
+		{Category: "Social Study"},
+		{Category: "History"},
+		{Category: "IR & Politics"},
+	}
+	result := db.Create(&objs)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+}
+
+func seedingStatus(db *gorm.DB) {
+	objs := []*models.Status{
+		{Category: "article", StatusName: "Pending"},
+		{Category: "article", StatusName: "Approved"},
+		{Category: "article", StatusName: "Hidden"},
+		{Category: "user", StatusName: "Active"},
+		{Category: "user", StatusName: "Inactive"},
 	}
 	result := db.Create(&objs)
 	if result.Error != nil {

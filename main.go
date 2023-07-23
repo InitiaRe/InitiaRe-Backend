@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"os"
 	"time"
@@ -25,7 +26,7 @@ import (
 //	@contact.url	contact.here
 //	@contact.email	email@here.com
 
-//	@BasePath	api/v1
+// @BasePath	api/v1
 func main() {
 	log.Info("Starting api server")
 
@@ -74,6 +75,7 @@ func main() {
 		DB:          cfg.Redis.DB,
 		PoolSize:    cfg.Redis.PoolSize,
 		PoolTimeout: time.Duration(cfg.Redis.PoolTimeout) * time.Second,
+		TLSConfig:   &tls.Config{MinVersion: tls.VersionTLS12},
 	})
 	defer redisClient.Close()
 

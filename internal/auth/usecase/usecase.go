@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
@@ -26,14 +25,6 @@ func NewUseCase(cfg *config.Config, repo repository.IRepository, redisRepo repos
 		repo:      repo,
 		redisRepo: redisRepo,
 	}
-}
-
-const (
-	basePrefix = "api-auth"
-)
-
-func (u *usecase) GenerateUserKey(userId int) string {
-	return fmt.Sprintf("%s: %d", basePrefix, userId)
 }
 
 func (u *usecase) Register(ctx context.Context, params *models.SaveRequest) (*models.Response, error) {
@@ -104,7 +95,7 @@ func (u *usecase) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	}
 
 	// save to cache
-	if err = u.redisRepo.SetUser(ctx, u.GenerateUserKey(foundUser.Id), u.cfg.Auth.Expire, foundUser); err != nil {
+	if err = u.redisRepo.SetUser(ctx, utils.GenerateUserKey(foundUser.Id), u.cfg.Auth.Expire, foundUser); err != nil {
 		log.Errorf("usecase.redisRepo.SetUser: %v", err)
 		return nil, err
 	}

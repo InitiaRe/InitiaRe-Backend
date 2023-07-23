@@ -4,12 +4,13 @@ import (
 	_ "github.com/Ho-Minh/InitiaRe-website/docs"
 	initArticle "github.com/Ho-Minh/InitiaRe-website/internal/article/init"
 	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
+	initCategory "github.com/Ho-Minh/InitiaRe-website/internal/category/init"
 	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
 	initTodo "github.com/Ho-Minh/InitiaRe-website/internal/todo/init"
-	initCategory "github.com/Ho-Minh/InitiaRe-website/internal/category/init"
 	initUser "github.com/Ho-Minh/InitiaRe-website/internal/user/init"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
@@ -28,21 +29,28 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 
 	// Init Article
 	article := initArticle.NewInit(s.db, s.cfg, mw)
-	
+
 	// Init Category
 	category := initCategory.NewInit(s.db, s.cfg, mw)
 
 	// Init User
 	user := initUser.NewInit(s.db, s.cfg, mw)
 
-	v1 := e.Group("/api/v1")
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
+	// Enable cors
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.PUT, echo.POST},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
+	// Group api paths
+	v1 := e.Group("/api/v1")
 	authGroup := v1.Group("/auth")
 	todoGroup := v1.Group("/todos")
 	articleGroup := v1.Group("/articles")
 	categoryGroup := v1.Group("/categories")
 	userGroup := v1.Group("/users")
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	auth.Handler.MapRoutes(authGroup)
 	todo.Handler.MapRoutes(todoGroup)

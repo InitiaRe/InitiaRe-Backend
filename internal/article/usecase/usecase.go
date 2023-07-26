@@ -59,10 +59,10 @@ func (u *usecase) GetOne(ctx context.Context, params *models.RequestList) (*mode
 }
 
 func (u *usecase) Create(ctx context.Context, userId int, params *models.SaveRequest) (*models.Response, error) {
-	artical := &entity.Article{}
-	artical.ParseForCreate(params, userId)
-	res, err := u.repo.Create(ctx, artical)
-	if res != nil {
+	article := &entity.Article{}
+	article.ParseForCreate(params, userId)
+	res, err := u.repo.Create(ctx, article)
+	if err != nil {
 		log.Error("Create single artical error", err)
 		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "error when create article")
 	}

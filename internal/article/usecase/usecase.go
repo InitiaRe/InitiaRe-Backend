@@ -63,7 +63,7 @@ func (u *usecase) Create(ctx context.Context, userId int, params *models.SaveReq
 	article.ParseForCreate(params, userId)
 	res, err := u.repo.Create(ctx, article)
 	if err != nil {
-		log.Error("Create single artical error", err)
+		log.Errorf("usecase.repo.Create: %v", err)
 		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when create article")
 	}
 

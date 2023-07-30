@@ -26,7 +26,11 @@ import (
 //	@contact.url	contact.here
 //	@contact.email	email@here.com
 
-// @BasePath	api/v1
+//	@securityDefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
+
+//	@BasePath	/api/v1
 func main() {
 	log.Info("Starting api server")
 

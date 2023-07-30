@@ -37,8 +37,8 @@ func (s *Server) Run() error {
 
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%s", s.cfg.Server.Port),
-		ReadTimeout:  time.Second * s.cfg.Server.ReadTimeout,
-		WriteTimeout: time.Second * s.cfg.Server.WriteTimeout,
+		ReadTimeout:  time.Second * time.Duration(s.cfg.Server.ReadTimeout),
+		WriteTimeout: time.Second * time.Duration(s.cfg.Server.WriteTimeout),
 	}
 
 	go func() {

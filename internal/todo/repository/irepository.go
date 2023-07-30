@@ -16,4 +16,6 @@ type IRepository interface {
 	GetList(ctx context.Context, queries map[string]interface{}) ([]*entity.Todo, error)
 	GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Todo, error)
 	Count(ctx context.Context, queries map[string]interface{}) (int, error)
+	Delete(ctx context.Context, id int) (int, error)
+	DeleteMany(ctx context.Context, ids []int) (int, error)
 }

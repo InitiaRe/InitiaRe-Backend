@@ -2,6 +2,7 @@ package models
 
 import (
 	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
+	"github.com/jinzhu/copier"
 )
 
 type RequestList struct {
@@ -33,8 +34,29 @@ type Response struct {
 }
 
 type SaveRequest struct {
-	Id      int  `json:"id"`
+	Id      int    `json:"id"`
 	Content string `json:"content"`
+}
+
+type CreateRequest struct {
+	Content string `json:"content"`
+}
+
+func (r *CreateRequest) ToSaveRequest() *SaveRequest {
+	req := &SaveRequest{}
+	copier.Copy(req, r)
+	return req
+}
+
+type UpdateRequest struct {
+	Content string `json:"content"`
+}
+
+func (r *UpdateRequest) ToSaveRequest(id int) *SaveRequest {
+	req := &SaveRequest{}
+	copier.Copy(req, r)
+	req.Id = id
+	return req
 }
 
 type ListPaging struct {

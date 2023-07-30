@@ -90,7 +90,7 @@ func (u *usecase) CreateMany(ctx context.Context, userId int, params []*models.S
 	objs := (&entity.Todo{}).ParseForCreateMany(params, userId)
 	res, err := u.repo.CreateMany(ctx, objs)
 	if err != nil {
-		log.Errorf("usecase.repo.Create: %v", err)
+		log.Errorf("usecase.repo.CreateMany: %v", err)
 		return 0, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when create todo")
 	}
 	return res, nil
@@ -111,8 +111,26 @@ func (u *usecase) UpdateMany(ctx context.Context, userId int, params []*models.S
 	objs := (&entity.Todo{}).ParseForUpdateMany(params, userId)
 	res, err := u.repo.UpdateMany(ctx, objs)
 	if err != nil {
-		log.Errorf("usecase.repo.Update: %v", err)
+		log.Errorf("usecase.repo.UpdateMany: %v", err)
 		return 0, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when update todo")
+	}
+	return res, nil
+}
+
+func (u *usecase) Delete(ctx context.Context, id int) (int, error) {
+	res, err := u.repo.Delete(ctx, id)
+	if err != nil {
+		log.Errorf("usecase.repo.Delete: %v", err)
+		return 0, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when delete todo")
+	}
+	return res, nil
+}
+
+func (u *usecase) DeleteMany(ctx context.Context, ids []int) (int, error) {
+	res, err := u.repo.DeleteMany(ctx, ids)
+	if err != nil {
+		log.Errorf("usecase.repo.DeleteMany: %v", err)
+		return 0, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when delete todo")
 	}
 	return res, nil
 }

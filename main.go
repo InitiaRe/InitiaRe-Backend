@@ -3,12 +3,10 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/internal/server"
-	"github.com/joho/godotenv"
 
 	"github.com/labstack/gommon/log"
 	"github.com/redis/go-redis/v9"
@@ -29,22 +27,7 @@ import (
 // @BasePath	api/v1
 func main() {
 	log.Info("Starting api server")
-
 	cfg := config.GetConfig()
-
-	port := os.Getenv("PORT")
-	// Get port from .env file in case of running locally
-	if port == "" {
-		err := godotenv.Load(".env")
-		if err != nil {
-			panic(err.Error())
-		}
-		port = os.Getenv("PORT")
-		if port == "" {
-			log.Fatal("$PORT must be set")
-		}
-	}
-	cfg.Server.Port = port
 
 	// Init Logger
 	newLogger := logger.New(
@@ -78,7 +61,7 @@ func main() {
 		TLSConfig:   &tls.Config{MinVersion: tls.VersionTLS12},
 	})
 	defer redisClient.Close()
-
+	
 	s := server.NewServer(cfg, db, redisClient)
 	if err = s.Run(); err != nil {
 		log.Fatal(err)

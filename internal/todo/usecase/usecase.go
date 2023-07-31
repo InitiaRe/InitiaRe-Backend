@@ -97,6 +97,9 @@ func (u *usecase) CreateMany(ctx context.Context, userId int, params []*models.S
 }
 
 func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveRequest) (*models.Response, error) {
+	if err := u.validateBeforeUpdate(ctx, params.Id); err != nil {
+		return nil, err
+	}
 	obj := &entity.Todo{}
 	obj.ParseForUpdate(params, userId)
 	res, err := u.repo.Update(ctx, obj)
@@ -108,6 +111,11 @@ func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveReq
 }
 
 func (u *usecase) UpdateMany(ctx context.Context, userId int, params []*models.SaveRequest) (int, error) {
+	for _, p := range params {
+		if err := u.validateBeforeUpdate(ctx, p.Id); err != nil {
+			return 0, err
+		}
+	}
 	objs := (&entity.Todo{}).ParseForUpdateMany(params, userId)
 	res, err := u.repo.UpdateMany(ctx, objs)
 	if err != nil {
@@ -118,6 +126,9 @@ func (u *usecase) UpdateMany(ctx context.Context, userId int, params []*models.S
 }
 
 func (u *usecase) Delete(ctx context.Context, id int) (int, error) {
+	if err := u.validateBeforeUpdate(ctx, id); err != nil {
+		return 0, err
+	}
 	res, err := u.repo.Delete(ctx, id)
 	if err != nil {
 		log.Errorf("usecase.repo.Delete: %v", err)
@@ -127,10 +138,39 @@ func (u *usecase) Delete(ctx context.Context, id int) (int, error) {
 }
 
 func (u *usecase) DeleteMany(ctx context.Context, ids []int) (int, error) {
+	for _, id := range ids {
+		if err := u.validateBeforeUpdate(ctx, id); err != nil {
+			return 0, err
+		}
+	}
 	res, err := u.repo.DeleteMany(ctx, ids)
 	if err != nil {
 		log.Errorf("usecase.repo.DeleteMany: %v", err)
 		return 0, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when delete todo")
 	}
 	return res, nil
+}
+
+func (u *usecase) validateBeforeUpdate(ctx context.Context, id int) error {
+	record, err := u.repo.GetById(ctx, id)
+	if err != nil {
+		log.Errorf("usecase.repo.GetById: %v", err)
+		return utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when get todo")
+	}
+	if record.Id == 0 {
+		return utils.NewError(constants.STATUS_CODE_NOT_FOUND, "Todo not found")
+	}
+	return nil
+}
+
+func (u *usecase) validateBeforeDelete(ctx context.Context, id int) error {
+	record, err := u.repo.GetById(ctx, id)
+	if err != nil {
+		log.Errorf("usecase.repo.GetById: %v", err)
+		return utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when get todo")
+	}
+	if record.Id == 0 {
+		return utils.NewError(constants.STATUS_CODE_NOT_FOUND, "Todo not found")
+	}
+	return nil
 }

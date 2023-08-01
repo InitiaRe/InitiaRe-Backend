@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
+	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/internal/todo/entity"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils/conversion"
 
@@ -132,8 +132,8 @@ func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*
 func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Todo, error) {
 	records := []*entity.Todo{}
 
-	page := conversion.GetFromInterface(queries, "page", constants.DEFAULT_PAGE).(int)
-	size := conversion.GetFromInterface(queries, "size", constants.DEFAULT_SIZE).(int)
+	page := conversion.GetFromInterface(queries, "page", constant.DEFAULT_PAGE).(int)
+	size := conversion.GetFromInterface(queries, "size", constant.DEFAULT_SIZE).(int)
 
 	query := r.initQuery(ctx, queries)
 
@@ -161,7 +161,7 @@ func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	sortBy := conversion.GetFromInterface(queries, "sort_by", "").(string)
-	orderBy := conversion.GetFromInterface(queries, "order_by", constants.DEFAULT_SORT_ORDER).(string)
+	orderBy := conversion.GetFromInterface(queries, "order_by", constant.DEFAULT_SORT_ORDER).(string)
 
 	switch sortBy {
 	default:

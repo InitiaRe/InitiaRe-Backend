@@ -8,17 +8,17 @@ import (
 	authRepo "github.com/Ho-Minh/InitiaRe-website/internal/auth/repository"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
+	"github.com/rs/zerolog/log"
 )
 
 type middlewareManager struct {
-	cfg      *config.Config
+	cfg           *config.Config
 	authRedisRepo authRepo.IRedisRepository
 }
 
 func NewMiddlewareManager(cfg *config.Config, authRedisRepo authRepo.IRedisRepository) IMiddlewareManager {
 	return &middlewareManager{
-		cfg:      cfg,
+		cfg:           cfg,
 		authRedisRepo: authRedisRepo,
 	}
 }
@@ -30,22 +30,22 @@ func (mw *middlewareManager) AuthJWTMiddleware() echo.MiddlewareFunc {
 			bearerHeader := c.Request().Header.Get("Authorization")
 
 			if bearerHeader != "" {
-				log.Infof("auth middleware bearerHeader %s", bearerHeader)
+				// log.Info().Msgf("Middleware bearerHeader: %s", bearerHeader)
 				headerParts := strings.Split(bearerHeader, " ")
 				if len(headerParts) != 2 {
-					log.Errorf("auth middleware: length header invalid")
+					log.Error().Msg("auth middleware: length header invalid")
 					return c.JSON(http.StatusOK, httpResponse.NewUnauthorizedError(nil))
 				}
 				tokenString := headerParts[1]
 
 				if err := mw.validateJWTToken(c, tokenString); err != nil {
-					log.Errorf("middleware validateJWTToken: %s", err.Error())
+					log.Error().Err(err).Str("service", "mw.validateJWTToken").Send()
 					return c.JSON(http.StatusUnauthorized, httpResponse.NewUnauthorizedError(nil))
 				}
 
 				return next(c)
 			} else {
-				log.Errorf("Invalid Authorization header")
+				log.Error().Msg("Invalid Authorization header")
 				return c.JSON(http.StatusOK, httpResponse.NewUnauthorizedError(nil))
 			}
 		}

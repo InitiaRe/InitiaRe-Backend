@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	articleEntity "github.com/Ho-Minh/InitiaRe-website/internal/article/entity"
@@ -9,6 +10,8 @@ import (
 	categoryEntity "github.com/Ho-Minh/InitiaRe-website/internal/category/entity"
 	"github.com/Ho-Minh/InitiaRe-website/internal/models"
 	todoEntity "github.com/Ho-Minh/InitiaRe-website/internal/todo/entity"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -17,21 +20,27 @@ import (
 
 func main() {
 
+	// Init log
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
 	// Connect to database
 	c := config.GetConfig()
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", c.PostgreSQL.Host, c.PostgreSQL.User, c.PostgreSQL.Password, c.PostgreSQL.DBName, c.PostgreSQL.Port)
 
+	log.Info().Msg("Connect to database ...")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Error),
 	})
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatal().Msg("failed to connect database")
 	}
 
-	fmt.Println("Connect to database successfully")
+	log.Info().Msg("Connect to database successfully")
 
-	fmt.Println("Run migrate ...")
+	log.Info().Msg("Run migrate ...")
 	// Migrate the schema
 	db.AutoMigrate(&userEntity.User{})
 	db.AutoMigrate(&todoEntity.Todo{})
@@ -40,13 +49,13 @@ func main() {
 	db.AutoMigrate(&models.Rating{})
 	db.AutoMigrate(&categoryEntity.Category{})
 	db.AutoMigrate(&models.Status{})
-	fmt.Println("Migrate successfully")
+	log.Info().Msg("Migrate successfully")
 
-	fmt.Println("Seeding data ...")
+	log.Info().Msg("Seeding data ...")
 	// Seeding data
 	seedingCategory(db)
 	seedingStatus(db)
-	fmt.Println("Seeding successfully")
+	log.Info().Msg("Seeding successfully")
 }
 
 func seedingCategory(db *gorm.DB) {
@@ -63,7 +72,7 @@ func seedingCategory(db *gorm.DB) {
 	}
 	result := db.Create(&objs)
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Fatal().Msg(result.Error.Error())
 	}
 }
 
@@ -77,6 +86,6 @@ func seedingStatus(db *gorm.DB) {
 	}
 	result := db.Create(&objs)
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Fatal().Msg(result.Error.Error())
 	}
 }

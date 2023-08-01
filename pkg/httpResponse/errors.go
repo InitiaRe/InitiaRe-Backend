@@ -93,6 +93,15 @@ func NewInternalServerError(cause interface{}) RestErr {
 	return result
 }
 
+func NewRequestTimeoutError(cause interface{}) RestErr {
+	result := RestError{
+		ErrStatus: http.StatusRequestTimeout,
+		ErrError:  constants.STATUS_CODE_REQUEST_TIMEOUT,
+		ErrCause:  cause,
+	}
+	return result
+}
+
 func ParseError(err error) RestErr {
 	if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
 		return NewBadRequestError(utils.GetErrorMessage(err))
@@ -105,6 +114,9 @@ func ParseError(err error) RestErr {
 	}
 	if strings.Contains(err.Error(), constants.STATUS_CODE_FORBIDDEN) {
 		return NewForbiddenError(utils.GetErrorMessage(err))
+	}
+	if strings.Contains(err.Error(), constants.STATUS_CODE_REQUEST_TIMEOUT) {
+		return NewRequestTimeoutError(utils.GetErrorMessage(err))
 	}
 	return NewInternalServerError(utils.GetErrorMessage(err))
 }

@@ -2,14 +2,13 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
+	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/article/usecase"
 	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/usecase"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
@@ -58,11 +57,7 @@ func (h Handler) Create() echo.HandlerFunc {
 		user := c.Get("user").(*userModel.Response)
 		res, err := h.usecase.Create(ctx, user.Id, req)
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
@@ -91,11 +86,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 
 		res, err := h.usecase.GetListPaging(ctx, req)
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))

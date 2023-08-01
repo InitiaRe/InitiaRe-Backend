@@ -34,7 +34,7 @@ func (r *repo) GetById(ctx context.Context, id int) (*entity.User, error) {
 func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.User, error) {
 	record := &entity.User{}
 	query := r.initQuery(ctx, queries)
-	result := query.Offset(0).Limit(1).Find(&record)
+	result := query.Limit(1).Find(&record)
 	if result.Error != nil {
 		return nil, result.Error
 	}

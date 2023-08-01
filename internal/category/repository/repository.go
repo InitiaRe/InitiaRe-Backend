@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 	"github.com/Ho-Minh/InitiaRe-website/internal/category/entity"
+	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils/conversion"
 
 	"gorm.io/gorm"
@@ -73,7 +73,7 @@ func (r *repo) GetById(ctx context.Context, id int) (*entity.Category, error) {
 func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.Category, error) {
 	record := &entity.Category{}
 	query := r.initQuery(ctx, queries)
-	result := query.Offset(0).Limit(1).Find(&record)
+	result := query.Limit(1).Find(&record)
 	if result.Error != nil {
 		return nil, result.Error
 	}

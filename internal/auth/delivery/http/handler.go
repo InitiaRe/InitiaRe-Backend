@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
@@ -82,12 +81,9 @@ func (h Handler) Register() echo.HandlerFunc {
 
 		res, err := h.usecase.Register(ctx, req.ToSaveRequest())
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
+
 		return c.JSON(http.StatusCreated, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
 	}
 }

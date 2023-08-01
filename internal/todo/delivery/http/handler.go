@@ -3,7 +3,6 @@ package handler
 import (
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
@@ -62,11 +61,7 @@ func (h Handler) Create() echo.HandlerFunc {
 		user := c.Get("user").(*userModel.Response)
 		res, err := h.usecase.Create(ctx, user.Id, req.ToSaveRequest())
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
@@ -101,11 +96,7 @@ func (h Handler) Update() echo.HandlerFunc {
 		}
 		res, err := h.usecase.Update(ctx, user.Id, req.ToSaveRequest(id))
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))
@@ -131,13 +122,9 @@ func (h Handler) Delete() echo.HandlerFunc {
 			log.Error(err)
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
-		res, err := h.usecase.Delete(ctx,id)
+		res, err := h.usecase.Delete(ctx, id)
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))
@@ -166,11 +153,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 
 		res, err := h.usecase.GetListPaging(ctx, req)
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))

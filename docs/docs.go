@@ -22,11 +22,6 @@ const docTemplate = `{
     "paths": {
         "/articles": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get list article with paging and filter",
                 "consumes": [
                     "application/json"
@@ -654,6 +649,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "last_name": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 },
                 "school": {

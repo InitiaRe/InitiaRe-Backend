@@ -139,6 +139,8 @@ definitions:
         type: string
       last_name:
         type: string
+      password:
+        type: string
       school:
         type: string
     type: object
@@ -186,8 +188,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging'
-      security:
-      - ApiKeyAuth: []
       summary: Get list article
       tags:
       - Article

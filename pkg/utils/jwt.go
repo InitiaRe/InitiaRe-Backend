@@ -30,7 +30,7 @@ func GenerateJWTToken(user *models.Response, secret string, ttl int) (string, er
 	return token.SignedString([]byte(secret))
 }
 
-func ComparePasswords(hashedPwd string, plainPwd string) error {
+func ComparePassword(hashedPwd string, plainPwd string) error {
 	if err := bcrypt.CompareHashAndPassword([]byte(hashedPwd), []byte(plainPwd)); err != nil {
 		return err
 	}

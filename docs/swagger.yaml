@@ -1,5 +1,10 @@
-basePath: api/v1
+basePath: /api/v1
 definitions:
+  github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest:
+    properties:
+      content:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging:
     properties:
       page:
@@ -51,6 +56,11 @@ definitions:
       user_id:
         type: string
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest:
+    properties:
+      category:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging:
     properties:
       page:
@@ -79,6 +89,11 @@ definitions:
       updated_by:
         type: integer
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest:
+    properties:
+      content:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging:
     properties:
       page:
@@ -105,6 +120,31 @@ definitions:
       update_by:
         type: integer
       updated_at:
+        type: string
+    type: object
+  models.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.RegisterRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      last_name:
+        type: string
+      school:
+        type: string
+    type: object
+  models.UpdateRequest:
+    properties:
+      content:
         type: string
     type: object
   models.UserWithToken:
@@ -146,6 +186,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging'
+      security:
+      - ApiKeyAuth: []
       summary: Get list article
       tags:
       - Article
@@ -154,12 +196,12 @@ paths:
       - application/json
       description: Create new article
       parameters:
-      - description: Content
+      - description: body
         in: body
-        name: Content
+        name: body
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest'
       produces:
       - application/json
       responses:
@@ -167,6 +209,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Create article
       tags:
       - Article
@@ -176,18 +220,12 @@ paths:
       - application/json
       description: Login and return token
       parameters:
-      - description: Email
+      - description: body
         in: body
-        name: Email
+        name: body
         required: true
         schema:
-          type: string
-      - description: Password
-        in: body
-        name: Password
-        required: true
-        schema:
-          type: string
+          $ref: '#/definitions/models.LoginRequest'
       produces:
       - application/json
       responses:
@@ -204,46 +242,12 @@ paths:
       - application/json
       description: Create new user, returns user and token
       parameters:
-      - description: First name
+      - description: body
         in: body
-        name: FirstName
+        name: body
         required: true
         schema:
-          type: string
-      - description: Last name
-        in: body
-        name: LastName
-        required: true
-        schema:
-          type: string
-      - description: Email
-        in: body
-        name: Email
-        required: true
-        schema:
-          type: string
-      - description: Password
-        in: body
-        name: Password
-        required: true
-        schema:
-          type: string
-      - description: Gender
-        in: body
-        name: Gender
-        required: true
-        schema:
-          type: string
-      - description: School
-        in: body
-        name: School
-        schema:
-          type: string
-      - description: Gender
-        in: body
-        name: Birthday
-        schema:
-          type: string
+          $ref: '#/definitions/models.RegisterRequest'
       produces:
       - application/json
       responses:
@@ -277,6 +281,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging'
+      security:
+      - ApiKeyAuth: []
       summary: Get list category
       tags:
       - Category
@@ -285,12 +291,12 @@ paths:
       - application/json
       description: Create new category
       parameters:
-      - description: Content
+      - description: body
         in: body
-        name: Content
+        name: body
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest'
       produces:
       - application/json
       responses:
@@ -298,6 +304,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Create category
       tags:
       - Category
@@ -324,6 +332,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging'
+      security:
+      - ApiKeyAuth: []
       summary: Get list todo
       tags:
       - Todo
@@ -332,12 +342,12 @@ paths:
       - application/json
       description: Create new todo
       parameters:
-      - description: Content
+      - description: body
         in: body
-        name: Content
+        name: body
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest'
       produces:
       - application/json
       responses:
@@ -345,7 +355,60 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Create todo
+      tags:
+      - Todo
+  /todos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete todo
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete todo
+      tags:
+      - Todo
+    put:
+      consumes:
+      - application/json
+      description: Update todo
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update todo
       tags:
       - Todo
   /users/me:
@@ -360,7 +423,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Get user info
       tags:
       - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

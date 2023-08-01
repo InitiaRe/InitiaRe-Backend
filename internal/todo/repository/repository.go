@@ -46,11 +46,51 @@ func (r *repo) Update(ctx context.Context, obj *entity.Todo) (*entity.Todo, erro
 }
 
 func (r *repo) UpdateMany(ctx context.Context, objs []*entity.Todo) (int, error) {
-	result := r.db.Updates(objs)
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	for _, v := range objs {
+		if err := tx.Updates(v).Error; err != nil {
+			tx.Rollback()
+			return 0, err
+		}
+	}
+	if err := tx.Commit().Error; err != nil {
+		return 0, err
+	}
+
+	return len(objs), nil
+}
+
+func (r *repo) Delete(ctx context.Context, id int) (int, error) {
+	result := r.db.Delete(&entity.Todo{}, id)
 	if result.Error != nil {
 		return 0, result.Error
 	}
 	return int(result.RowsAffected), nil
+}
+
+func (r *repo) DeleteMany(ctx context.Context, ids []int) (int, error) {
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	for _, id := range ids {
+		if err := tx.Delete(&entity.Todo{}, id).Error; err != nil {
+			tx.Rollback()
+			return 0, err
+		}
+	}
+	if err := tx.Commit().Error; err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
 }
 
 func (r *repo) Count(ctx context.Context, queries map[string]interface{}) (int, error) {
@@ -73,7 +113,7 @@ func (r *repo) GetById(ctx context.Context, id int) (*entity.Todo, error) {
 func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.Todo, error) {
 	record := &entity.Todo{}
 	query := r.initQuery(ctx, queries)
-	result := query.Offset(0).Limit(1).Find(&record)
+	result := query.Limit(1).Find(&record)
 	if result.Error != nil {
 		return nil, result.Error
 	}

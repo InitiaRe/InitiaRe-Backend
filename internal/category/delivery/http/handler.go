@@ -2,14 +2,13 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
-	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
 	"github.com/Ho-Minh/InitiaRe-website/internal/category/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/category/usecase"
+	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
+	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
@@ -39,30 +38,27 @@ func (h Handler) MapRoutes(group *echo.Group) {
 
 // Create godoc
 //
+//	@Security		ApiKeyAuth
 //	@Summary		Create category
 //	@Description	Create new category
 //	@Tags			Category
 //	@Accept			json
 //	@Produce		json
-//	@Param			Content	body		string	true	"Content"
+//	@Param			body	body		models.CreateRequest	true	"body"
 //	@Success		201		{object}	models.Response
 //	@Router			/categories [post]
 func (h Handler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		req := &models.SaveRequest{}
+		req := &models.CreateRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 		user := c.Get("user").(*userModel.Response)
-		res, err := h.usecase.Create(ctx, user.Id, req)
+		res, err := h.usecase.Create(ctx, user.Id, req.ToSaveRequest())
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
@@ -71,6 +67,7 @@ func (h Handler) Create() echo.HandlerFunc {
 
 // GetListPaging godoc
 //
+//	@Security		ApiKeyAuth
 //	@Summary		Get list category
 //	@Description	Get list category with paging and filter
 //	@Tags			Category
@@ -91,11 +88,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 
 		res, err := h.usecase.GetListPaging(ctx, req)
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))

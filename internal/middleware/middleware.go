@@ -33,7 +33,7 @@ func (mw *middlewareManager) AuthJWTMiddleware() echo.MiddlewareFunc {
 				log.Infof("auth middleware bearerHeader %s", bearerHeader)
 				headerParts := strings.Split(bearerHeader, " ")
 				if len(headerParts) != 2 {
-					log.Errorf("auth middleware: %s", len(headerParts) != 2)
+					log.Errorf("auth middleware: length header invalid")
 					return c.JSON(http.StatusOK, httpResponse.NewUnauthorizedError(nil))
 				}
 				tokenString := headerParts[1]

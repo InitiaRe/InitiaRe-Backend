@@ -6,5 +6,7 @@ import "github.com/labstack/echo/v4"
 type IHandler interface {
 	MapRoutes(todoGroup *echo.Group)
 	Create() echo.HandlerFunc
+	Update() echo.HandlerFunc
+	Delete() echo.HandlerFunc
 	GetListPaging() echo.HandlerFunc
 }

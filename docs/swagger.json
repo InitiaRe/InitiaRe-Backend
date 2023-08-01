@@ -14,11 +14,6 @@
     "paths": {
         "/articles": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get list article with paging and filter",
                 "consumes": [
                     "application/json"
@@ -646,6 +641,9 @@
                     "type": "string"
                 },
                 "last_name": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 },
                 "school": {

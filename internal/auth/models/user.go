@@ -51,18 +51,19 @@ type LoginRequest struct {
 }
 
 type RegisterRequest struct {
-	FirstName string `json:"first_name,omitempty"`
-	LastName  string `json:"last_name,omitempty"`
-	Email     string `json:"email,omitempty"`
-	School    string `json:"school,omitempty"`
-	Gender    string `json:"gender,omitempty"`
+	FirstName string    `json:"first_name,omitempty"`
+	LastName  string    `json:"last_name,omitempty"`
+	Email     string    `json:"email,omitempty"`
+	School    string    `json:"school,omitempty"`
+	Gender    string    `json:"gender,omitempty"`
+	Password  string    `json:"password"`
 }
 
 func (r *RegisterRequest) ToSaveRequest() *SaveRequest {
 	req := &SaveRequest{}
 	copier.Copy(req, r)
 	return req
-} 
+}
 
 // User sign in response
 type UserWithToken struct {

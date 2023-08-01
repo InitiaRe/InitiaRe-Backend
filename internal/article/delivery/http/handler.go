@@ -33,7 +33,7 @@ func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMid
 // Map routes
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("", h.Create(), h.mw.AuthJWTMiddleware())
-	group.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
+	group.GET("", h.GetListPaging())
 }
 
 // Create godoc
@@ -67,7 +67,6 @@ func (h Handler) Create() echo.HandlerFunc {
 
 // GetListPaging godoc
 //
-//	@Security		ApiKeyAuth
 //	@Summary		Get list article
 //	@Description	Get list article with paging and filter
 //	@Tags			Article

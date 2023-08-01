@@ -81,7 +81,7 @@ func (u *usecase) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	}
 
 	// check if password is correct
-	if err = utils.ComparePasswords(foundUser.Password, params.Password); err != nil {
+	if err = utils.ComparePassword(foundUser.Password, params.Password); err != nil {
 		log.Errorf("Compare password failed: %v", err)
 		return nil, utils.NewError(constants.STATUS_CODE_UNAUTHORIZED, constants.STATUS_MESSAGE_INVALID_EMAIL_OR_PASSWORD)
 	}

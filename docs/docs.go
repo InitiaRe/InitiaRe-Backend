@@ -22,6 +22,11 @@ const docTemplate = `{
     "paths": {
         "/articles": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get list article with paging and filter",
                 "consumes": [
                     "application/json"
@@ -59,6 +64,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create new article",
                 "consumes": [
                     "application/json"
@@ -72,12 +82,12 @@ const docTemplate = `{
                 "summary": "Create article",
                 "parameters": [
                     {
-                        "description": "Content",
-                        "name": "Content",
+                        "description": "body",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest"
                         }
                     }
                 ],
@@ -161,6 +171,11 @@ const docTemplate = `{
         },
         "/categories": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get list category with paging and filter",
                 "consumes": [
                     "application/json"
@@ -198,6 +213,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create new category",
                 "consumes": [
                     "application/json"
@@ -211,12 +231,12 @@ const docTemplate = `{
                 "summary": "Create category",
                 "parameters": [
                     {
-                        "description": "Content",
-                        "name": "Content",
+                        "description": "body",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest"
                         }
                     }
                 ],
@@ -232,6 +252,11 @@ const docTemplate = `{
         },
         "/todos": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get list todo with paging and filter",
                 "consumes": [
                     "application/json"
@@ -292,7 +317,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CreateRequest"
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest"
                         }
                     }
                 ],
@@ -389,6 +414,11 @@ const docTemplate = `{
         },
         "/users/me": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get user info by token",
                 "consumes": [
                     "application/json"
@@ -412,6 +442,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging": {
             "type": "object",
             "properties": {
@@ -490,6 +528,14 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging": {
             "type": "object",
             "properties": {
@@ -533,6 +579,14 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging": {
             "type": "object",
             "properties": {
@@ -572,14 +626,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.CreateRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
                     "type": "string"
                 }
             }

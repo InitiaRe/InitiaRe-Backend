@@ -1,5 +1,10 @@
 basePath: /api/v1
 definitions:
+  github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest:
+    properties:
+      content:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging:
     properties:
       page:
@@ -51,6 +56,11 @@ definitions:
       user_id:
         type: string
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest:
+    properties:
+      category:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging:
     properties:
       page:
@@ -79,6 +89,11 @@ definitions:
       updated_by:
         type: integer
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest:
+    properties:
+      content:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging:
     properties:
       page:
@@ -105,11 +120,6 @@ definitions:
       update_by:
         type: integer
       updated_at:
-        type: string
-    type: object
-  models.CreateRequest:
-    properties:
-      content:
         type: string
     type: object
   models.LoginRequest:
@@ -176,6 +186,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging'
+      security:
+      - ApiKeyAuth: []
       summary: Get list article
       tags:
       - Article
@@ -184,12 +196,12 @@ paths:
       - application/json
       description: Create new article
       parameters:
-      - description: Content
+      - description: body
         in: body
-        name: Content
+        name: body
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest'
       produces:
       - application/json
       responses:
@@ -197,6 +209,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Create article
       tags:
       - Article
@@ -267,6 +281,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging'
+      security:
+      - ApiKeyAuth: []
       summary: Get list category
       tags:
       - Category
@@ -275,12 +291,12 @@ paths:
       - application/json
       description: Create new category
       parameters:
-      - description: Content
+      - description: body
         in: body
-        name: Content
+        name: body
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest'
       produces:
       - application/json
       responses:
@@ -288,6 +304,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Create category
       tags:
       - Category
@@ -314,6 +332,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging'
+      security:
+      - ApiKeyAuth: []
       summary: Get list todo
       tags:
       - Todo
@@ -327,7 +347,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/models.CreateRequest'
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest'
       produces:
       - application/json
       responses:
@@ -403,6 +423,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Get user info
       tags:
       - User

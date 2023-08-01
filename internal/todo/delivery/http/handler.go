@@ -133,6 +133,7 @@ func (h Handler) Delete() echo.HandlerFunc {
 
 // GetListPaging godoc
 //
+//	@Security		ApiKeyAuth
 //	@Summary		Get list todo
 //	@Description	Get list todo with paging and filter
 //	@Tags			Todo

@@ -80,3 +80,11 @@ func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveReq
 func (u *usecase) UpdateMany(ctx context.Context, userId int, params []*models.SaveRequest) (int, error) {
 	return 0, nil
 }
+
+func (u *usecase) Delete(ctx context.Context, id int) (int, error) {
+    return 0, nil
+}
+
+func (u *usecase) DeleteMany(ctx context.Context, ids []int) (int, error) {
+    return 0, nil
+}

@@ -2,6 +2,7 @@ package models
 
 import (
 	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
+	"github.com/jinzhu/copier"
 )
 
 type RequestList struct {
@@ -40,4 +41,14 @@ type SaveRequest struct {
 type ListPaging struct {
 	commonModel.ListPaging
 	Records []*Response
+}
+
+type CreateRequest struct {
+	Category string `json:"category"`
+}
+
+func (r *CreateRequest) ToSaveRequest() *SaveRequest {
+	req := &SaveRequest{}
+	copier.Copy(req, r)
+	return req
 }

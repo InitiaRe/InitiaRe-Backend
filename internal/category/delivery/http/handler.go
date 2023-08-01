@@ -38,24 +38,25 @@ func (h Handler) MapRoutes(group *echo.Group) {
 
 // Create godoc
 //
+//	@Security		ApiKeyAuth
 //	@Summary		Create category
 //	@Description	Create new category
 //	@Tags			Category
 //	@Accept			json
 //	@Produce		json
-//	@Param			Content	body		string	true	"Content"
+//	@Param			body	body		models.CreateRequest	true	"body"
 //	@Success		201		{object}	models.Response
 //	@Router			/categories [post]
 func (h Handler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		req := &models.SaveRequest{}
+		req := &models.CreateRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 		user := c.Get("user").(*userModel.Response)
-		res, err := h.usecase.Create(ctx, user.Id, req)
+		res, err := h.usecase.Create(ctx, user.Id, req.ToSaveRequest())
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
@@ -66,6 +67,7 @@ func (h Handler) Create() echo.HandlerFunc {
 
 // GetListPaging godoc
 //
+//	@Security		ApiKeyAuth
 //	@Summary		Get list category
 //	@Description	Get list category with paging and filter
 //	@Tags			Category

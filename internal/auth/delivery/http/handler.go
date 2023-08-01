@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
@@ -40,9 +39,8 @@ func (h Handler) MapRoutes(group *echo.Group) {
 //	@Tags			Auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			Email		body		string	true	"Email"
-//	@Param			Password	body		string	true	"Password"
-//	@Success		200			{object}	models.UserWithToken
+//	@Param			body	body		models.LoginRequest	true	"body"
+//	@Success		200		{object}	models.UserWithToken
 //	@Router			/auth/login [post]
 func (h Handler) Login() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -69,32 +67,23 @@ func (h Handler) Login() echo.HandlerFunc {
 //	@Tags			Auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			FirstName	body		string	true	"First name"
-//	@Param			LastName	body		string	true	"Last name"
-//	@Param			Email		body		string	true	"Email"
-//	@Param			Password	body		string	true	"Password"
-//	@Param			Gender		body		string	true	"Gender"
-//	@Param			School		body		string	false	"School"
-//	@Param			Birthday	body		string	false	"Gender"
-//	@Success		201			{object}	models.Response
+//	@Param			body	body		models.RegisterRequest	true	"body"
+//	@Success		201		{object}	models.Response
 //	@Router			/auth/register [post]
 func (h Handler) Register() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		req := &models.SaveRequest{}
+		req := &models.RegisterRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
-		res, err := h.usecase.Register(ctx, req)
+		res, err := h.usecase.Register(ctx, req.ToSaveRequest())
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
-				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
-			} else {
-				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
-			}
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
+
 		return c.JSON(http.StatusCreated, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
 	}
 }

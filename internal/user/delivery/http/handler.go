@@ -30,6 +30,7 @@ func (h Handler) MapRoutes(group *echo.Group) {
 
 // GetMe godoc
 //
+//	@Security		ApiKeyAuth
 //	@Summary		Get user info
 //	@Description	Get user info by token
 //	@Tags			User

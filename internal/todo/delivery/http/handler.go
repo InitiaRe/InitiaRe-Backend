@@ -37,7 +37,7 @@ func (h Handler) MapRoutes(todoGroup *echo.Group) {
 	todoGroup.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 	todoGroup.DELETE("/:id", h.Delete(), h.mw.AuthJWTMiddleware())
 	todoGroup.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
-	todoGroup.GET("/:id", h.GetById())
+	todoGroup.GET("/:id", h.GetById(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -165,6 +165,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 
 // GetById godoc
 //
+//	@Security		ApiKeyAuth
 //	@Summary		Get detail todo
 //	@Description	Get detail todo
 //	@Tags			Todo

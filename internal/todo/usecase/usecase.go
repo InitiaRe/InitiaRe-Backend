@@ -29,6 +29,9 @@ func (u *usecase) GetById(ctx context.Context, id int) (*models.Response, error)
 		log.Error().Err(err).Str("prefix", "Todo").Str("service", "usecase.repo.GetById").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get todo")
 	}
+	if record.Id == 0 {
+		return nil, utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Todo not found")
+	}
 	return record.Export(), nil
 }
 

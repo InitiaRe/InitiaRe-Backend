@@ -328,6 +328,11 @@ const docTemplate = `{
         },
         "/todos/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get detail todo",
                 "consumes": [
                     "application/json"

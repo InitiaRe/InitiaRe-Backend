@@ -400,6 +400,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Get detail todo
       tags:
       - Todo

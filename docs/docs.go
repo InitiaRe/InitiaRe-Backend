@@ -327,6 +327,36 @@ const docTemplate = `{
             }
         },
         "/todos/{id}": {
+            "get": {
+                "description": "Get detail todo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Todo"
+                ],
+                "summary": "Get detail todo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {

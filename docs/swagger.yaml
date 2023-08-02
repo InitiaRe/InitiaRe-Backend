@@ -383,6 +383,26 @@ paths:
       summary: Delete todo
       tags:
       - Todo
+    get:
+      consumes:
+      - application/json
+      description: Get detail todo
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+      summary: Get detail todo
+      tags:
+      - Todo
     put:
       consumes:
       - application/json

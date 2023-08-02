@@ -37,6 +37,7 @@ func (h Handler) MapRoutes(todoGroup *echo.Group) {
 	todoGroup.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 	todoGroup.DELETE("/:id", h.Delete(), h.mw.AuthJWTMiddleware())
 	todoGroup.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
+	todoGroup.GET("/:id", h.GetById(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -154,6 +155,35 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 		}
 
 		res, err := h.usecase.GetListPaging(ctx, req)
+		if err != nil {
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
+		}
+
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+	}
+}
+
+// GetById godoc
+//
+//	@Security		ApiKeyAuth
+//	@Summary		Get detail todo
+//	@Description	Get detail todo
+//	@Tags			Todo
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Id"
+//	@Success		200	{object}	models.Response
+//	@Router			/todos/{id} [get]
+func (h Handler) GetById() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+
+		res, err := h.usecase.GetById(ctx, id)
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}

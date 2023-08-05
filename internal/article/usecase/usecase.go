@@ -75,7 +75,16 @@ func (u *usecase) CreateMany(ctx context.Context, userId int, params []*models.S
 }
 
 func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveRequest) (*models.Response, error) {
-	return nil, nil
+	article := entity.Article{}
+	article.ParseForUpdate(params, userId)
+	res, err := u.repo.Update(ctx, &article)
+
+	if err != nil {
+		log.Errorf("usecase.repo.Create: %v", err)
+		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when update article")
+	}
+
+	return res.Export(), err
 }
 
 func (u *usecase) UpdateMany(ctx context.Context, userId int, params []*models.SaveRequest) (int, error) {

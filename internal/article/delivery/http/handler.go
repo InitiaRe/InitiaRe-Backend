@@ -5,11 +5,11 @@ import (
 	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
+	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/article/usecase"
 	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/usecase"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
@@ -35,6 +35,7 @@ func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMid
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("", h.Create(), h.mw.AuthJWTMiddleware())
 	group.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
+	group.PUT("", h.Update(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -99,5 +100,41 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))
+	}
+}
+
+// Create godoc
+//
+//	@Summary		Update article
+//	@Description	Update an existing article
+//	@Tags			Article
+//	@Accept			json
+//	@Produce		json
+//	@Param			id			body		int		true	"Id"
+//	@Param			content		body		string	true	"Content"
+//	@Param			category_id	body		string	true	"category_id"
+//	@Success		201			{object}	models.Response
+//	@Router			/articles [put]
+func (h Handler) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+
+		req := &models.SaveRequest{}
+		if err := utils.ReadBodyRequest(c, req); err != nil {
+			log.Error(err)
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+
+		user := c.Get("user").(*userModel.Response)
+		res, err := h.usecase.Update(ctx, user.Id, req)
+		if err != nil {
+			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
+				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
+			} else {
+				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+			}
+		}
+
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
 	}
 }

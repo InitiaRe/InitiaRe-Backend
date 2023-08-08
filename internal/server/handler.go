@@ -11,7 +11,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
@@ -57,10 +56,6 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	article.Handler.MapRoutes(articleGroup)
 	category.Handler.MapRoutes(categoryGroup)
 	user.Handler.MapRoutes(userGroup)
-
-	if s.cfg.Server.Debug {
-		log.SetLevel(log.DEBUG)
-	}
 
 	return nil
 }

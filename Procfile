@@ -1,1 +1,1 @@
-web: initiare-website
+web: InitiaRe-website

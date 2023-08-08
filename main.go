@@ -4,14 +4,15 @@ import (
 	"crypto/tls"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/internal/server"
-	"github.com/joho/godotenv"
 
-	"github.com/labstack/gommon/log"
 	"github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -26,29 +27,37 @@ import (
 //	@contact.url	contact.here
 //	@contact.email	email@here.com
 
-//	@BasePath	api/v1
-func main() {
-	log.Info("Starting api server")
+//	@securityDefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
 
+//	@BasePath	/api/v1
+func main() {
 	cfg := config.GetConfig()
 
-	port := os.Getenv("PORT")
-	// Get port from .env file in case of running locally
-	if port == "" {
-		err := godotenv.Load(".env")
-		if err != nil {
-			panic(err.Error())
-		}
-		port = os.Getenv("PORT")
-		if port == "" {
-			log.Fatal("$PORT must be set")
-		}
-	}
-	cfg.Server.Port = port
-
 	// Init Logger
+	initLogger(&cfg.Logger)
+
+	// Init DB
+	db := initDB(&cfg.PostgreSQL)
+
+	// Init Redis
+	redisClient := initRedis(&cfg.Redis)
+	defer redisClient.Close()
+
+	// Init server
+	log.Info().Msg("Starting api server")
+	s := server.NewServer(cfg, db, redisClient)
+	if err := s.Run(); err != nil {
+		log.Fatal().Msg(err.Error())
+	}
+}
+
+func initDB(cfg *config.PostgreSQLConfig) *gorm.DB {
+	log.Info().Msg("Init DB")
+	zLogger := zerolog.New(os.Stderr).With().Timestamp().Logger()
 	newLogger := logger.New(
-		log.New("GORM:"), // io writer
+		&zLogger, // io writer
 		logger.Config{
 			SlowThreshold:             time.Second,   // Slow SQL threshold
 			LogLevel:                  logger.Silent, // Log level
@@ -57,30 +66,62 @@ func main() {
 			Colorful:                  false,         // Disable color
 		},
 	)
-
-	// Init Postgresql
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", cfg.PostgreSQL.Host, cfg.PostgreSQL.User, cfg.PostgreSQL.Password, cfg.PostgreSQL.DBName, cfg.PostgreSQL.Port)
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", cfg.Host, cfg.User, cfg.Password, cfg.DBName, cfg.Port)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})
 	if err != nil {
-		log.Fatalf("Postgresql init: %s", err)
+		log.Fatal().Msgf("DB init: %s", err)
 	}
+	return db
+}
 
-	// Init Redis
+func initRedis(cfg *config.RedisConfig) *redis.Client {
+	log.Info().Msg("Init Redis")
 	redisClient := redis.NewClient(&redis.Options{
-		Addr:        fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port),
-		Username:    cfg.Redis.Username,
-		Password:    cfg.Redis.Password,
-		DB:          cfg.Redis.DB,
-		PoolSize:    cfg.Redis.PoolSize,
-		PoolTimeout: time.Duration(cfg.Redis.PoolTimeout) * time.Second,
+		Addr:        fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+		Username:    cfg.Username,
+		Password:    cfg.Password,
+		DB:          cfg.DB,
+		PoolSize:    cfg.PoolSize,
+		PoolTimeout: time.Duration(cfg.PoolTimeout) * time.Second,
 		TLSConfig:   &tls.Config{MinVersion: tls.VersionTLS12},
 	})
-	defer redisClient.Close()
+	return redisClient
+}
 
-	s := server.NewServer(cfg, db, redisClient)
-	if err = s.Run(); err != nil {
-		log.Fatal(err)
+func initLogger(cfg *config.LoggerConfig) {
+	zerolog.CallerMarshalFunc = func(pc uintptr, file string, line int) string {
+		short := file
+		for i := len(file) - 1; i > 0; i-- {
+			if file[i] == '/' {
+				short = file[i+1:]
+				break
+			}
+		}
+		file = short
+		return file + ":" + strconv.Itoa(line)
+	}
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	log.Logger = log.With().Caller().Logger()
+	if cfg.Mode == "pretty" {
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	}
+
+	switch cfg.Level {
+	case "debug":
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	case "info":
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	case "warn":
+		zerolog.SetGlobalLevel(zerolog.WarnLevel)
+	case "error":
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	case "fatal":
+		zerolog.SetGlobalLevel(zerolog.FatalLevel)
+	case "panic":
+		zerolog.SetGlobalLevel(zerolog.PanicLevel)
+	default:
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 }

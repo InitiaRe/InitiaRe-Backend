@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
+	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/internal/category/entity"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils/conversion"
 
@@ -46,11 +46,51 @@ func (r *repo) Update(ctx context.Context, obj *entity.Category) (*entity.Catego
 }
 
 func (r *repo) UpdateMany(ctx context.Context, objs []*entity.Category) (int, error) {
-	result := r.db.Updates(objs)
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	for _, v := range objs {
+		if err := tx.Updates(v).Error; err != nil {
+			tx.Rollback()
+			return 0, err
+		}
+	}
+	if err := tx.Commit().Error; err != nil {
+		return 0, err
+	}
+
+	return len(objs), nil
+}
+
+func (r *repo) Delete(ctx context.Context, id int) (int, error) {
+	result := r.db.Delete(&entity.Category{}, id)
 	if result.Error != nil {
 		return 0, result.Error
 	}
 	return int(result.RowsAffected), nil
+}
+
+func (r *repo) DeleteMany(ctx context.Context, ids []int) (int, error) {
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	for _, id := range ids {
+		if err := tx.Delete(&entity.Category{}, id).Error; err != nil {
+			tx.Rollback()
+			return 0, err
+		}
+	}
+	if err := tx.Commit().Error; err != nil {
+		return 0, err
+	}
+
+	return len(ids), nil
 }
 
 func (r *repo) Count(ctx context.Context, queries map[string]interface{}) (int, error) {
@@ -73,7 +113,7 @@ func (r *repo) GetById(ctx context.Context, id int) (*entity.Category, error) {
 func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.Category, error) {
 	record := &entity.Category{}
 	query := r.initQuery(ctx, queries)
-	result := query.Offset(0).Limit(1).Find(&record)
+	result := query.Limit(1).Find(&record)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -92,8 +132,8 @@ func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*
 func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Category, error) {
 	records := []*entity.Category{}
 
-	page := conversion.GetFromInterface(queries, "page", constants.DEFAULT_PAGE).(int)
-	size := conversion.GetFromInterface(queries, "size", constants.DEFAULT_SIZE).(int)
+	page := conversion.GetFromInterface(queries, "page", constant.DEFAULT_PAGE).(int)
+	size := conversion.GetFromInterface(queries, "size", constant.DEFAULT_SIZE).(int)
 
 	query := r.initQuery(ctx, queries)
 
@@ -121,7 +161,7 @@ func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	sortBy := conversion.GetFromInterface(queries, "sort_by", "").(string)
-	orderBy := conversion.GetFromInterface(queries, "order_by", constants.DEFAULT_SORT_ORDER).(string)
+	orderBy := conversion.GetFromInterface(queries, "order_by", constant.DEFAULT_SORT_ORDER).(string)
 
 	switch sortBy {
 	default:

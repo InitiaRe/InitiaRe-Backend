@@ -214,6 +214,39 @@ paths:
       summary: Create article
       tags:
       - Article
+    put:
+      consumes:
+      - application/json
+      description: Update an existing article
+      parameters:
+      - description: Id
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      - description: Content
+        in: body
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: category_id
+        in: body
+        name: category_id
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+      summary: Update article
+      tags:
+      - Article
   /auth/login:
     post:
       consumes:

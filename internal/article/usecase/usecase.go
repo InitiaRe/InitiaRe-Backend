@@ -10,7 +10,7 @@ import (
 
 	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
-	"github.com/labstack/gommon/log"
+	"github.com/rs/zerolog/log"
 )
 
 type usecase struct {
@@ -35,12 +35,13 @@ func (u *usecase) GetListPaging(ctx context.Context, params *models.RequestList)
 	queries := params.ToMap()
 	records, err := u.repo.GetListPaging(ctx, queries)
 	if err != nil {
-		log.Errorf("usecase.repo.GetListPaging: %v", err)
+		log.Error().Err(err).Str("service", "usecase.repo.GetListPaging").Send()
 		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when get list article")
 	}
 	count, err := u.repo.Count(ctx, queries)
 	if err != nil {
-		log.Errorf("usecase.repo.Count: %v", err)
+		log.Error().Err(err).Str("service", "usecase.repo.Count").Send()
+
 		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when get list article")
 	}
 
@@ -63,7 +64,7 @@ func (u *usecase) Create(ctx context.Context, userId int, params *models.SaveReq
 	article.ParseForCreate(params, userId)
 	res, err := u.repo.Create(ctx, article)
 	if err != nil {
-		log.Errorf("usecase.repo.Create: %v", err)
+		log.Error().Err(err).Str("service", "usecase.repo.Create").Send()
 		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when create article")
 	}
 
@@ -80,7 +81,7 @@ func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveReq
 	res, err := u.repo.Update(ctx, &article)
 
 	if err != nil {
-		log.Errorf("usecase.repo.Create: %v", err)
+		log.Error().Err(err).Str("service", "usecase.repo.Update").Send()
 		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when update article")
 	}
 

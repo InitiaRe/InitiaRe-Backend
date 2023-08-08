@@ -14,7 +14,7 @@ import (
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
+	"github.com/rs/zerolog/log"
 )
 
 type Handler struct {
@@ -53,7 +53,7 @@ func (h Handler) Create() echo.HandlerFunc {
 		ctx := utils.GetRequestCtx(c)
 		req := &models.SaveRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 		user := c.Get("user").(*userModel.Response)
@@ -86,7 +86,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 		ctx := utils.GetRequestCtx(c)
 		req := &models.RequestList{}
 		if err := utils.ReadQueryRequest(c, req); err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
@@ -103,17 +103,17 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 	}
 }
 
-// Create godoc
+// Update godoc
 //
 //	@Summary		Update article
 //	@Description	Update an existing article
 //	@Tags			Article
 //	@Accept			json
 //	@Produce		json
-//	@Param			id			body		int		true	"Id"
-//	@Param			content		body		string	true	"Content"
-//	@Param			category_id	body		string	true	"category_id"
-//	@Success		201			{object}	models.Response
+//	@Params			id			body		int		true	"Id"
+//	@Params			content		body		string	true	"Content"
+//	@Params			category_id	body		string	true	"category_id"
+//	@Success		200			{object}	models.Response
 //	@Router			/articles [put]
 func (h Handler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -121,7 +121,7 @@ func (h Handler) Update() echo.HandlerFunc {
 
 		req := &models.SaveRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
@@ -135,6 +135,6 @@ func (h Handler) Update() echo.HandlerFunc {
 			}
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_CREATED, res))
 	}
 }

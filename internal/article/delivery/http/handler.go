@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/constant"
@@ -120,13 +121,13 @@ func (h Handler) Update() echo.HandlerFunc {
 		user := c.Get("user").(*userModel.Response)
 		res, err := h.usecase.Update(ctx, user.Id, req)
 		if err != nil {
-			if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
+			if strings.Contains(err.Error(), constant.STATUS_CODE_BAD_REQUEST) {
 				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
 			} else {
 				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 			}
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_CREATED, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_CREATED, res))
 	}
 }

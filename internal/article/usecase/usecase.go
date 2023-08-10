@@ -81,7 +81,7 @@ func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveReq
 	// validation
 	record, err := u.repo.GetById(ctx, article.Id)
 	if err != nil {
-		log.Error().Err(err).Str("service", "usecase.repo.GetById").Send()
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetById").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
 	}
 	if record.CreatedBy != userId {
@@ -90,7 +90,7 @@ func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveReq
 
 	res, err := u.repo.Update(ctx, &article)
 	if err != nil {
-		log.Error().Err(err).Str("service", "usecase.repo.Update").Send()
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.Update").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when update article")
 	}
 

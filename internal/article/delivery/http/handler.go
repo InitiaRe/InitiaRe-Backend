@@ -107,7 +107,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 //	@Param			id		path		int						true	"Id"
 //	@Param			body	body		models.UpdateRequest	true	"body"
 //	@Success		200		{object}	models.Response
-//	@Router			/articles [put]
+//	@Router			/articles/{id} [put]
 func (h Handler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)

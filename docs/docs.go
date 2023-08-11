@@ -58,56 +58,6 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "description": "Update an existing article",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Article"
-                ],
-                "summary": "Update article",
-                "parameters": [
-                    {
-                        "description": "Id",
-                        "name": "id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "Content",
-                        "name": "content",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "category_id",
-                        "name": "category_id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
-                        }
-                    }
-                }
-            },
             "post": {
                 "security": [
                     {
@@ -139,6 +89,47 @@ const docTemplate = `{
                 "responses": {
                     "201": {
                         "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/articles/{id}": {
+            "put": {
+                "description": "Update an existing article",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "Update article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
                         }
@@ -443,7 +434,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UpdateRequest"
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest"
                         }
                     }
                 ],
@@ -582,6 +573,17 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response": {
             "type": "object",
             "properties": {
@@ -710,6 +712,14 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "models.LoginRequest": {
             "type": "object",
             "properties": {
@@ -740,14 +750,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "school": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UpdateRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
                     "type": "string"
                 }
             }

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
@@ -35,7 +36,7 @@ func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMid
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("", h.Create())
 	group.GET("", h.GetListPaging())
-	group.PUT("", h.Update())
+	group.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -103,23 +104,28 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 //	@Tags			Article
 //	@Accept			json
 //	@Produce		json
-//	@Params			id			body		int		true	"Id"
-//	@Params			content		body		string	true	"Content"
-//	@Params			category_id	body		string	true	"category_id"
-//	@Success		200			{object}	models.Response
+//	@Param			id		path		int						true	"Id"
+//	@Param			body	body		models.UpdateRequest	true	"body"
+//	@Success		200		{object}	models.Response
 //	@Router			/articles [put]
 func (h Handler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
 
-		req := &models.SaveRequest{}
+		req := &models.UpdateRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
 			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
 		user := c.Get("user").(*userModel.Response)
-		res, err := h.usecase.Update(ctx, user.Id, req)
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+
+		res, err := h.usecase.Update(ctx, user.Id, req.ToSaveRequest(id))
 		if err != nil {
 			if strings.Contains(err.Error(), constant.STATUS_CODE_BAD_REQUEST) {
 				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
@@ -128,6 +134,6 @@ func (h Handler) Update() echo.HandlerFunc {
 			}
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_CREATED, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
 	}
 }

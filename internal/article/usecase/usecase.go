@@ -78,14 +78,8 @@ func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveReq
 	article := entity.Article{}
 	article.ParseForUpdate(params, userId)
 
-	// validation
-	record, err := u.repo.GetById(ctx, article.Id)
-	if err != nil {
-		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetById").Send()
-		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
-	}
-	if record.CreatedBy != userId {
-		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when update article")
+	if err := u.validateBeforeUpdate(ctx, article.Id, userId); err != nil {
+		return nil, err
 	}
 
 	res, err := u.repo.Update(ctx, &article)
@@ -107,4 +101,21 @@ func (u *usecase) Delete(ctx context.Context, id int) (int, error) {
 
 func (u *usecase) DeleteMany(ctx context.Context, ids []int) (int, error) {
 	return 0, nil
+}
+
+func (u *usecase) validateBeforeUpdate(ctx context.Context, id int, userId int) error {
+	record, err := u.repo.GetById(ctx, id)
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetById").Send()
+		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
+	}
+
+	if record.Id == 0 {
+		return utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Article not found")
+	}
+
+	if record.CreatedBy != userId {
+		return utils.NewError(constant.STATUS_CODE_UNAUTHORIZED, "You do not have the permission to edit this document")
+	}
+	return nil
 }

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/spf13/viper"
+	"github.com/rs/zerolog/log"
 )
 
 type Config struct {
@@ -13,6 +14,7 @@ type Config struct {
 	Redis      RedisConfig      `mapstructure:"redis"`
 	PostgreSQL PostgreSQLConfig `mapstructure:"postgresql"`
 	Server     ServerConfig     `mapstructure:"server"`
+	Logger     LoggerConfig     `mapstructure:"logger"`
 }
 type PostgreSQLConfig struct {
 	Host     string `mapstructure:"host"`
@@ -41,7 +43,6 @@ type ServerConfig struct {
 	WriteTimeout      int    `mapstructure:"write_timeout"`
 	SSL               bool   `mapstructure:"ssl"`
 	CtxDefaultTimeout int    `mapstructure:"ctx_default_timeout"`
-	Debug             bool   `mapstructure:"debug"`
 }
 
 type AuthConfig struct {
@@ -49,6 +50,11 @@ type AuthConfig struct {
 	Expire    int    `mapstructure:"expire"`
 	Issuer    string `mapstructure:"issuer"`
 	Audience  string `mapstructure:"audience"`
+}
+
+type LoggerConfig struct {
+	Level string `mapstructure:"level"`
+	Mode  string `mapstructure:"mode"`
 }
 
 func GetConfig() *Config {
@@ -72,13 +78,13 @@ func GetConfig() *Config {
 		vp.AddConfigPath("./config")
 		if err := vp.ReadInConfig(); err != nil {
 			if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-				panic("Config file not found")
+				log.Fatal().Msg("Config file not found")
 			}
 		}
 	}
 	bindEnvs(vp, c)
 	if err := vp.Unmarshal(&c); err != nil {
-		panic("Unable to unmarshal config")
+		log.Fatal().Msg("Unable to unmarshal config")
 	}
 	return &c
 }

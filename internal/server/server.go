@@ -12,7 +12,7 @@ import (
 	"github.com/Ho-Minh/InitiaRe-website/config"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
+	"github.com/rs/zerolog/log"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
@@ -42,9 +42,9 @@ func (s *Server) Run() error {
 	}
 
 	go func() {
-		log.Infof("Server is listening on PORT: %v", s.cfg.Server.Port)
+		log.Info().Msgf("Server is listening on PORT: %v", s.cfg.Server.Port)
 		if err := s.echo.StartServer(server); err != nil {
-			log.Fatalf("Error starting server: ", err)
+			log.Fatal().Msgf("Error starting server: %v", err)
 		}
 	}()
 
@@ -60,6 +60,6 @@ func (s *Server) Run() error {
 	ctx, shutdown := context.WithTimeout(context.Background(), ctxTimeout*time.Second)
 	defer shutdown()
 
-	log.Info("Server Exited Properly")
+	log.Info().Msg("Server Exited Properly")
 	return s.echo.Server.Shutdown(ctx)
 }

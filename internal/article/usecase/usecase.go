@@ -3,14 +3,14 @@ package usecase
 import (
 	"context"
 
+	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/entity"
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/repository"
-	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 
 	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
-	"github.com/labstack/gommon/log"
+	"github.com/rs/zerolog/log"
 )
 
 type usecase struct {
@@ -35,13 +35,13 @@ func (u *usecase) GetListPaging(ctx context.Context, params *models.RequestList)
 	queries := params.ToMap()
 	records, err := u.repo.GetListPaging(ctx, queries)
 	if err != nil {
-		log.Errorf("usecase.repo.GetListPaging: %v", err)
-		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when get list article")
+		log.Error().Err(err).Str("service", "usecase.repo.GetListPaging").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get list article")
 	}
 	count, err := u.repo.Count(ctx, queries)
 	if err != nil {
-		log.Errorf("usecase.repo.Count: %v", err)
-		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when get list article")
+		log.Error().Err(err).Str("service", "usecase.repo.Count").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get list article")
 	}
 
 	return &models.ListPaging{
@@ -63,8 +63,8 @@ func (u *usecase) Create(ctx context.Context, userId int, params *models.SaveReq
 	article.ParseForCreate(params, userId)
 	res, err := u.repo.Create(ctx, article)
 	if err != nil {
-		log.Errorf("usecase.repo.Create: %v", err)
-		return nil, utils.NewError(constants.STATUS_CODE_INTERNAL_SERVER, "Error when create article")
+		log.Error().Err(err).Str("service", "usecase.repo.Create").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when create article")
 	}
 
 	return res.Export(), nil
@@ -75,7 +75,20 @@ func (u *usecase) CreateMany(ctx context.Context, userId int, params []*models.S
 }
 
 func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveRequest) (*models.Response, error) {
-	return nil, nil
+	article := entity.Article{}
+	article.ParseForUpdate(params, userId)
+
+	if err := u.validateBeforeUpdate(ctx, article.Id, userId); err != nil {
+		return nil, err
+	}
+
+	res, err := u.repo.Update(ctx, &article)
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.Update").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when update article")
+	}
+
+	return res.Export(), err
 }
 
 func (u *usecase) UpdateMany(ctx context.Context, userId int, params []*models.SaveRequest) (int, error) {
@@ -88,4 +101,21 @@ func (u *usecase) Delete(ctx context.Context, id int) (int, error) {
 
 func (u *usecase) DeleteMany(ctx context.Context, ids []int) (int, error) {
 	return 0, nil
+}
+
+func (u *usecase) validateBeforeUpdate(ctx context.Context, id int, userId int) error {
+	record, err := u.repo.GetById(ctx, id)
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetById").Send()
+		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
+	}
+
+	if record.Id == 0 {
+		return utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Article not found")
+	}
+
+	if record.CreatedBy != userId {
+		return utils.NewError(constant.STATUS_CODE_UNAUTHORIZED, "You do not have the permission to edit this document")
+	}
+	return nil
 }

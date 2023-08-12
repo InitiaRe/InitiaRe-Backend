@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
+	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 )
 
@@ -51,7 +51,7 @@ func NewRestError(status int, err string, cause interface{}) RestErr {
 func NewBadRequestError(cause interface{}) RestErr {
 	return RestError{
 		ErrStatus: http.StatusBadRequest,
-		ErrError:  constants.STATUS_CODE_BAD_REQUEST,
+		ErrError:  constant.STATUS_CODE_BAD_REQUEST,
 		ErrCause:  cause,
 	}
 }
@@ -60,7 +60,7 @@ func NewBadRequestError(cause interface{}) RestErr {
 func NewNotFoundError(cause interface{}) RestErr {
 	return RestError{
 		ErrStatus: http.StatusNotFound,
-		ErrError:  constants.STATUS_CODE_NOT_FOUND,
+		ErrError:  constant.STATUS_CODE_NOT_FOUND,
 		ErrCause:  cause,
 	}
 }
@@ -69,7 +69,7 @@ func NewNotFoundError(cause interface{}) RestErr {
 func NewUnauthorizedError(cause interface{}) RestErr {
 	return RestError{
 		ErrStatus: http.StatusUnauthorized,
-		ErrError:  constants.STATUS_CODE_UNAUTHORIZED,
+		ErrError:  constant.STATUS_CODE_UNAUTHORIZED,
 		ErrCause:  cause,
 	}
 }
@@ -78,7 +78,7 @@ func NewUnauthorizedError(cause interface{}) RestErr {
 func NewForbiddenError(cause interface{}) RestErr {
 	return RestError{
 		ErrStatus: http.StatusForbidden,
-		ErrError:  constants.STATUS_CODE_FORBIDDEN,
+		ErrError:  constant.STATUS_CODE_FORBIDDEN,
 		ErrCause:  cause,
 	}
 }
@@ -87,7 +87,7 @@ func NewForbiddenError(cause interface{}) RestErr {
 func NewInternalServerError(cause interface{}) RestErr {
 	result := RestError{
 		ErrStatus: http.StatusInternalServerError,
-		ErrError:  constants.STATUS_CODE_INTERNAL_SERVER,
+		ErrError:  constant.STATUS_CODE_INTERNAL_SERVER,
 		ErrCause:  cause,
 	}
 	return result
@@ -96,26 +96,26 @@ func NewInternalServerError(cause interface{}) RestErr {
 func NewRequestTimeoutError(cause interface{}) RestErr {
 	result := RestError{
 		ErrStatus: http.StatusRequestTimeout,
-		ErrError:  constants.STATUS_CODE_REQUEST_TIMEOUT,
+		ErrError:  constant.STATUS_CODE_REQUEST_TIMEOUT,
 		ErrCause:  cause,
 	}
 	return result
 }
 
 func ParseError(err error) RestErr {
-	if strings.Contains(err.Error(), constants.STATUS_CODE_BAD_REQUEST) {
+	if strings.Contains(err.Error(), constant.STATUS_CODE_BAD_REQUEST) {
 		return NewBadRequestError(utils.GetErrorMessage(err))
 	}
-	if strings.Contains(err.Error(), constants.STATUS_CODE_NOT_FOUND) {
+	if strings.Contains(err.Error(), constant.STATUS_CODE_NOT_FOUND) {
 		return NewNotFoundError(utils.GetErrorMessage(err))
 	}
-	if strings.Contains(err.Error(), constants.STATUS_CODE_UNAUTHORIZED) {
+	if strings.Contains(err.Error(), constant.STATUS_CODE_UNAUTHORIZED) {
 		return NewUnauthorizedError(utils.GetErrorMessage(err))
 	}
-	if strings.Contains(err.Error(), constants.STATUS_CODE_FORBIDDEN) {
+	if strings.Contains(err.Error(), constant.STATUS_CODE_FORBIDDEN) {
 		return NewForbiddenError(utils.GetErrorMessage(err))
 	}
-	if strings.Contains(err.Error(), constants.STATUS_CODE_REQUEST_TIMEOUT) {
+	if strings.Contains(err.Error(), constant.STATUS_CODE_REQUEST_TIMEOUT) {
 		return NewRequestTimeoutError(utils.GetErrorMessage(err))
 	}
 	return NewInternalServerError(utils.GetErrorMessage(err))

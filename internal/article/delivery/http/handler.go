@@ -2,18 +2,20 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
+	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/usecase"
 	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
+	"github.com/rs/zerolog/log"
 )
 
 type Handler struct {
@@ -34,6 +36,7 @@ func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMid
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("", h.Create(), h.mw.AuthJWTMiddleware())
 	group.GET("", h.GetListPaging())
+	group.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -52,7 +55,7 @@ func (h Handler) Create() echo.HandlerFunc {
 		ctx := utils.GetRequestCtx(c)
 		req := &models.CreateRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 		user := c.Get("user").(*userModel.Response)
@@ -61,7 +64,7 @@ func (h Handler) Create() echo.HandlerFunc {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constant.STATUS_MESSAGE_CREATED, res))
 	}
 }
 
@@ -81,7 +84,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 		ctx := utils.GetRequestCtx(c)
 		req := &models.RequestList{}
 		if err := utils.ReadQueryRequest(c, req); err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
@@ -90,6 +93,48 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+	}
+}
+
+// Update godoc
+//
+//	@Security		ApiKeyAuth
+//	@Summary		Update article
+//	@Description	Update an existing article
+//	@Tags			Article
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int						true	"Id"
+//	@Param			body	body		models.UpdateRequest	true	"body"
+//	@Success		200		{object}	models.Response
+//	@Router			/articles/{id} [put]
+func (h Handler) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+
+		req := &models.UpdateRequest{}
+		if err := utils.ReadBodyRequest(c, req); err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+
+		user := c.Get("user").(*userModel.Response)
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+
+		res, err := h.usecase.Update(ctx, user.Id, req.ToSaveRequest(id))
+		if err != nil {
+			if strings.Contains(err.Error(), constant.STATUS_CODE_BAD_REQUEST) {
+				return c.JSON(http.StatusOK, httpResponse.NewBadRequestError(utils.GetErrorMessage(err)))
+			} else {
+				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+			}
+		}
+
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
 	}
 }

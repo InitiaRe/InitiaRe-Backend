@@ -96,6 +96,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/articles/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update an existing article",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "Update article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "Login and return token",
@@ -327,6 +373,41 @@ const docTemplate = `{
             }
         },
         "/todos/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get detail todo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Todo"
+                ],
+                "summary": "Get detail todo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -358,7 +439,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UpdateRequest"
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest"
                         }
                     }
                 ],
@@ -497,6 +578,17 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response": {
             "type": "object",
             "properties": {
@@ -625,6 +717,14 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "models.LoginRequest": {
             "type": "object",
             "properties": {
@@ -655,14 +755,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "school": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UpdateRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
                     "type": "string"
                 }
             }

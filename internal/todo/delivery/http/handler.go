@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
+	"github.com/Ho-Minh/InitiaRe-website/constant"
 	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/constants"
 	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
 	"github.com/Ho-Minh/InitiaRe-website/internal/todo/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/todo/usecase"
@@ -14,7 +14,7 @@ import (
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
+	"github.com/rs/zerolog/log"
 )
 
 type Handler struct {
@@ -37,6 +37,7 @@ func (h Handler) MapRoutes(todoGroup *echo.Group) {
 	todoGroup.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 	todoGroup.DELETE("/:id", h.Delete(), h.mw.AuthJWTMiddleware())
 	todoGroup.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
+	todoGroup.GET("/:id", h.GetById(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -55,7 +56,7 @@ func (h Handler) Create() echo.HandlerFunc {
 		ctx := utils.GetRequestCtx(c)
 		req := &models.CreateRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 		user := c.Get("user").(*userModel.Response)
@@ -64,7 +65,7 @@ func (h Handler) Create() echo.HandlerFunc {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constants.STATUS_MESSAGE_CREATED, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusCreated, constant.STATUS_MESSAGE_CREATED, res))
 	}
 }
 
@@ -85,13 +86,13 @@ func (h Handler) Update() echo.HandlerFunc {
 		ctx := utils.GetRequestCtx(c)
 		req := &models.UpdateRequest{}
 		if err := utils.ReadBodyRequest(c, req); err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 		user := c.Get("user").(*userModel.Response)
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 		res, err := h.usecase.Update(ctx, user.Id, req.ToSaveRequest(id))
@@ -99,7 +100,7 @@ func (h Handler) Update() echo.HandlerFunc {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
 	}
 }
 
@@ -119,15 +120,16 @@ func (h Handler) Delete() echo.HandlerFunc {
 		ctx := utils.GetRequestCtx(c)
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
-		res, err := h.usecase.Delete(ctx, id)
+		user := c.Get("user").(*userModel.Response)
+		res, err := h.usecase.Delete(ctx, user.Id, id)
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
 	}
 }
 
@@ -148,7 +150,7 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 		ctx := utils.GetRequestCtx(c)
 		req := &models.RequestList{}
 		if err := utils.ReadQueryRequest(c, req); err != nil {
-			log.Error(err)
+			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
@@ -157,6 +159,35 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constants.STATUS_MESSAGE_OK, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+	}
+}
+
+// GetById godoc
+//
+//	@Security		ApiKeyAuth
+//	@Summary		Get detail todo
+//	@Description	Get detail todo
+//	@Tags			Todo
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Id"
+//	@Success		200	{object}	models.Response
+//	@Router			/todos/{id} [get]
+func (h Handler) GetById() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+
+		res, err := h.usecase.GetById(ctx, id)
+		if err != nil {
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
+		}
+
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
 	}
 }

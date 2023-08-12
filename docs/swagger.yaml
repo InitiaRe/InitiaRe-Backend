@@ -39,6 +39,13 @@ definitions:
       updated_by:
         type: integer
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest:
+    properties:
+      category_id:
+        type: integer
+      content:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response:
     properties:
       email:
@@ -122,6 +129,11 @@ definitions:
       updated_at:
         type: string
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest:
+    properties:
+      content:
+        type: string
+    type: object
   models.LoginRequest:
     properties:
       email:
@@ -142,11 +154,6 @@ definitions:
       password:
         type: string
       school:
-        type: string
-    type: object
-  models.UpdateRequest:
-    properties:
-      content:
         type: string
     type: object
   models.UserWithToken:
@@ -214,36 +221,32 @@ paths:
       summary: Create article
       tags:
       - Article
+  /articles/{id}:
     put:
       consumes:
       - application/json
       description: Update an existing article
       parameters:
       - description: Id
-        in: body
+        in: path
         name: id
         required: true
-        schema:
-          type: integer
-      - description: Content
+        type: integer
+      - description: body
         in: body
-        name: content
+        name: body
         required: true
         schema:
-          type: string
-      - description: category_id
-        in: body
-        name: category_id
-        required: true
-        schema:
-          type: string
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest'
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Update article
       tags:
       - Article
@@ -453,7 +456,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/models.UpdateRequest'
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest'
       produces:
       - application/json
       responses:

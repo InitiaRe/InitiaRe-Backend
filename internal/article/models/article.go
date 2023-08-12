@@ -59,3 +59,15 @@ func (r *CreateRequest) ToSaveRequest() *SaveRequest {
 	copier.Copy(req, r)
 	return req
 }
+
+type UpdateRequest struct {
+	Content    string `json:"content"`
+	CategoryId int    `json:"category_id"`
+}
+
+func (r *UpdateRequest) ToSaveRequest(id int) *SaveRequest {
+	req := &SaveRequest{}
+	copier.Copy(req, r)
+	req.Id = id
+	return req
+}

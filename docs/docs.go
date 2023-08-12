@@ -98,6 +98,11 @@ const docTemplate = `{
         },
         "/articles/{id}": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update an existing article",
                 "consumes": [
                     "application/json"

@@ -16,14 +16,14 @@ import (
 type usecase struct {
 	cfg       *config.Config
 	repo      repository.IRepository
-	redisRepo repository.IRedisRepository
+	cacheRepo repository.ICacheRepository
 }
 
-func NewUseCase(cfg *config.Config, repo repository.IRepository, redisRepo repository.IRedisRepository) IUseCase {
+func NewUseCase(cfg *config.Config, repo repository.IRepository, cacheRepo repository.ICacheRepository) IUseCase {
 	return &usecase{
 		cfg:       cfg,
 		repo:      repo,
-		redisRepo: redisRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -93,7 +93,7 @@ func (u *usecase) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	}
 
 	// save to cache
-	if err = u.redisRepo.SetUser(ctx, utils.GenerateUserKey(foundUser.Id), u.cfg.Auth.Expire, foundUser); err != nil {
+	if err = u.cacheRepo.SetUser(ctx, utils.GenerateUserKey(foundUser.Id), u.cfg.Auth.Expire, foundUser); err != nil {
 		log.Error().Err(err).Str("service", "usecase.redisRepo.SetUser").Send()
 		return nil, err
 	}

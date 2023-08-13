@@ -5,23 +5,12 @@ import (
 	"fmt"
 
 	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/todo/entity"
+	"github.com/Ho-Minh/InitiaRe-website/internal/storage/entity"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils/conversion"
-
 	"gorm.io/gorm"
 )
 
-type repo struct {
-	db *gorm.DB
-}
-
-func NewRepo(db *gorm.DB) IRepository {
-	return &repo{
-		db: db,
-	}
-}
-
-func (r *repo) Create(ctx context.Context, obj *entity.Todo) (*entity.Todo, error) {
+func (r *repo) Create(ctx context.Context, obj *entity.Storage) (*entity.Storage, error) {
 	result := r.db.Create(obj)
 	if result.Error != nil {
 		return nil, result.Error
@@ -29,7 +18,7 @@ func (r *repo) Create(ctx context.Context, obj *entity.Todo) (*entity.Todo, erro
 	return obj, nil
 }
 
-func (r *repo) CreateMany(ctx context.Context, objs []*entity.Todo) (int, error) {
+func (r *repo) CreateMany(ctx context.Context, objs []*entity.Storage) (int, error) {
 	result := r.db.Create(objs)
 	if result.Error != nil {
 		return 0, result.Error
@@ -37,7 +26,7 @@ func (r *repo) CreateMany(ctx context.Context, objs []*entity.Todo) (int, error)
 	return int(result.RowsAffected), nil
 }
 
-func (r *repo) Update(ctx context.Context, obj *entity.Todo) (*entity.Todo, error) {
+func (r *repo) Update(ctx context.Context, obj *entity.Storage) (*entity.Storage, error) {
 	result := r.db.Updates(obj)
 	if result.Error != nil {
 		return nil, result.Error
@@ -45,7 +34,7 @@ func (r *repo) Update(ctx context.Context, obj *entity.Todo) (*entity.Todo, erro
 	return obj, nil
 }
 
-func (r *repo) UpdateMany(ctx context.Context, objs []*entity.Todo) (int, error) {
+func (r *repo) UpdateMany(ctx context.Context, objs []*entity.Storage) (int, error) {
 	tx := r.db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -66,7 +55,7 @@ func (r *repo) UpdateMany(ctx context.Context, objs []*entity.Todo) (int, error)
 }
 
 func (r *repo) Delete(ctx context.Context, id int) (int, error) {
-	result := r.db.Delete(&entity.Todo{}, id)
+	result := r.db.Delete(&entity.Storage{}, id)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -81,7 +70,7 @@ func (r *repo) DeleteMany(ctx context.Context, ids []int) (int, error) {
 		}
 	}()
 	for _, id := range ids {
-		if err := tx.Delete(&entity.Todo{}, id).Error; err != nil {
+		if err := tx.Delete(&entity.Storage{}, id).Error; err != nil {
 			tx.Rollback()
 			return 0, err
 		}
@@ -101,8 +90,8 @@ func (r *repo) Count(ctx context.Context, queries map[string]interface{}) (int, 
 	return int(count), nil
 }
 
-func (r *repo) GetById(ctx context.Context, id int) (*entity.Todo, error) {
-	record := &entity.Todo{}
+func (r *repo) GetById(ctx context.Context, id int) (*entity.Storage, error) {
+	record := &entity.Storage{}
 	result := r.db.Find(&record, id).Limit(1)
 	if result.Error != nil {
 		return nil, result.Error
@@ -110,8 +99,8 @@ func (r *repo) GetById(ctx context.Context, id int) (*entity.Todo, error) {
 	return record, nil
 }
 
-func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.Todo, error) {
-	record := &entity.Todo{}
+func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.Storage, error) {
+	record := &entity.Storage{}
 	query := r.initQuery(ctx, queries)
 	result := query.Limit(1).Find(&record)
 	if result.Error != nil {
@@ -120,8 +109,8 @@ func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*ent
 	return record, nil
 }
 
-func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*entity.Todo, error) {
-	records := []*entity.Todo{}
+func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*entity.Storage, error) {
+	records := []*entity.Storage{}
 	query := r.initQuery(ctx, queries)
 	if err := query.Scan(&records).Error; err != nil {
 		return nil, err
@@ -129,8 +118,8 @@ func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*
 	return records, nil
 }
 
-func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Todo, error) {
-	records := []*entity.Todo{}
+func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Storage, error) {
+	records := []*entity.Storage{}
 
 	page := conversion.GetFromInterface(queries, "page", constant.DEFAULT_PAGE).(int)
 	size := conversion.GetFromInterface(queries, "size", constant.DEFAULT_SIZE).(int)
@@ -145,7 +134,7 @@ func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}
 }
 
 func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *gorm.DB {
-	query := r.db.Model(&entity.Todo{})
+	query := r.db.Model(&entity.Storage{})
 	query = r.join(query, queries)
 	query = r.filter(query, queries)
 	query = r.sort(query, queries)
@@ -172,7 +161,7 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
-	tbName := (&entity.Todo{}).TableName()
+	tbName := (&entity.Storage{}).TableName()
 	fromDate := conversion.GetFromInterface(queries, "from_date", 0).(int)
 	toDate := conversion.GetFromInterface(queries, "to_date", 0).(int)
 	createdBy := conversion.GetFromInterface(queries, "created_by", 0).(int)

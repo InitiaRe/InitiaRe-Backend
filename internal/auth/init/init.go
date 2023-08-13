@@ -11,7 +11,7 @@ import (
 )
 
 type Init struct {
-	RedisRepository repository.IRedisRepository
+	CacheRepository repository.ICacheRepository
 	Repository      repository.IRepository
 	Usecase         usecase.IUseCase
 	Handler         handler.IHandler
@@ -20,14 +20,14 @@ type Init struct {
 func NewInit(
 	db *gorm.DB,
 	cfg *config.Config,
-	redisClient *redis.Client,
+	cache *redis.Client,
 ) *Init {
 	repo := repository.NewRepo(db)
-	redisRepo := repository.NewRedisRepo(redisClient)
-	usecase := usecase.NewUseCase(cfg, repo, redisRepo)
+	cacheRepo := repository.NewCacheRepo(cache)
+	usecase := usecase.NewUseCase(cfg, repo, cacheRepo)
 	handler := handler.NewHandler(cfg, usecase)
 	return &Init{
-		RedisRepository: redisRepo,
+		CacheRepository: cacheRepo,
 		Repository:      repo,
 		Usecase:         usecase,
 		Handler:         handler,

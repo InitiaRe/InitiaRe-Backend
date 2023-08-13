@@ -20,7 +20,7 @@ type Article struct {
 }
 
 func (a *Article) TableName() string {
-	return "articles"
+	return "article"
 }
 
 func (a *Article) Export() *models.Response {

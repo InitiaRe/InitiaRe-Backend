@@ -172,19 +172,19 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
-	todoTbName := (&entity.Article{}).TableName()
+	tbName := (&entity.Article{}).TableName()
 	fromDate := conversion.GetFromInterface(queries, "from_date", 0).(int)
 	toDate := conversion.GetFromInterface(queries, "to_date", 0).(int)
 	createdBy := conversion.GetFromInterface(queries, "created_by", 0).(int)
 
 	if createdBy != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_by = ?", todoTbName), createdBy)
+		query = query.Where(fmt.Sprintf("%s.created_by = ?", tbName), createdBy)
 	}
 	if fromDate != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_at >= timestamp(?)", todoTbName), conversion.FormatUnixToString(fromDate, "YYYY-MM-DD HH:mm:ss"))
+		query = query.Where(fmt.Sprintf("%s.created_at >= timestamp(?)", tbName), conversion.FormatUnixToString(fromDate, "YYYY-MM-DD HH:mm:ss"))
 	}
 	if toDate != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_at < timestamp(?)", todoTbName), conversion.FormatUnixToString(toDate, "YYYY-MM-DD HH:mm:ss"))
+		query = query.Where(fmt.Sprintf("%s.created_at < timestamp(?)", tbName), conversion.FormatUnixToString(toDate, "YYYY-MM-DD HH:mm:ss"))
 	}
 	return query
 }

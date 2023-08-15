@@ -47,19 +47,8 @@ type CreateRequest struct {
 	Category string `json:"category"`
 }
 
-type UpdateRequest struct {
-	Category string `json:"category"`
-}
-
 func (r *CreateRequest) ToSaveRequest() *SaveRequest {
 	req := &SaveRequest{}
 	copier.Copy(req, r)
-	return req
-}
-
-func (r *UpdateRequest) ToSaveRequest(id int) *SaveRequest {
-	req := &SaveRequest{}
-	copier.Copy(req, r)
-	req.Id = id
 	return req
 }

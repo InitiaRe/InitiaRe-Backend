@@ -96,6 +96,11 @@ definitions:
       updated_by:
         type: integer
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest:
+    properties:
+      category:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest:
     properties:
       content:
@@ -343,6 +348,35 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Create category
+      tags:
+      - Category
+  /categories/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update category
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update category
       tags:
       - Category
   /todos:

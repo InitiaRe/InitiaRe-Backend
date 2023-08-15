@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/todo/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/storage/models"
 
 	"github.com/jinzhu/copier"
 )
@@ -19,7 +19,7 @@ type Storage struct {
 }
 
 func (s *Storage) TableName() string {
-	return "storage"
+	return "initiaRe_storage"
 }
 
 func (s *Storage) Export() *models.Response {

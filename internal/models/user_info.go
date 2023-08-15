@@ -7,3 +7,8 @@ type UserInfo struct {
 	NumberPeerReviewed int 		 `gorm:"column:number_peer_reviewed" json:"number_peer_reviewed" redis:"number_peer_reviewed"`
 	NumberSpecReviewed int 		 `gorm:"column:number_spec_reviewed" json:"number_spec_reviewed" redis:"number_spec_reviewed"`
 }
+
+
+func (u *UserInfo) TableName() string {
+	return "initiaRe_user_info"
+}

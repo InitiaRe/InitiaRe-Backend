@@ -22,10 +22,10 @@ func NewInit(
 	cfg *config.Config,
 	cache *redis.Client,
 ) *Init {
-	repo := repository.NewRepo(db)
+	repo := repository.InitRepo(db)
 	cacheRepo := repository.NewCacheRepo(cache)
-	usecase := usecase.NewUseCase(cfg, repo, cacheRepo)
-	handler := handler.NewHandler(cfg, usecase)
+	usecase := usecase.InitUsecase(cfg, repo, cacheRepo)
+	handler := handler.InitHandler(cfg, usecase)
 	return &Init{
 		CacheRepository: cacheRepo,
 		Repository:      repo,

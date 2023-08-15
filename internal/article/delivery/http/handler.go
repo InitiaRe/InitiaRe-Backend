@@ -24,7 +24,7 @@ type Handler struct {
 	mw      middleware.IMiddlewareManager
 }
 
-func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMiddlewareManager) IHandler {
+func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMiddlewareManager) IHandler {
 	return Handler{
 		cfg:     cfg,
 		usecase: usecase,

@@ -8,6 +8,7 @@ import (
 	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
 	initTodo "github.com/Ho-Minh/InitiaRe-website/internal/todo/init"
 	initUser "github.com/Ho-Minh/InitiaRe-website/internal/user/init"
+	initStorage "github.com/Ho-Minh/InitiaRe-website/internal/storage/init"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -35,6 +36,9 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	// Init User
 	user := initUser.NewInit(s.db, s.cfg, mw)
 
+	// Init Storage
+	storage := initStorage.NewInit(s.db, s.cfg, mw, s.ctn)
+
 	// Enable cors
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
@@ -49,6 +53,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	articleGroup := v1.Group("/articles")
 	categoryGroup := v1.Group("/categories")
 	userGroup := v1.Group("/users")
+	storageGroup := v1.Group("/storage")
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	auth.Handler.MapRoutes(authGroup)
@@ -56,6 +61,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	article.Handler.MapRoutes(articleGroup)
 	category.Handler.MapRoutes(categoryGroup)
 	user.Handler.MapRoutes(userGroup)
+	storage.Handler.MapRoutes(storageGroup)
 
 	return nil
 }

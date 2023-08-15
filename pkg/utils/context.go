@@ -38,6 +38,14 @@ func ReadBodyRequest(ctx echo.Context, request interface{}) error {
 	return nil
 }
 
+// Read request form data
+// func ReadFormDataRequest(ctx echo.Context, request interface{}) error {
+// 	if err := ctx.Echo().Bin(request); err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
+
 // Get context with request id
 func GetRequestCtx(c echo.Context) context.Context {
 	return context.WithValue(c.Request().Context(), ReqIDCtxKey{}, GetRequestID(c))

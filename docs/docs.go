@@ -291,6 +291,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/storage": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Upload media file (pdf, docs, images, videos, etc.)",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Storage"
+                ],
+                "summary": "Upload media",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "binary file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/todos": {
             "get": {
                 "security": [
@@ -663,6 +700,26 @@ const docTemplate = `{
                 },
                 "updated_by": {
                     "type": "integer"
+                }
+            }
+        },
+        "github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "integer"
+                },
+                "download_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },

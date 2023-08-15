@@ -18,7 +18,7 @@ type Todo struct {
 }
 
 func (t *Todo) TableName() string {
-	return "todo"
+	return "initiaRe_todo"
 }
 
 func (a *Todo) Export() *models.Response {

@@ -19,7 +19,7 @@ type usecase struct {
 	cacheRepo repository.ICacheRepository
 }
 
-func NewUseCase(cfg *config.Config, repo repository.IRepository, cacheRepo repository.ICacheRepository) IUseCase {
+func InitUsecase(cfg *config.Config, repo repository.IRepository, cacheRepo repository.ICacheRepository) IUseCase {
 	return &usecase{
 		cfg:       cfg,
 		repo:      repo,

@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/spf13/viper"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 )
 
 type Config struct {
@@ -15,6 +15,7 @@ type Config struct {
 	PostgreSQL PostgreSQLConfig `mapstructure:"postgresql"`
 	Server     ServerConfig     `mapstructure:"server"`
 	Logger     LoggerConfig     `mapstructure:"logger"`
+	Storage    StorageConfig    `mapstructure:"storage"`
 }
 type PostgreSQLConfig struct {
 	Host     string `mapstructure:"host"`
@@ -55,6 +56,13 @@ type AuthConfig struct {
 type LoggerConfig struct {
 	Level string `mapstructure:"level"`
 	Mode  string `mapstructure:"mode"`
+}
+
+type StorageConfig struct {
+	Host        string `mapstructure:"host"`
+	Container   string `mapstructure:"container"`
+	AccountName string `mapstructure:"account_name"`
+	AccountKey  string `mapstructure:"account_key"`
 }
 
 func GetConfig() *Config {

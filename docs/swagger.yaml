@@ -96,6 +96,19 @@ definitions:
       updated_by:
         type: integer
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      download_url:
+        type: string
+      id:
+        type: integer
+      type:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest:
     properties:
       content:
@@ -345,6 +358,29 @@ paths:
       summary: Create category
       tags:
       - Category
+  /storage:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload media file (pdf, docs, images, videos, etc.)
+      parameters:
+      - description: binary file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Upload media
+      tags:
+      - Storage
   /todos:
     get:
       consumes:

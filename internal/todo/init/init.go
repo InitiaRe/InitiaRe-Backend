@@ -21,9 +21,9 @@ func NewInit(
 	cfg *config.Config,
 	mw *initMW.Init,
 ) *Init {
-	repo := repository.NewRepo(db)
-	usecase := usecase.NewUseCase(repo)
-	handler := handler.NewHandler(cfg, usecase, mw.MiddlewareManager)
+	repo := repository.InitRepo(db)
+	usecase := usecase.InitUsecase(repo)
+	handler := handler.InitHandler(cfg, usecase, mw.MiddlewareManager)
 	return &Init{
 		Repository: repo,
 		Usecase:    usecase,

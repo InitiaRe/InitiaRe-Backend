@@ -6,8 +6,7 @@ import (
 
 	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/internal/category/entity"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils/conversion"
-
+	"github.com/vukyn/go-kuqery/konversion"
 	"gorm.io/gorm"
 )
 
@@ -15,7 +14,7 @@ type repo struct {
 	db *gorm.DB
 }
 
-func NewRepo(db *gorm.DB) IRepository {
+func InitRepo(db *gorm.DB) IRepository {
 	return &repo{
 		db: db,
 	}
@@ -132,8 +131,8 @@ func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*
 func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Category, error) {
 	records := []*entity.Category{}
 
-	page := conversion.GetFromInterface(queries, "page", constant.DEFAULT_PAGE).(int)
-	size := conversion.GetFromInterface(queries, "size", constant.DEFAULT_SIZE).(int)
+	page := konversion.ReadInterface(queries, "page", constant.DEFAULT_PAGE).(int)
+	size := konversion.ReadInterface(queries, "size", constant.DEFAULT_SIZE).(int)
 
 	query := r.initQuery(ctx, queries)
 
@@ -160,8 +159,8 @@ func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 }
 
 func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
-	sortBy := conversion.GetFromInterface(queries, "sort_by", "").(string)
-	orderBy := conversion.GetFromInterface(queries, "order_by", constant.DEFAULT_SORT_ORDER).(string)
+	sortBy := konversion.ReadInterface(queries, "sort_by", "").(string)
+	orderBy := konversion.ReadInterface(queries, "order_by", constant.DEFAULT_SORT_ORDER).(string)
 
 	switch sortBy {
 	default:
@@ -173,18 +172,18 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	tbName := (&entity.Category{}).TableName()
-	fromDate := conversion.GetFromInterface(queries, "from_date", 0).(int)
-	toDate := conversion.GetFromInterface(queries, "to_date", 0).(int)
-	createdBy := conversion.GetFromInterface(queries, "created_by", 0).(int)
+	fromDate := konversion.ReadInterface(queries, "from_date", 0).(int)
+	toDate := konversion.ReadInterface(queries, "to_date", 0).(int)
+	createdBy := konversion.ReadInterface(queries, "created_by", 0).(int)
 
 	if createdBy != 0 {
 		query = query.Where(fmt.Sprintf("%s.created_by = ?", tbName), createdBy)
 	}
 	if fromDate != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_at >= timestamp(?)", tbName), conversion.FormatUnixToString(fromDate, "YYYY-MM-DD HH:mm:ss"))
+		query = query.Where(fmt.Sprintf("%s.created_at >= timestamp(?)", tbName), konversion.FormatUnixToString(fromDate, konversion.DD_MM_YYYY_HH_MM_SS))
 	}
 	if toDate != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_at < timestamp(?)", tbName), conversion.FormatUnixToString(toDate, "YYYY-MM-DD HH:mm:ss"))
+		query = query.Where(fmt.Sprintf("%s.created_at < timestamp(?)", tbName), konversion.FormatUnixToString(toDate, konversion.DD_MM_YYYY_HH_MM_SS))
 	}
 	return query
 }

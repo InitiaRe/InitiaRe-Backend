@@ -5,7 +5,7 @@ test:
 	go test -cover ./...
 
 migrate:
-	go run migrations/migrate.go
+	go run migration/migrate.go
 
 tidy:
 	go mod tidy

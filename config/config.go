@@ -10,59 +10,59 @@ import (
 )
 
 type Config struct {
-	Auth       AuthConfig       `mapstructure:"auth"`
-	Redis      RedisConfig      `mapstructure:"redis"`
-	PostgreSQL PostgreSQLConfig `mapstructure:"postgresql"`
-	Server     ServerConfig     `mapstructure:"server"`
-	Logger     LoggerConfig     `mapstructure:"logger"`
-	Storage    StorageConfig    `mapstructure:"storage"`
+	Auth       AuthConfig
+	Redis      RedisConfig
+	PostgreSQL PostgreSQLConfig
+	Server     ServerConfig
+	Logger     LoggerConfig
+	Storage    StorageConfig
 }
 type PostgreSQLConfig struct {
-	Host     string `mapstructure:"host"`
-	Port     int    `mapstructure:"port"`
-	User     string `mapstructure:"user"`
-	Password string `mapstructure:"password"`
-	DBName   string `mapstructure:"dbname"`
+	Host     string
+	Port     int
+	User     string
+	Password string
+	DBName   string
 }
 
 type RedisConfig struct {
-	Host         string `mapstructure:"host"`
-	Port         int    `mapstructure:"port"`
-	PoolSize     int    `mapstructure:"poolsize"`
-	PoolTimeout  int    `mapstructure:"pooltimeout"`
-	MinIdleConns int    `mapstructure:"minidleconns"`
-	DB           int    `mapstructure:"db"`
-	Username     string `mapstructure:"username"`
-	Password     string `mapstructure:"password"`
+	Host         string
+	Port         int
+	PoolSize     int
+	PoolTimeout  int
+	MinIdleConns int
+	DB           int
+	Username     string
+	Password     string
 }
 
 type ServerConfig struct {
-	AppVersion        string `mapstructure:"app_version"`
-	Port              string `mapstructure:"port"`
-	Mode              string `mapstructure:"mode"`
-	ReadTimeout       int    `mapstructure:"readtimeout"`
-	WriteTimeout      int    `mapstructure:"writetimeout"`
-	SSL               bool   `mapstructure:"ssl"`
-	CtxDefaultTimeout int    `mapstructure:"ctxdefaulttimeout"`
+	AppVersion        string
+	Port              string
+	Mode              string
+	ReadTimeout       int
+	WriteTimeout      int
+	SSL               bool
+	CtxDefaultTimeout int
 }
 
 type AuthConfig struct {
-	Secret   string `mapstructure:"secret"`
-	Expire   int    `mapstructure:"expire"`
-	Issuer   string `mapstructure:"issuer"`
-	Audience string `mapstructure:"audience"`
+	Secret   string
+	Expire   int
+	Issuer   string
+	Audience string
 }
 
 type LoggerConfig struct {
-	Level string `mapstructure:"level"`
-	Mode  string `mapstructure:"mode"`
+	Level string
+	Mode  string
 }
 
 type StorageConfig struct {
-	Host        string `mapstructure:"host"`
-	Container   string `mapstructure:"container"`
-	AccountName string `mapstructure:"accountname"`
-	AccountKey  string `mapstructure:"accountkey"`
+	Host        string
+	Container   string
+	AccountName string
+	AccountKey  string
 }
 
 func GetConfig() *Config {

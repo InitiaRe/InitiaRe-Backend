@@ -6,7 +6,7 @@ import (
 
 	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/entity"
-	"github.com/vukyn/go-kuqery/konversion"
+	"github.com/vukyn/go-kuery/konversion"
 
 	"gorm.io/gorm"
 )

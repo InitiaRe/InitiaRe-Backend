@@ -8,7 +8,7 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/Ho-Minh/InitiaRe-website/internal/storage/models"
-	"github.com/vukyn/go-kuqery/krypto"
+	"github.com/vukyn/go-kuery/krypto"
 )
 
 func (c *ctnRepo) Upload(ctx context.Context, req *models.UploadRequest) (string, error) {

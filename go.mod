@@ -13,14 +13,14 @@ require (
 	github.com/spf13/viper v1.16.0
 	github.com/swaggo/echo-swagger v1.4.0
 	github.com/swaggo/swag v1.16.1
-	github.com/vukyn/go-kuqery v0.0.0-20230814154257-cea02433fca0
-	golang.org/x/crypto v0.11.0
+	github.com/vukyn/go-kuery v0.0.0-20230816071025-2917841200eb
+	golang.org/x/crypto v0.12.0
 	gorm.io/driver/postgres v1.5.2
-	gorm.io/gorm v1.25.3
+	gorm.io/gorm v1.25.2
 )
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.6.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.7.1 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.3.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
@@ -53,9 +53,9 @@ require (
 	github.com/swaggo/files/v2 v2.0.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	golang.org/x/net v0.12.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
-	golang.org/x/text v0.11.0 // indirect
+	golang.org/x/net v0.14.0 // indirect
+	golang.org/x/sys v0.11.0 // indirect
+	golang.org/x/text v0.12.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.11.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

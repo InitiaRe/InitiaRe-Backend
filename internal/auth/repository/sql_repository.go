@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
-	"github.com/vukyn/go-kuqery/konversion"
+	"github.com/vukyn/go-kuery/konversion"
 
 	"gorm.io/gorm"
 )

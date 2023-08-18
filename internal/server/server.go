@@ -9,11 +9,12 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/Ho-Minh/InitiaRe-website/config"
 
 	"github.com/labstack/echo/v4"
-	"github.com/rs/zerolog/log"
 	"github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
 
@@ -26,11 +27,18 @@ type Server struct {
 	echo        *echo.Echo
 	cfg         *config.Config
 	db          *gorm.DB
+	ctn         *azblob.Client
 	redisClient *redis.Client
 }
 
-func NewServer(cfg *config.Config, db *gorm.DB, redisClient *redis.Client) *Server {
-	return &Server{echo: echo.New(), cfg: cfg, db: db, redisClient: redisClient}
+func NewServer(cfg *config.Config, db *gorm.DB, ctn *azblob.Client, redisClient *redis.Client) *Server {
+	return &Server{
+		echo:        echo.New(),
+		cfg:         cfg,
+		db:          db,
+		ctn:         ctn,
+		redisClient: redisClient,
+	}
 }
 
 func (s *Server) Run() error {

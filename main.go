@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/internal/server"
 
@@ -45,9 +46,12 @@ func main() {
 	redisClient := initRedis(&cfg.Redis)
 	defer redisClient.Close()
 
+	// Init Azure Blob Storage
+	ctnClient := initContainer(&cfg.Storage)
+
 	// Init server
 	log.Info().Msg("Starting api server")
-	s := server.NewServer(cfg, db, redisClient)
+	s := server.NewServer(cfg, db, ctnClient, redisClient)
 	if err := s.Run(); err != nil {
 		log.Fatal().Msg(err.Error())
 	}
@@ -56,6 +60,7 @@ func main() {
 func initDB(cfg *config.PostgreSQLConfig) *gorm.DB {
 	log.Info().Msg("Init DB")
 	zLogger := zerolog.New(os.Stderr).With().Timestamp().Logger()
+	zLogger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	newLogger := logger.New(
 		&zLogger, // io writer
 		logger.Config{
@@ -63,7 +68,7 @@ func initDB(cfg *config.PostgreSQLConfig) *gorm.DB {
 			LogLevel:                  logger.Silent, // Log level
 			IgnoreRecordNotFoundError: true,          // Ignore ErrRecordNotFound error for logger
 			ParameterizedQueries:      true,          // Don't include params in the SQL log
-			Colorful:                  false,         // Disable color
+			Colorful:                  true,          // Disable color
 		},
 	)
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", cfg.Host, cfg.User, cfg.Password, cfg.DBName, cfg.Port)
@@ -124,4 +129,16 @@ func initLogger(cfg *config.LoggerConfig) {
 	default:
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
+}
+
+func initContainer(cfg *config.StorageConfig) *azblob.Client {
+	credential, err := azblob.NewSharedKeyCredential(cfg.AccountName, cfg.AccountKey)
+	if err != nil {
+		log.Fatal().Msgf("Azure credential init: %s", err)
+	}
+	client, err := azblob.NewClientWithSharedKeyCredential(cfg.Host, credential, nil)
+	if err != nil {
+		log.Fatal().Msgf("Azure client init: %s", err)
+	}
+	return client
 }

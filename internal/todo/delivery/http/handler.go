@@ -23,7 +23,7 @@ type Handler struct {
 	mw      middleware.IMiddlewareManager
 }
 
-func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMiddlewareManager) IHandler {
+func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMiddlewareManager) IHandler {
 	return Handler{
 		cfg:     cfg,
 		usecase: usecase,
@@ -32,12 +32,12 @@ func NewHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMid
 }
 
 // Map routes
-func (h Handler) MapRoutes(todoGroup *echo.Group) {
-	todoGroup.POST("", h.Create(), h.mw.AuthJWTMiddleware())
-	todoGroup.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
-	todoGroup.DELETE("/:id", h.Delete(), h.mw.AuthJWTMiddleware())
-	todoGroup.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
-	todoGroup.GET("/:id", h.GetById(), h.mw.AuthJWTMiddleware())
+func (h Handler) MapRoutes(group *echo.Group) {
+	group.POST("", h.Create(), h.mw.AuthJWTMiddleware())
+	group.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
+	group.DELETE("/:id", h.Delete(), h.mw.AuthJWTMiddleware())
+	group.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
+	group.GET("/:id", h.GetById(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc

@@ -5,25 +5,22 @@ import (
 	"gorm.io/gorm"
 )
 
-// Auth repository
 type repo struct {
 	db *gorm.DB
 }
 
-func NewRepo(db *gorm.DB) IRepository {
+func InitRepo(db *gorm.DB) IRepository {
 	return &repo{
 		db: db,
 	}
 }
 
-// Auth redis repository
-type redisRepo struct {
-	redisClient *redis.Client
+type cacheRepo struct {
+	cache *redis.Client
 }
 
-// Auth redis repository constructor
-func NewRedisRepo(redisClient *redis.Client) IRedisRepository {
-	return &redisRepo{
-		redisClient: redisClient,
+func NewCacheRepo(cache *redis.Client) ICacheRepository {
+	return &cacheRepo{
+		cache: cache,
 	}
 }

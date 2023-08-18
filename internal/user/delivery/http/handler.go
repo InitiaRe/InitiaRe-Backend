@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
+	_ "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
-	_ "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 
 	"github.com/labstack/echo/v4"
 )
@@ -16,7 +16,7 @@ type Handler struct {
 	mw  middleware.IMiddlewareManager
 }
 
-func NewHandler(cfg *config.Config, mw middleware.IMiddlewareManager) IHandler {
+func InitHandler(cfg *config.Config, mw middleware.IMiddlewareManager) IHandler {
 	return Handler{
 		cfg: cfg,
 		mw:  mw,

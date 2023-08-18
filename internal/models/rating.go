@@ -6,3 +6,8 @@ type Rating struct {
 	ArticleId 		   int 		 `gorm:"column:article_id" json:"article_id" redis:"article_id"`
 	Rating			   int 		 `gorm:"column:rating" json:"rating" redis:"rating"`
 }
+
+
+func (r *Rating) TableName() string {
+	return "initiaRe_rating"
+}

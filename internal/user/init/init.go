@@ -17,7 +17,7 @@ func NewInit(
 	cfg *config.Config,
 	mw *initMW.Init,
 ) *Init {
-	handler := handler.NewHandler(cfg, mw.MiddlewareManager)
+	handler := handler.InitHandler(cfg, mw.MiddlewareManager)
 	return &Init{
 		Handler: handler,
 	}

@@ -19,7 +19,7 @@ type Handler struct {
 	usecase usecase.IUseCase
 }
 
-func NewHandler(cfg *config.Config, usecase usecase.IUseCase) IHandler {
+func InitHandler(cfg *config.Config, usecase usecase.IUseCase) IHandler {
 	return Handler{
 		cfg:     cfg,
 		usecase: usecase,

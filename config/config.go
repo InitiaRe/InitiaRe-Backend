@@ -5,56 +5,64 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/spf13/viper"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Auth       AuthConfig       `mapstructure:"auth"`
-	Redis      RedisConfig      `mapstructure:"redis"`
-	PostgreSQL PostgreSQLConfig `mapstructure:"postgresql"`
-	Server     ServerConfig     `mapstructure:"server"`
-	Logger     LoggerConfig     `mapstructure:"logger"`
+	Auth       AuthConfig
+	Redis      RedisConfig
+	PostgreSQL PostgreSQLConfig
+	Server     ServerConfig
+	Logger     LoggerConfig
+	Storage    StorageConfig
 }
 type PostgreSQLConfig struct {
-	Host     string `mapstructure:"host"`
-	Port     int    `mapstructure:"port"`
-	User     string `mapstructure:"user"`
-	Password string `mapstructure:"password"`
-	DBName   string `mapstructure:"dbname"`
+	Host     string
+	Port     int
+	User     string
+	Password string
+	DBName   string
 }
 
 type RedisConfig struct {
-	Host         string `mapstructure:"host"`
-	Port         int    `mapstructure:"port"`
-	PoolSize     int    `mapstructure:"pool_size"`
-	PoolTimeout  int    `mapstructure:"pool_timeout"`
-	MinIdleConns int    `mapstructure:"min_idle_conns"`
-	DB           int    `mapstructure:"db"`
-	Username     string `mapstructure:"username"`
-	Password     string `mapstructure:"password"`
+	Host         string
+	Port         int
+	PoolSize     int
+	PoolTimeout  int
+	MinIdleConns int
+	DB           int
+	Username     string
+	Password     string
 }
 
 type ServerConfig struct {
-	AppVersion        string `mapstructure:"app_version"`
-	Port              string `mapstructure:"port"`
-	Mode              string `mapstructure:"mode"`
-	ReadTimeout       int    `mapstructure:"read_timeout"`
-	WriteTimeout      int    `mapstructure:"write_timeout"`
-	SSL               bool   `mapstructure:"ssl"`
-	CtxDefaultTimeout int    `mapstructure:"ctx_default_timeout"`
+	AppVersion        string
+	Port              string
+	Mode              string
+	ReadTimeout       int
+	WriteTimeout      int
+	SSL               bool
+	CtxDefaultTimeout int
 }
 
 type AuthConfig struct {
-	JWTSecret string `mapstructure:"jwt_secret"`
-	Expire    int    `mapstructure:"expire"`
-	Issuer    string `mapstructure:"issuer"`
-	Audience  string `mapstructure:"audience"`
+	Secret   string
+	Expire   int
+	Issuer   string
+	Audience string
 }
 
 type LoggerConfig struct {
-	Level string `mapstructure:"level"`
-	Mode  string `mapstructure:"mode"`
+	Level string
+	Mode  string
+}
+
+type StorageConfig struct {
+	Host        string
+	Container   string
+	AccountName string
+	AccountKey  string
 }
 
 func GetConfig() *Config {
@@ -72,6 +80,7 @@ func GetConfig() *Config {
 		}
 		mapEnv["SERVER.PORT"] = os.Getenv("PORT")
 		vp.MergeConfigMap(mapEnv)
+		bindEnvs(vp, c)
 	default:
 		vp.SetConfigName("config")
 		vp.SetConfigType("yaml")
@@ -82,7 +91,6 @@ func GetConfig() *Config {
 			}
 		}
 	}
-	bindEnvs(vp, c)
 	if err := vp.Unmarshal(&c); err != nil {
 		log.Fatal().Msg("Unable to unmarshal config")
 	}

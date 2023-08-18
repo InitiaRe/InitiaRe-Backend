@@ -5,3 +5,7 @@ type Status struct {
 	Category     	   string    `gorm:"column:category" json:"category" redis:"category"`	
 	StatusName 		   string    `gorm:"column:status_name" json:"status_name" redis:"status_name"`
 }
+
+func (s *Status) TableName() string {
+	return "initiaRe_status"
+}

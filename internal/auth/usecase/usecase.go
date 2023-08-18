@@ -16,14 +16,14 @@ import (
 type usecase struct {
 	cfg       *config.Config
 	repo      repository.IRepository
-	redisRepo repository.IRedisRepository
+	cacheRepo repository.ICacheRepository
 }
 
-func NewUseCase(cfg *config.Config, repo repository.IRepository, redisRepo repository.IRedisRepository) IUseCase {
+func InitUsecase(cfg *config.Config, repo repository.IRepository, cacheRepo repository.ICacheRepository) IUseCase {
 	return &usecase{
 		cfg:       cfg,
 		repo:      repo,
-		redisRepo: redisRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -86,14 +86,14 @@ func (u *usecase) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	// end validation
 
 	// generate token
-	token, err := utils.GenerateJWTToken(foundUser.Export(), u.cfg.Auth.JWTSecret, u.cfg.Auth.Expire)
+	token, err := utils.GenerateJWTToken(foundUser.Export(), u.cfg.Auth.Secret, u.cfg.Auth.Expire)
 	if err != nil {
 		log.Error().Err(err).Str("service", "utils.GenerateJWTToken").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, constant.STATUS_MESSAGE_INTERNAL_SERVER_ERROR)
 	}
 
 	// save to cache
-	if err = u.redisRepo.SetUser(ctx, utils.GenerateUserKey(foundUser.Id), u.cfg.Auth.Expire, foundUser); err != nil {
+	if err = u.cacheRepo.SetUser(ctx, utils.GenerateUserKey(foundUser.Id), u.cfg.Auth.Expire, foundUser); err != nil {
 		log.Error().Err(err).Str("service", "usecase.redisRepo.SetUser").Send()
 		return nil, err
 	}

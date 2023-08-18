@@ -96,6 +96,24 @@ definitions:
       updated_by:
         type: integer
     type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest:
+    properties:
+      category:
+        type: string
+    type: object
+  github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      download_url:
+        type: string
+      id:
+        type: integer
+      type:
+        type: string
+    type: object
   github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest:
     properties:
       content:
@@ -345,6 +363,58 @@ paths:
       summary: Create category
       tags:
       - Category
+  /categories/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update category
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update category
+      tags:
+      - Category
+  /storage/media/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload media file (pdf, docs, images, videos, etc.)
+      parameters:
+      - description: binary file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Upload media
+      tags:
+      - Storage
   /todos:
     get:
       consumes:

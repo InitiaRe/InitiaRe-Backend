@@ -14,7 +14,7 @@ func NewInit(
 	cfg *config.Config,
 	initAuth *initAuth.Init,
 ) *Init {
-	mw := middleware.NewMiddlewareManager(cfg, initAuth.RedisRepository)
+	mw := middleware.NewMiddlewareManager(cfg, initAuth.CacheRepository)
 	return &Init{
 		MiddlewareManager: mw,
 	}

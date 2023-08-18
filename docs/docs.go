@@ -291,6 +291,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/categories/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Update category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/storage/media/upload": {
             "post": {
                 "security": [
@@ -700,6 +746,14 @@ const docTemplate = `{
                 },
                 "updated_by": {
                     "type": "integer"
+                }
+            }
+        },
+        "github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
                 }
             }
         },

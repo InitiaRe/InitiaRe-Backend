@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/constant"
@@ -34,6 +35,7 @@ func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMi
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("", h.Create(), h.mw.AuthJWTMiddleware())
 	group.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
+	group.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -87,6 +89,41 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 		}
 
 		res, err := h.usecase.GetListPaging(ctx, req)
+		if err != nil {
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
+		}
+
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+	}
+}
+
+// Update godoc
+//
+//	@Security		ApiKeyAuth
+//	@Summary		Update category
+//	@Description	Update category
+//	@Tags			Category
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int						true	"Id"
+//	@Param			body	body		models.UpdateRequest	true	"body"
+//	@Success		200		{object}	models.Response
+//	@Router			/categories/{id} [put]
+func (h Handler) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+		req := &models.UpdateRequest{}
+		if err := utils.ReadBodyRequest(c, req); err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+		user := c.Get("user").(*userModel.Response)
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+		res, err := h.usecase.Update(ctx, user.Id, req.ToSaveRequest(id))
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}

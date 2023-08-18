@@ -32,7 +32,7 @@ func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMi
 
 // Map routes
 func (h Handler) MapRoutes(group *echo.Group) {
-	group.POST("", h.UploadMedia(), h.mw.AuthJWTMiddleware())
+	group.POST("/media/upload", h.UploadMedia(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -45,15 +45,17 @@ func (h Handler) MapRoutes(group *echo.Group) {
 //	@Produce		json
 //	@Param			file	formData	file	true	"binary file"
 //	@Success		201		{object}	models.Response
-//	@Router			/storage [post]
+//	@Router			/storage/media/upload [post]
 func (h Handler) UploadMedia() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		// file := []byte{}
-		req := models.UploadRequest{}
-		if err := utils.ReadBodyRequest(c, req); err != nil {
+		file, err := c.FormFile("file")
+		if err != nil {
 			log.Error().Err(err).Send()
-			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
+		}
+		req := models.UploadRequest{
+			File: file,
 		}
 		user := c.Get("user").(*userModel.Response)
 		res, err := h.usecase.UploadMedia(ctx, user.Id, &req)

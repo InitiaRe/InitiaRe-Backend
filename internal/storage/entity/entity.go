@@ -12,8 +12,8 @@ type Storage struct {
 	Id          int       `gorm:"primarykey;column:id" json:"id" redis:"id"`
 	DownloadUrl string    `gorm:"column:download_url" json:"download_url,omitempty" redis:"download_url"`
 	Type        string    `gorm:"column:type" json:"type,omitempty" redis:"type"`
-	Token       string    `gorm:"column:token" json:"token,omitempty" redis:"token"`
-	LifeTime    int       `gorm:"column:life_time" json:"life_time,omitempty" redis:"life_time"`
+	Token       string    `gorm:"column:token;default:(-)" json:"token,omitempty" redis:"token"`
+	LifeTime    int       `gorm:"column:life_time;default:(-)" json:"life_time,omitempty" redis:"life_time"`
 	CreatedBy   int       `gorm:"column:created_by" json:"created_by,omitempty" redis:"created_by"`
 	CreatedAt   time.Time `gorm:"autoCreateTime" json:"created_at,omitempty" redis:"created_at"`
 }

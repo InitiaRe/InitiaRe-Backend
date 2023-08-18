@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"mime/multipart"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/constant"
@@ -27,8 +28,8 @@ func InitUsecase(cfg *config.Config, repo repository.IRepository, ctnRepo reposi
 	}
 }
 func (u *usecase) UploadMedia(ctx context.Context, userId int, params *models.UploadRequest) (*models.Response, error) {
-	log.Info().Str("prefix", "Storage").Msgf("Upload file by user [%v] with params: %+v", userId, params)
-	if err := u.validateBeforeUpload(ctx, params.Obj); err != nil {
+	log.Info().Str("prefix", "Storage").Msgf("Upload file by user [%v] with params: [%+v]", userId, params.File.Filename)
+	if err := u.validateBeforeUpload(ctx, params.File); err != nil {
 		return nil, err
 	}
 
@@ -52,7 +53,7 @@ func (u *usecase) UploadMedia(ctx context.Context, userId int, params *models.Up
 	return res.Export(), nil
 }
 
-func (u *usecase) validateBeforeUpload(ctx context.Context, obj []byte) error {
+func (u *usecase) validateBeforeUpload(ctx context.Context, file *multipart.FileHeader) error {
 	// record, err := u.repo.GetById(ctx, id)
 	// if err != nil {
 	// 	log.Error().Err(err).Str("prefix", "Todo").Str("service", "usecase.repo.GetById")

@@ -86,7 +86,7 @@ func (u *usecase) Login(ctx context.Context, params *models.LoginRequest) (*mode
 	// end validation
 
 	// generate token
-	token, err := utils.GenerateJWTToken(foundUser.Export(), u.cfg.Auth.JWTSecret, u.cfg.Auth.Expire)
+	token, err := utils.GenerateJWTToken(foundUser.Export(), u.cfg.Auth.Secret, u.cfg.Auth.Expire)
 	if err != nil {
 		log.Error().Err(err).Str("service", "utils.GenerateJWTToken").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, constant.STATUS_MESSAGE_INTERNAL_SERVER_ERROR)

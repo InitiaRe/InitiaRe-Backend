@@ -1,5 +1,7 @@
 package models
 
+import "mime/multipart"
+
 type Response struct {
 	Id          int    `json:"id,omitempty"`
 	DownloadUrl string `json:"download_url,omitempty"`
@@ -17,5 +19,5 @@ type SaveRequest struct {
 }
 
 type UploadRequest struct {
-	Obj           []byte `json:"obj"`
+	File *multipart.FileHeader `json:"file"`
 }

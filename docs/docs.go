@@ -291,7 +291,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/storage": {
+        "/storage/media/upload": {
             "post": {
                 "security": [
                     {

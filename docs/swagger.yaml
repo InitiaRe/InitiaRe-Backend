@@ -358,7 +358,7 @@ paths:
       summary: Create category
       tags:
       - Category
-  /storage:
+  /storage/media/upload:
     post:
       consumes:
       - multipart/form-data

@@ -28,9 +28,9 @@ type PostgreSQLConfig struct {
 type RedisConfig struct {
 	Host         string `mapstructure:"host"`
 	Port         int    `mapstructure:"port"`
-	PoolSize     int    `mapstructure:"pool_size"`
-	PoolTimeout  int    `mapstructure:"pool_timeout"`
-	MinIdleConns int    `mapstructure:"min_idle_conns"`
+	PoolSize     int    `mapstructure:"poolsize"`
+	PoolTimeout  int    `mapstructure:"pooltimeout"`
+	MinIdleConns int    `mapstructure:"minidleconns"`
 	DB           int    `mapstructure:"db"`
 	Username     string `mapstructure:"username"`
 	Password     string `mapstructure:"password"`
@@ -40,17 +40,17 @@ type ServerConfig struct {
 	AppVersion        string `mapstructure:"app_version"`
 	Port              string `mapstructure:"port"`
 	Mode              string `mapstructure:"mode"`
-	ReadTimeout       int    `mapstructure:"read_timeout"`
-	WriteTimeout      int    `mapstructure:"write_timeout"`
+	ReadTimeout       int    `mapstructure:"readtimeout"`
+	WriteTimeout      int    `mapstructure:"writetimeout"`
 	SSL               bool   `mapstructure:"ssl"`
-	CtxDefaultTimeout int    `mapstructure:"ctx_default_timeout"`
+	CtxDefaultTimeout int    `mapstructure:"ctxdefaulttimeout"`
 }
 
 type AuthConfig struct {
-	JWTSecret string `mapstructure:"jwt_secret"`
-	Expire    int    `mapstructure:"expire"`
-	Issuer    string `mapstructure:"issuer"`
-	Audience  string `mapstructure:"audience"`
+	Secret   string `mapstructure:"secret"`
+	Expire   int    `mapstructure:"expire"`
+	Issuer   string `mapstructure:"issuer"`
+	Audience string `mapstructure:"audience"`
 }
 
 type LoggerConfig struct {
@@ -61,8 +61,8 @@ type LoggerConfig struct {
 type StorageConfig struct {
 	Host        string `mapstructure:"host"`
 	Container   string `mapstructure:"container"`
-	AccountName string `mapstructure:"account_name"`
-	AccountKey  string `mapstructure:"account_key"`
+	AccountName string `mapstructure:"accountname"`
+	AccountKey  string `mapstructure:"accountkey"`
 }
 
 func GetConfig() *Config {
@@ -80,6 +80,7 @@ func GetConfig() *Config {
 		}
 		mapEnv["SERVER.PORT"] = os.Getenv("PORT")
 		vp.MergeConfigMap(mapEnv)
+		bindEnvs(vp, c)
 	default:
 		vp.SetConfigName("config")
 		vp.SetConfigType("yaml")
@@ -90,7 +91,6 @@ func GetConfig() *Config {
 			}
 		}
 	}
-	bindEnvs(vp, c)
 	if err := vp.Unmarshal(&c); err != nil {
 		log.Fatal().Msg("Unable to unmarshal config")
 	}

@@ -20,7 +20,7 @@ func (mw *middlewareManager) validateJWTToken(c echo.Context, tokenString string
 			log.Error().Msgf("unexpected signin method %v", token.Header["alg"])
 			return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, constant.STATUS_MESSAGE_INTERNAL_SERVER_ERROR)
 		}
-		return []byte(mw.cfg.Auth.JWTSecret), nil
+		return []byte(mw.cfg.Auth.Secret), nil
 	})
 	if err != nil {
 		log.Error().Err(err).Str("service", "jwt.Parse").Send()

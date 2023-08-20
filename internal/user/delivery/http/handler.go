@@ -34,7 +34,6 @@ func (h Handler) MapRoutes(group *echo.Group) {
 //	@Summary		Get user info
 //	@Description	Get user info by token
 //	@Tags			User
-//	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	models.Response
 //	@Router			/users/me [get]

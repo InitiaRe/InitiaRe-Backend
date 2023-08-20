@@ -53,11 +53,11 @@ func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
-	userTbName := (&entity.User{}).TableName()
+	tbName := (&entity.User{}).TableName()
 	email := konversion.ReadInterface(queries, "email", "").(string)
 
 	if email != "" {
-		query = query.Where(fmt.Sprintf("\"%s\".email = ?", userTbName), email)
+		query = query.Where(fmt.Sprintf("\"%s\".email = ?", tbName), email)
 	}
 	return query
 }

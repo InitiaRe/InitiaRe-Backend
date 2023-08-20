@@ -178,13 +178,13 @@ func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	createdBy := konversion.ReadInterface(queries, "created_by", 0).(int)
 
 	if createdBy != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_by = ?", tbName), createdBy)
+		query = query.Where(fmt.Sprintf("\"%s\".created_by = ?", tbName), createdBy)
 	}
 	if fromDate != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_at >= timestamp(?)", tbName), konversion.FormatUnixToString(fromDate, konversion.DD_MM_YYYY_HH_MM_SS))
+		query = query.Where(fmt.Sprintf("\"%s\".created_at >= timestamp(?)", tbName), konversion.FormatUnixToString(fromDate, konversion.DD_MM_YYYY_HH_MM_SS))
 	}
 	if toDate != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_at < timestamp(?)", tbName), konversion.FormatUnixToString(toDate, konversion.DD_MM_YYYY_HH_MM_SS))
+		query = query.Where(fmt.Sprintf("\"%s\".created_at < timestamp(?)", tbName), konversion.FormatUnixToString(toDate, konversion.DD_MM_YYYY_HH_MM_SS))
 	}
 	return query
 }

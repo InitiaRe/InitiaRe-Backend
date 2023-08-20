@@ -38,6 +38,7 @@ func (h Handler) MapRoutes(group *echo.Group) {
 	group.DELETE("/:id", h.Delete(), h.mw.AuthJWTMiddleware())
 	group.GET("", h.GetListPaging(), h.mw.AuthJWTMiddleware())
 	group.GET("/:id", h.GetById(), h.mw.AuthJWTMiddleware())
+	group.GET("/me", h.GetByMe(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -139,7 +140,6 @@ func (h Handler) Delete() echo.HandlerFunc {
 //	@Summary		Get list todo
 //	@Description	Get list todo with paging and filter
 //	@Tags			Todo
-//	@Accept			json
 //	@Produce		json
 //	@Param			Page	query		int	true	"Page"
 //	@Param			Size	query		int	true	"Size"
@@ -169,7 +169,6 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 //	@Summary		Get detail todo
 //	@Description	Get detail todo
 //	@Tags			Todo
-//	@Accept			json
 //	@Produce		json
 //	@Param			id	path		int	true	"Id"
 //	@Success		200	{object}	models.Response
@@ -184,6 +183,37 @@ func (h Handler) GetById() echo.HandlerFunc {
 		}
 
 		res, err := h.usecase.GetById(ctx, id)
+		if err != nil {
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
+		}
+
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+	}
+}
+
+// GetByMe godoc
+//
+//	@Security		ApiKeyAuth
+//	@Summary		Get list current user todo
+//	@Description	Get list current user todo by token
+//	@Tags			Todo
+//	@Produce		json
+//	@Param			Page	query		int	true	"Page"
+//	@Param			Size	query		int	true	"Size"
+//	@Success		200		{object}	models.Response
+//	@Router			/todos/me [get]
+func (h Handler) GetByMe() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+		req := &models.RequestList{}
+		if err := utils.ReadQueryRequest(c, req); err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+
+		user := c.Get("user")
+		req.CreatedBy = user.(*userModel.Response).Id
+		res, err := h.usecase.GetListPaging(ctx, req)
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}

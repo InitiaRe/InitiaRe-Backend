@@ -382,9 +382,6 @@ const docTemplate = `{
                     }
                 ],
                 "description": "Get list todo with paging and filter",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -455,6 +452,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/todos/me": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list current user todo by token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Todo"
+                ],
+                "summary": "Get list current user todo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "Page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size",
+                        "name": "Size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/todos/{id}": {
             "get": {
                 "security": [
@@ -463,9 +501,6 @@ const docTemplate = `{
                     }
                 ],
                 "description": "Get detail todo",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -579,9 +614,6 @@ const docTemplate = `{
                     }
                 ],
                 "description": "Get user info by token",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],

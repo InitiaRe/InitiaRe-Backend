@@ -417,8 +417,6 @@ paths:
       - Storage
   /todos:
     get:
-      consumes:
-      - application/json
       description: Get list todo with paging and filter
       parameters:
       - description: Page
@@ -490,8 +488,6 @@ paths:
       tags:
       - Todo
     get:
-      consumes:
-      - application/json
       description: Get detail todo
       parameters:
       - description: Id
@@ -539,10 +535,34 @@ paths:
       summary: Update todo
       tags:
       - Todo
+  /todos/me:
+    get:
+      description: Get list current user todo by token
+      parameters:
+      - description: Page
+        in: query
+        name: Page
+        required: true
+        type: integer
+      - description: Size
+        in: query
+        name: Size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get list current user todo
+      tags:
+      - Todo
   /users/me:
     get:
-      consumes:
-      - application/json
       description: Get user info by token
       produces:
       - application/json

@@ -24,7 +24,15 @@ func InitUsecase(repo repository.IRepository) IUseCase {
 }
 
 func (u *usecase) GetById(ctx context.Context, id int) (*models.Response, error) {
-	return nil, nil
+	record, err := u.repo.GetById(ctx, id)
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetById").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
+	}
+	if record.Id == 0 {
+		return nil, utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Article not found")
+	}
+	return record.Export(), nil
 }
 
 func (u *usecase) GetList(ctx context.Context, params *models.RequestList) ([]*models.Response, error) {

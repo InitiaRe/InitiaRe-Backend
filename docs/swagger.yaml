@@ -240,6 +240,26 @@ paths:
       tags:
       - Article
   /articles/{id}:
+    get:
+      description: Get detail article
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get detail article
+      tags:
+      - Article
     put:
       consumes:
       - application/json

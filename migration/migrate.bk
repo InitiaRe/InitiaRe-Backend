@@ -9,8 +9,8 @@ import (
 	user "github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
 	category "github.com/Ho-Minh/InitiaRe-website/internal/category/entity"
 	"github.com/Ho-Minh/InitiaRe-website/internal/models"
-	todo "github.com/Ho-Minh/InitiaRe-website/internal/todo/entity"
 	storage "github.com/Ho-Minh/InitiaRe-website/internal/storage/entity"
+	todo "github.com/Ho-Minh/InitiaRe-website/internal/todo/entity"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
@@ -19,12 +19,22 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+type migrateCfg struct {
+	seedData    bool
+	autoMigrate bool
+}
+
 func main() {
 
 	// Init log
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
+	cfg := migrateCfg{
+		seedData:    true,
+		autoMigrate: true,
+	}
 
 	// Connect to database
 	c := config.GetConfig()
@@ -41,23 +51,27 @@ func main() {
 
 	log.Info().Msg("Connect to database successfully")
 
-	log.Info().Msg("Run migrate ...")
 	// Migrate the schema
-	db.AutoMigrate(&user.User{})
-	db.AutoMigrate(&todo.Todo{})
-	db.AutoMigrate(&models.UserInfo{})
-	db.AutoMigrate(&article.Article{})
-	db.AutoMigrate(&models.Rating{})
-	db.AutoMigrate(&category.Category{})
-	db.AutoMigrate(&storage.Storage{})
-	db.AutoMigrate(&models.Status{})
-	log.Info().Msg("Migrate successfully")
+	if cfg.autoMigrate {
+		log.Info().Msg("Run migrate ...")
+		db.AutoMigrate(&user.User{})
+		db.AutoMigrate(&todo.Todo{})
+		db.AutoMigrate(&models.UserInfo{})
+		db.AutoMigrate(&article.Article{})
+		db.AutoMigrate(&models.Rating{})
+		db.AutoMigrate(&category.Category{})
+		db.AutoMigrate(&storage.Storage{})
+		db.AutoMigrate(&models.Status{})
+		log.Info().Msg("Migrate successfully")
+	}
 
-	log.Info().Msg("Seeding data ...")
 	// Seeding data
-	seedingCategory(db)
-	seedingStatus(db)
-	log.Info().Msg("Seeding successfully")
+	if cfg.seedData {
+		log.Info().Msg("Seeding data ...")
+		// seedingCategory(db)
+		seedingStatus(db)
+		log.Info().Msg("Seeding successfully")
+	}
 }
 
 func seedingCategory(db *gorm.DB) {
@@ -80,11 +94,11 @@ func seedingCategory(db *gorm.DB) {
 
 func seedingStatus(db *gorm.DB) {
 	objs := []*models.Status{
-		{Category: "article", StatusName: "Pending"},
-		{Category: "article", StatusName: "Approved"},
-		{Category: "article", StatusName: "Hidden"},
-		{Category: "user", StatusName: "Active"},
-		{Category: "user", StatusName: "Inactive"},
+		{StatusId: 1, Category: "article", StatusName: "Pending"},
+		{StatusId: 2, Category: "article", StatusName: "Approved"},
+		{StatusId: 3, Category: "article", StatusName: "Hidden"},
+		{StatusId: 1, Category: "user", StatusName: "Active"},
+		{StatusId: 2, Category: "user", StatusName: "Inactive"},
 	}
 	result := db.Create(&objs)
 	if result.Error != nil {

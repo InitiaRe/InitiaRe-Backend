@@ -26,7 +26,7 @@ func InitUsecase(repo repository.IRepository) IUseCase {
 func (u *usecase) GetById(ctx context.Context, id int) (*models.Response, error) {
 	record, err := u.repo.GetById(ctx, id)
 	if err != nil {
-		log.Error().Err(err).Str("prefix", "Todo").Str("service", "usecase.repo.GetById").Send()
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetById").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
 	}
 	if record.Id == 0 {

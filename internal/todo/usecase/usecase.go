@@ -160,26 +160,17 @@ func (u *usecase) DeleteMany(ctx context.Context, userId int, ids []int) (int, e
 	return res, nil
 }
 
+
 func (u *usecase) validateBeforeUpdate(ctx context.Context, id int) error {
-	record, err := u.repo.GetById(ctx, id)
-	if err != nil {
-		log.Error().Err(err).Str("prefix", "Todo").Str("service", "usecase.repo.GetById").Send()
-		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get todo")
-	}
-	if record.Id == 0 {
-		return utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Todo not found")
+	if _, err := u.GetById(ctx, id); err != nil {
+		return err
 	}
 	return nil
 }
 
 func (u *usecase) validateBeforeDelete(ctx context.Context, id int) error {
-	record, err := u.repo.GetById(ctx, id)
-	if err != nil {
-		log.Error().Err(err).Str("prefix", "Todo").Str("service", "usecase.repo.GetById")
-		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get todo")
-	}
-	if record.Id == 0 {
-		return utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Todo not found")
+	if _, err := u.GetById(ctx, id); err != nil {
+		return err
 	}
 	return nil
 }

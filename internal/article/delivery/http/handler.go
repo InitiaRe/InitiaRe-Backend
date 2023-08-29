@@ -35,6 +35,7 @@ func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMi
 // Map routes
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("", h.Create(), h.mw.AuthJWTMiddleware())
+	group.GET("/:id", h.GetById())
 	group.GET("", h.GetListPaging())
 	group.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 }
@@ -133,6 +134,34 @@ func (h Handler) Update() echo.HandlerFunc {
 			} else {
 				return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 			}
+		}
+
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+	}
+}
+
+// GetById godoc
+//
+//	@Security		ApiKeyAuth
+//	@Summary		Get detail article
+//	@Description	Get detail article
+//	@Tags			Article
+//	@Produce		json
+//	@Param			id	path		int	true	"Id"
+//	@Success		200	{object}	models.Response
+//	@Router			/articles/{id} [get]
+func (h Handler) GetById() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+
+		res, err := h.usecase.GetById(ctx, id)
+		if err != nil {
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))

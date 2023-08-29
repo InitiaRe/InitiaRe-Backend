@@ -1,0 +1,13 @@
+package constant
+
+const (
+	ARTICLE_STATUS_PENDING int = iota + 1
+	ARTICLE_STATUS_APPROVED
+	ARTICLE_STATUS_HIDDEN
+)
+
+var ARTICLE_STATUS = map[int]string{
+	ARTICLE_STATUS_PENDING:  "Pending",
+	ARTICLE_STATUS_APPROVED: "Approved",
+	ARTICLE_STATUS_HIDDEN:   "Hidden",
+}

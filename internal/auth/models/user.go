@@ -32,6 +32,9 @@ type Response struct {
 	Email     string    `json:"email,omitempty"`
 	School    string    `json:"school,omitempty"`
 	Gender    string    `json:"gender,omitempty"`
+
+	// Custom fields
+	Status int `json:"status,omitempty"`
 }
 
 type SaveRequest struct {
@@ -51,12 +54,12 @@ type LoginRequest struct {
 }
 
 type RegisterRequest struct {
-	FirstName string    `json:"first_name,omitempty"`
-	LastName  string    `json:"last_name,omitempty"`
-	Email     string    `json:"email,omitempty"`
-	School    string    `json:"school,omitempty"`
-	Gender    string    `json:"gender,omitempty"`
-	Password  string    `json:"password"`
+	FirstName string `json:"first_name,omitempty"`
+	LastName  string `json:"last_name,omitempty"`
+	Email     string `json:"email,omitempty"`
+	School    string `json:"school,omitempty"`
+	Gender    string `json:"gender,omitempty"`
+	Password  string `json:"password"`
 }
 
 func (r *RegisterRequest) ToSaveRequest() *SaveRequest {

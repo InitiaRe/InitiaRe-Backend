@@ -12,18 +12,21 @@ import (
 
 // User model
 type User struct {
-	Id        int       `gorm:"primarykey;column:id" json:"id" redis:"id"`
-	UserId    uuid.UUID `gorm:"column:user_id" json:"user_id" redis:"user_id"`
-	FirstName string    `gorm:"column:first_name" json:"first_name" redis:"first_name"`
-	LastName  string    `gorm:"column:last_name" json:"last_name" redis:"last_name"`
-	Email     string    `gorm:"column:email" json:"email,omitempty" redis:"email"`
-	Password  string    `gorm:"column:password" json:"password,omitempty" redis:"password"`
-	School    string    `gorm:"column:school" json:"school" redis:"school"`
-	Gender    string    `gorm:"column:gender" json:"gender,omitempty" redis:"gender"`
-	Birthday  time.Time `gorm:"column:birthday;default:(-)" json:"birthday,omitempty" redis:"birthday"`
-	CreatedAt time.Time `gorm:"autoCreatetime" json:"created_at,omitempty" redis:"created_at"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime;default:(-)" json:"updated_at,omitempty" redis:"updated_at"`
-	LoginDate time.Time `gorm:"column:login_date;default:(-)" json:"login_date,omitempty" redis:"login_date"`
+	Id        int       `gorm:"primarykey;column:id" json:"id"`
+	UserId    uuid.UUID `gorm:"column:user_id" json:"user_id"`
+	FirstName string    `gorm:"column:first_name" json:"first_name"`
+	LastName  string    `gorm:"column:last_name" json:"last_name"`
+	Email     string    `gorm:"column:email" json:"email,omitempty"`
+	Password  string    `gorm:"column:password" json:"password,omitempty"`
+	School    string    `gorm:"column:school" json:"school"`
+	Gender    string    `gorm:"column:gender" json:"gender,omitempty"`
+	Birthday  time.Time `gorm:"column:birthday;default:(-)" json:"birthday,omitempty"`
+	CreatedAt time.Time `gorm:"autoCreatetime" json:"created_at,omitempty"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime;default:(-)" json:"updated_at,omitempty"`
+	LoginDate time.Time `gorm:"column:login_date;default:(-)" json:"login_date,omitempty"`
+
+	// Custom fields
+	Status int `gorm:"->" json:"status,omitempty"`
 }
 
 func (u *User) TableName() string {

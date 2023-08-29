@@ -32,8 +32,8 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	cfg := migrateCfg{
-		seedData:    true,
 		autoMigrate: true,
+		seedData:    false,
 	}
 
 	// Connect to database

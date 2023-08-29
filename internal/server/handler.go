@@ -6,9 +6,10 @@ import (
 	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
 	initCategory "github.com/Ho-Minh/InitiaRe-website/internal/category/init"
 	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
+	initStorage "github.com/Ho-Minh/InitiaRe-website/internal/storage/init"
 	initTodo "github.com/Ho-Minh/InitiaRe-website/internal/todo/init"
 	initUser "github.com/Ho-Minh/InitiaRe-website/internal/user/init"
-	initStorage "github.com/Ho-Minh/InitiaRe-website/internal/storage/init"
+	initUserInfo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/init"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -18,8 +19,11 @@ import (
 // Map Server Handlers
 func (s *Server) MapHandlers(e *echo.Echo) error {
 
+	// Init UserInfo
+	userInfo := initUserInfo.NewInit(s.db, s.cfg)
+
 	// Init Auth
-	auth := initAuth.NewInit(s.db, s.cfg, s.redisClient)
+	auth := initAuth.NewInit(s.db, s.cfg, s.redisClient, userInfo.Usecase)
 
 	// Init Middlewares
 	mw := initMW.NewInit(s.cfg, auth)

@@ -112,14 +112,9 @@ func (u *usecase) DeleteMany(ctx context.Context, ids []int) (int, error) {
 }
 
 func (u *usecase) validateBeforeUpdate(ctx context.Context, id int, userId int) error {
-	record, err := u.repo.GetById(ctx, id)
+	record, err := u.GetById(ctx, id)
 	if err != nil {
-		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetById").Send()
-		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
-	}
-
-	if record.Id == 0 {
-		return utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Article not found")
+		return err
 	}
 
 	if record.CreatedBy != userId {

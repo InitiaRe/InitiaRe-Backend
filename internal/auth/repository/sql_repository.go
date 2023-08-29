@@ -45,8 +45,11 @@ func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *g
 }
 
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
+	query = query.Joins("join \"initiaRe_user_info\" iui on iui.user_id = \"initiaRe_user\".id")
+
 	query = query.Select(
-		"*",
+		"\"initiaRe_user\".*",
+		"iui.status",
 	)
 	return query
 }

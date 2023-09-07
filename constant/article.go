@@ -11,3 +11,15 @@ var ARTICLE_STATUS = map[int]string{
 	ARTICLE_STATUS_APPROVED: "Approved",
 	ARTICLE_STATUS_HIDDEN:   "Hidden",
 }
+
+const (
+	ARTICLE_TYPE_RESEARCH_PAPER int = iota + 1
+	ARTICLE_TYPE_REVIEW_PAPER
+	ARTICLE_TYPE_RESEARCH_PROPOSAL
+)
+
+var ARTICLE_TYPE = map[int]string{
+	ARTICLE_TYPE_RESEARCH_PAPER:    "Research Paper",
+	ARTICLE_TYPE_REVIEW_PAPER:      "Review Paper",
+	ARTICLE_TYPE_RESEARCH_PROPOSAL: "Research Proposal",
+}

@@ -12,10 +12,14 @@ definitions:
         type: string
       short_brief:
         type: string
+      sub_category_ids:
+        type: string
       thumbnail:
         type: string
       title:
         type: string
+      type_id:
+        type: integer
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging:
     properties:
@@ -34,6 +38,8 @@ definitions:
     properties:
       category_id:
         type: integer
+      category_name:
+        type: string
       content:
         type: string
       created_at:
@@ -50,9 +56,20 @@ definitions:
         type: string
       status_id:
         type: integer
+      status_name:
+        description: Custom fields
+        type: string
+      sub_categories:
+        items:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+        type: array
       thumbnail:
         type: string
       title:
+        type: string
+      type_id:
+        type: integer
+      type_name:
         type: string
       updated_at:
         type: string
@@ -75,6 +92,8 @@ definitions:
         type: string
       title:
         type: string
+      type_id:
+        type: integer
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response:
     properties:
@@ -98,7 +117,7 @@ definitions:
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest:
     properties:
-      category:
+      category_name:
         type: string
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging:
@@ -116,7 +135,7 @@ definitions:
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response:
     properties:
-      category:
+      category_name:
         type: string
       created_at:
         type: string
@@ -131,7 +150,7 @@ definitions:
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest:
     properties:
-      category:
+      category_name:
         type: string
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response:
@@ -229,6 +248,22 @@ paths:
       - application/json
       description: Get list article with paging and filter
       parameters:
+      - description: Title
+        in: query
+        name: Title
+        type: string
+      - description: Status
+        in: query
+        name: StatusId
+        type: integer
+      - description: Type
+        in: query
+        name: TypeId
+        type: integer
+      - description: Category
+        in: query
+        name: CategoryIds
+        type: string
       - description: Page
         in: query
         name: Page

@@ -7,13 +7,15 @@ import (
 
 type RequestList struct {
 	commonModel.RequestPaging
-	FromDate  int `json:"from_date"`
-	ToDate    int `json:"to_date"`
-	CreatedBy int `json:"created_by"`
+	ArticleId int
+	FromDate  int
+	ToDate    int
+	CreatedBy int
 }
 
 func (r *RequestList) ToMap() map[string]interface{} {
 	return map[string]interface{}{
+		"article_id": r.ArticleId,
 		"from_date":  r.FromDate,
 		"to_date":    r.ToDate,
 		"created_by": r.CreatedBy,
@@ -25,17 +27,17 @@ func (r *RequestList) ToMap() map[string]interface{} {
 }
 
 type Response struct {
-	Id        int    `json:"id"`
-	Category  string `json:"category"`
-	CreatedAt string `json:"created_at"`
-	CreatedBy int    `json:"created_by"`
-	UpdatedAt string `json:"updated_at"`
-	UpdatedBy int    `json:"updated_by"`
+	Id           int    `json:"id"`
+	CategoryName string `json:"category_name"`
+	CreatedAt    string `json:"created_at"`
+	CreatedBy    int    `json:"created_by"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
+	UpdatedBy    int    `json:"updated_by,omitempty"`
 }
 
 type SaveRequest struct {
-	Id       int    `json:"id"`
-	Category string `json:"category"`
+	Id           int    `json:"id"`
+	CategoryName string `json:"category_name"`
 }
 
 type ListPaging struct {
@@ -44,11 +46,11 @@ type ListPaging struct {
 }
 
 type CreateRequest struct {
-	Category string `json:"category"`
+	CategoryName string `json:"category_name"`
 }
 
 type UpdateRequest struct {
-	Category string `json:"category"`
+	CategoryName string `json:"category_name"`
 }
 
 func (r *CreateRequest) ToSaveRequest() *SaveRequest {

@@ -3,6 +3,7 @@ package server
 import (
 	_ "github.com/Ho-Minh/InitiaRe-website/docs"
 	initArticle "github.com/Ho-Minh/InitiaRe-website/internal/article/init"
+	initArticleCategory "github.com/Ho-Minh/InitiaRe-website/internal/article_category/init"
 	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
 	initCategory "github.com/Ho-Minh/InitiaRe-website/internal/category/init"
 	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
@@ -23,7 +24,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	userInfo := initUserInfo.NewInit(s.db, s.cfg)
 
 	// Init Auth
-	auth := initAuth.NewInit(s.db, s.cfg, s.redisClient, userInfo.Usecase)
+	auth := initAuth.NewInit(s.db, s.cfg, s.redisClient, userInfo)
 
 	// Init Middlewares
 	mw := initMW.NewInit(s.cfg, auth)
@@ -31,11 +32,14 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	// Init Todo
 	todo := initTodo.NewInit(s.db, s.cfg, mw)
 
-	// Init Article
-	article := initArticle.NewInit(s.db, s.cfg, mw)
-
 	// Init Category
 	category := initCategory.NewInit(s.db, s.cfg, mw)
+
+	// Init Article Category
+	articleCategory := initArticleCategory.NewInit(s.db, s.cfg)
+
+	// Init Article
+	article := initArticle.NewInit(s.db, s.cfg, mw, category, articleCategory)
 
 	// Init User
 	user := initUser.NewInit(s.db, s.cfg, mw)

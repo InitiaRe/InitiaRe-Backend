@@ -9,19 +9,24 @@ import (
 )
 
 type Article struct {
-	Id                int       `gorm:"primarykey;column:id" json:"id"`
-	CategoryId        int       `gorm:"column:category_id" json:"category_id"`
-	StatusId          int       `gorm:"column:status_id" json:"status_id"`
-	Title             string    `gorm:"column:title;default:(-)" json:"title"`
-	ShortBrief        string    `gorm:"column:short_brief;default:(-)" json:"short_brief,omitempty"`
-	Content           string    `gorm:"column:content;default:(-)" json:"content"`
-	Thumbnail         string    `gorm:"column:thumbnail;default:(-)" json:"thumbnail,omitempty"`
-	PrePublishContent string    `gorm:"column:pre_publish_content;default:(-)" json:"pre_publish_content,omitempty"`
-	PublishDate       time.Time `gorm:"column:publish_date;default:(-)" json:"publish_date,omitempty"`
-	CreatedBy         int       `gorm:"column:created_by" json:"created_by"`
-	CreatedAt         time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedBy         int       `gorm:"column:update_by;default:(-)" json:"update_by,omitempty"`
-	UpdatedAt         time.Time `gorm:"autoUpdateTime;default:(-)" json:"updated_at,omitempty"`
+	Id                int       `gorm:"primarykey;column:id"`
+	CategoryId        int       `gorm:"column:category_id"`
+	StatusId          int       `gorm:"column:status_id"`
+	Title             string    `gorm:"column:title;default:(-)"`
+	ShortBrief        string    `gorm:"column:short_brief;default:(-)"`
+	Content           string    `gorm:"column:content;default:(-)"`
+	Thumbnail         string    `gorm:"column:thumbnail;default:(-)"`
+	PrePublishContent string    `gorm:"column:pre_publish_content;default:(-)"`
+	PublishDate       time.Time `gorm:"column:publish_date;default:(-)"`
+	TypeId            int       `gorm:"column:type_id;default:(-)"` // 1: research, 2: review, 3: research proposal
+	CreatedBy         int       `gorm:"column:created_by"`
+	CreatedAt         time.Time `gorm:"autoCreateTime"`
+	UpdatedBy         int       `gorm:"column:update_by;default:(-)"`
+	UpdatedAt         time.Time `gorm:"autoUpdateTime;default:(-)"`
+
+	// Custom fields
+	StatusName   string `gorm:"->;-:migration"`
+	CategoryName string `gorm:"->;-:migration"`
 }
 
 func (a *Article) TableName() string {
@@ -36,6 +41,9 @@ func (a *Article) Export() *models.Response {
 	}
 	if !a.UpdatedAt.IsZero() {
 		obj.UpdatedAt = a.UpdatedAt.Format(time.RFC3339)
+	}
+	if a.TypeId != 0 {
+		obj.TypeName = constant.ARTICLE_TYPE[a.TypeId]
 	}
 	return obj
 }

@@ -32,6 +32,8 @@ type Response struct {
 	StatusId    int    `json:"status_id"`
 	Content     string `json:"content"`
 	PublishDate string `json:"publish_date"`
+	TypeId      int    `json:"type_id"`
+	TypeName    string `json:"type_name"`
 	CreatedAt   string `json:"created_at"`
 	CreatedBy   int    `json:"created_by"`
 	UpdatedAt   string `json:"updated_at"`

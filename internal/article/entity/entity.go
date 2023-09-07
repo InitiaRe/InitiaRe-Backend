@@ -23,6 +23,10 @@ type Article struct {
 	CreatedAt         time.Time `gorm:"autoCreateTime"`
 	UpdatedBy         int       `gorm:"column:update_by;default:(-)"`
 	UpdatedAt         time.Time `gorm:"autoUpdateTime;default:(-)"`
+
+	// Custom fields
+	StatusName   string `gorm:"->;-:migration"`
+	CategoryName string `gorm:"->;-:migration"`
 }
 
 func (a *Article) TableName() string {
@@ -37,6 +41,9 @@ func (a *Article) Export() *models.Response {
 	}
 	if !a.UpdatedAt.IsZero() {
 		obj.UpdatedAt = a.UpdatedAt.Format(time.RFC3339)
+	}
+	if a.TypeId != 0 {
+		obj.TypeName = constant.ARTICLE_TYPE[a.TypeId]
 	}
 	return obj
 }

@@ -6,9 +6,9 @@ import (
 
 type RequestList struct {
 	commonModel.RequestPaging
-	ArticleId  int `json:"article_id"`
-	CategoryId int `json:"category_id"`
-	Type       int `json:"type"`
+	ArticleId  int
+	CategoryId int
+	Type       int
 }
 
 func (r *RequestList) ToMap() map[string]interface{} {

@@ -145,7 +145,7 @@ func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}
 }
 
 func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *gorm.DB {
-	query := r.db.Model(&entity.Article{})
+	query := r.db.Debug().Model(&entity.Article{})
 	query = r.join(query, queries)
 	query = r.filter(query, queries)
 	query = r.sort(query, queries)
@@ -153,8 +153,15 @@ func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *g
 }
 
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
+
+	query = query.
+		Joins("inner join \"initiaRe_status\" irs on \"initiaRe_article\".status_id = irs.status_id and irs.category = 'article'").
+		Joins("inner join \"initiaRe_category\" irc on \"initiaRe_article\".category_id = irc.id")
+
 	query = query.Select(
-		"*",
+		"\"initiaRe_article\".*",
+		"irs.status_name",
+		"irc.category_name",
 	)
 	return query
 }
@@ -165,7 +172,7 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	switch sortBy {
 	default:
-		query = query.Order("id " + orderBy)
+		query = query.Order("\"initiaRe_article\".id " + orderBy)
 	}
 	return query
 }
@@ -173,18 +180,34 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	tbName := (&entity.Article{}).TableName()
+	title := konversion.ReadInterface(queries, "title", "").(string)
+	categoryIds := konversion.ReadInterface(queries, "category_ids", []int{}).([]int)
+	statusId := konversion.ReadInterface(queries, "status_id", 0).(int)
+	typeId := konversion.ReadInterface(queries, "type_id", 0).(int)
 	fromDate := konversion.ReadInterface(queries, "from_date", 0).(int)
 	toDate := konversion.ReadInterface(queries, "to_date", 0).(int)
 	createdBy := konversion.ReadInterface(queries, "created_by", 0).(int)
 
+	if title != "" {
+		query = query.Where(fmt.Sprintf("\"%s\".title ilike ?", tbName), "%"+title+"%")
+	}
+	if statusId != 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".status_id = ?", tbName), statusId)
+	}
+	if typeId != 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".type_id = ?", tbName), typeId)
+	}
 	if createdBy != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_by = ?", tbName), createdBy)
+		query = query.Where(fmt.Sprintf("\"%s\".created_by = ?", tbName), createdBy)
 	}
 	if fromDate != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_at >= timestamp(?)", tbName), konversion.FormatUnixToString(fromDate, konversion.DD_MM_YYYY_HH_MM_SS))
+		query = query.Where(fmt.Sprintf("\"%s\".created_at >= timestamp(?)", tbName), konversion.FormatUnixToString(fromDate, konversion.DD_MM_YYYY_HH_MM_SS))
 	}
 	if toDate != 0 {
-		query = query.Where(fmt.Sprintf("%s.created_at < timestamp(?)", tbName), konversion.FormatUnixToString(toDate, konversion.DD_MM_YYYY_HH_MM_SS))
+		query = query.Where(fmt.Sprintf("\"%s\".created_at < timestamp(?)", tbName), konversion.FormatUnixToString(toDate, konversion.DD_MM_YYYY_HH_MM_SS))
+	}
+	if len(categoryIds) > 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".category_id in ?", tbName), categoryIds)
 	}
 	return query
 }

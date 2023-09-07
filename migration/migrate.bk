@@ -6,11 +6,13 @@ import (
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	article "github.com/Ho-Minh/InitiaRe-website/internal/article/entity"
+	articleCategory "github.com/Ho-Minh/InitiaRe-website/internal/article_category/entity"
 	user "github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
 	category "github.com/Ho-Minh/InitiaRe-website/internal/category/entity"
 	"github.com/Ho-Minh/InitiaRe-website/internal/models"
 	storage "github.com/Ho-Minh/InitiaRe-website/internal/storage/entity"
 	todo "github.com/Ho-Minh/InitiaRe-website/internal/todo/entity"
+	userInfo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/entity"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
@@ -49,42 +51,79 @@ func main() {
 		log.Fatal().Msg("failed to connect database")
 	}
 
-	log.Info().Msg("Connect to database successfully")
+	log.Info().Msgf("Connect to database [%v] successfully", c.PostgreSQL.DBName)
 
 	// Migrate the schema
 	if cfg.autoMigrate {
 		log.Info().Msg("Run migrate ...")
-		db.AutoMigrate(&user.User{})
-		db.AutoMigrate(&todo.Todo{})
-		db.AutoMigrate(&models.UserInfo{})
-		db.AutoMigrate(&article.Article{})
-		db.AutoMigrate(&models.Rating{})
-		db.AutoMigrate(&category.Category{})
-		db.AutoMigrate(&storage.Storage{})
-		db.AutoMigrate(&models.Status{})
+
+		if !db.Migrator().HasTable(&user.User{}) {
+			log.Info().Msg("Create table user ...")
+			db.AutoMigrate(&user.User{})
+		}
+		if !db.Migrator().HasTable(&todo.Todo{}) {
+			log.Info().Msg("Create table todo ...")
+			db.AutoMigrate(&todo.Todo{})
+		}
+
+		if !db.Migrator().HasTable(&userInfo.UserInfo{}) {
+			log.Info().Msg("Create table user_info ...")
+			db.AutoMigrate(&userInfo.UserInfo{})
+		}
+
+		if !db.Migrator().HasTable(&article.Article{}) {
+			log.Info().Msg("Create table article ...")
+			db.AutoMigrate(&article.Article{})
+		}
+
+		if !db.Migrator().HasTable(&articleCategory.ArticleCategory{}) {
+			log.Info().Msg("Create table article_category ...")
+			db.AutoMigrate(&articleCategory.ArticleCategory{})
+		}
+
+		if !db.Migrator().HasTable(&models.Rating{}) {
+			log.Info().Msg("Create table rating ...")
+			db.AutoMigrate(&models.Rating{})
+		}
+
+		if !db.Migrator().HasTable(&category.Category{}) {
+			log.Info().Msg("Create table category ...")
+			db.AutoMigrate(&category.Category{})
+		}
+
+		if !db.Migrator().HasTable(&storage.Storage{}) {
+			log.Info().Msg("Create table storage ...")
+			db.AutoMigrate(&storage.Storage{})
+		}
+
+		if !db.Migrator().HasTable(&models.Status{}) {
+			log.Info().Msg("Create table status ...")
+			db.AutoMigrate(&models.Status{})
+		}
+
 		log.Info().Msg("Migrate successfully")
 	}
 
 	// Seeding data
 	if cfg.seedData {
 		log.Info().Msg("Seeding data ...")
-		// seedingCategory(db)
-		seedingStatus(db)
+		seedingCategory(db)
+		// seedingStatus(db)
 		log.Info().Msg("Seeding successfully")
 	}
 }
 
 func seedingCategory(db *gorm.DB) {
 	objs := []*category.Category{
-		{Category: "Mathematics"},
-		{Category: "English Literature"},
-		{Category: "Vietnamese Literature"},
-		{Category: "Physics"},
-		{Category: "Chemistry"},
-		{Category: "Biology"},
-		{Category: "Social Study"},
-		{Category: "History"},
-		{Category: "IR & Politics"},
+		{Id:1, CategoryName: "Mathematics"},
+		{Id:1, CategoryName: "English Literature"},
+		{Id:1, CategoryName: "Vietnamese Literature"},
+		{Id:1, CategoryName: "Physics"},
+		{Id:1, CategoryName: "Chemistry"},
+		{Id:1, CategoryName: "Biology"},
+		{Id:1, CategoryName: "Social Study"},
+		{Id:1, CategoryName: "History"},
+		{Id:1, CategoryName: "IR & Politics"},
 	}
 	result := db.Create(&objs)
 	if result.Error != nil {

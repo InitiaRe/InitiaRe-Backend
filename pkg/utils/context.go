@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"encoding/json"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -53,7 +54,8 @@ func queryStringToMap(query string) (map[string]interface{}, error) {
 				res[qs[0]] = num
 				continue
 			}
-			res[qs[0]] = qs[1]
+			v, _ := url.PathUnescape(qs[1])
+			res[qs[0]] = v
 		}
 	}
 	return res, nil

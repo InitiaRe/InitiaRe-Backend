@@ -153,8 +153,12 @@ func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *g
 }
 
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
+
+	query = query.
+		Joins("inner join \"initiaRe_category\" irc on \"initiaRe_article_category\".category_id = irc.id")
+
 	query = query.Select(
-		"*",
+		"\"initiaRe_article_category\".*",
 	)
 	return query
 }
@@ -165,7 +169,7 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	switch sortBy {
 	default:
-		query = query.Order("id " + orderBy)
+		query = query.Order("\"initiaRe_article_category\".id " + orderBy)
 	}
 	return query
 }

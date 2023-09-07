@@ -10,7 +10,10 @@ type ArticleCategory struct {
 	Id         int `gorm:"primarykey;column:id"`
 	CategoryId int `gorm:"column:category_id"`
 	ArticleId  int `gorm:"column:article_id"`
-	Type       int `gorm:"column:type"`
+	Type       int `gorm:"column:type"` // 1: primary, 2: secondary
+
+	// Custom fields
+	CategoryName string `gorm:"->;-:migration"`
 }
 
 func (a *ArticleCategory) TableName() string {

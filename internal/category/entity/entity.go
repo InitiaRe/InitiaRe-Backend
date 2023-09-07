@@ -8,12 +8,12 @@ import (
 )
 
 type Category struct {
-	Id        int       `gorm:"primarykey;column:id" json:"id" redis:"id"`
-	Category  string    `gorm:"column:category" json:"category" redis:"category"`
-	CreatedBy int       `gorm:"column:created_by" json:"created_by,omitempty" redis:"created_by"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at,omitempty" redis:"created_at"`
-	UpdatedBy int       `gorm:"column:update_by;default:(-)" json:"update_by,omitempty" redis:"update_by"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime;default:(-)" json:"updated_at,omitempty" redis:"updated_at"`
+	Id           int       `gorm:"primarykey;column:id"`
+	CategoryName string    `gorm:"column:category_name"`
+	CreatedBy    int       `gorm:"column:created_by"`
+	CreatedAt    time.Time `gorm:"autoCreateTime"`
+	UpdatedBy    int       `gorm:"column:update_by;default:(-)"`
+	UpdatedAt    time.Time `gorm:"autoUpdateTime;default:(-)"`
 }
 
 func (c *Category) TableName() string {

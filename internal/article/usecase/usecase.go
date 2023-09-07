@@ -8,18 +8,30 @@ import (
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/repository"
 
+	articleCategoryUc "github.com/Ho-Minh/InitiaRe-website/internal/article_category/usecase"
+	categoryUc "github.com/Ho-Minh/InitiaRe-website/internal/category/usecase"
+	categoryModel "github.com/Ho-Minh/InitiaRe-website/internal/category/models"
+
 	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 	"github.com/rs/zerolog/log"
 )
 
 type usecase struct {
-	repo repository.IRepository
+	repo              repository.IRepository
+	categoryUc        categoryUc.IUseCase
+	articleCategoryUc articleCategoryUc.IUseCase
 }
 
-func InitUsecase(repo repository.IRepository) IUseCase {
+func InitUsecase(
+	repo repository.IRepository,
+	categoryUc categoryUc.IUseCase,
+	articleCategoryUc articleCategoryUc.IUseCase,
+) IUseCase {
 	return &usecase{
-		repo: repo,
+		repo:              repo,
+		categoryUc:        categoryUc,
+		articleCategoryUc: articleCategoryUc,
 	}
 }
 
@@ -32,7 +44,16 @@ func (u *usecase) GetById(ctx context.Context, id int) (*models.Response, error)
 	if record.Id == 0 {
 		return nil, utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Article not found")
 	}
-	return record.Export(), nil
+
+	res := record.Export()
+	res.SubCategories, err = u.categoryUc.GetList(ctx, &categoryModel.RequestList{
+		ArticleId: id,
+	})
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.categoryUc.GetList").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
+	}
+	return res, nil
 }
 
 func (u *usecase) GetList(ctx context.Context, params *models.RequestList) ([]*models.Response, error) {
@@ -64,18 +85,6 @@ func (u *usecase) GetListPaging(ctx context.Context, params *models.RequestList)
 
 func (u *usecase) GetOne(ctx context.Context, params *models.RequestList) (*models.Response, error) {
 	return nil, nil
-}
-
-func (u *usecase) Create(ctx context.Context, userId int, params *models.SaveRequest) (*models.Response, error) {
-	article := &entity.Article{}
-	article.ParseForCreate(params, userId)
-	res, err := u.repo.Create(ctx, article)
-	if err != nil {
-		log.Error().Err(err).Str("service", "usecase.repo.Create").Send()
-		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when create article")
-	}
-
-	return res.Export(), nil
 }
 
 func (u *usecase) CreateMany(ctx context.Context, userId int, params []*models.SaveRequest) (int, error) {
@@ -122,3 +131,4 @@ func (u *usecase) validateBeforeUpdate(ctx context.Context, id int, userId int) 
 	}
 	return nil
 }
+

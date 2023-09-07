@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/entity"
+	"github.com/Ho-Minh/InitiaRe-website/internal/article_category/entity"
 	"github.com/vukyn/go-kuery/konversion"
 
 	"gorm.io/gorm"
@@ -21,7 +21,7 @@ func InitRepo(db *gorm.DB) IRepository {
 	}
 }
 
-func (r *repo) Create(ctx context.Context, obj *entity.Article) (*entity.Article, error) {
+func (r *repo) Create(ctx context.Context, obj *entity.ArticleCategory) (*entity.ArticleCategory, error) {
 	result := r.db.Create(obj)
 	if result.Error != nil {
 		return nil, result.Error
@@ -29,7 +29,7 @@ func (r *repo) Create(ctx context.Context, obj *entity.Article) (*entity.Article
 	return obj, nil
 }
 
-func (r *repo) CreateMany(ctx context.Context, objs []*entity.Article) (int, error) {
+func (r *repo) CreateMany(ctx context.Context, objs []*entity.ArticleCategory) (int, error) {
 	result := r.db.Create(objs)
 	if result.Error != nil {
 		return 0, result.Error
@@ -37,7 +37,7 @@ func (r *repo) CreateMany(ctx context.Context, objs []*entity.Article) (int, err
 	return int(result.RowsAffected), nil
 }
 
-func (r *repo) Update(ctx context.Context, obj *entity.Article) (*entity.Article, error) {
+func (r *repo) Update(ctx context.Context, obj *entity.ArticleCategory) (*entity.ArticleCategory, error) {
 	result := r.db.Updates(obj)
 	if result.Error != nil {
 		return nil, result.Error
@@ -45,7 +45,7 @@ func (r *repo) Update(ctx context.Context, obj *entity.Article) (*entity.Article
 	return obj, nil
 }
 
-func (r *repo) UpdateMany(ctx context.Context, objs []*entity.Article) (int, error) {
+func (r *repo) UpdateMany(ctx context.Context, objs []*entity.ArticleCategory) (int, error) {
 	tx := r.db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -66,7 +66,7 @@ func (r *repo) UpdateMany(ctx context.Context, objs []*entity.Article) (int, err
 }
 
 func (r *repo) Delete(ctx context.Context, id int) (int, error) {
-	result := r.db.Delete(&entity.Article{}, id)
+	result := r.db.Delete(&entity.ArticleCategory{}, id)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -81,7 +81,7 @@ func (r *repo) DeleteMany(ctx context.Context, ids []int) (int, error) {
 		}
 	}()
 	for _, id := range ids {
-		if err := tx.Delete(&entity.Article{}, id).Error; err != nil {
+		if err := tx.Delete(&entity.ArticleCategory{}, id).Error; err != nil {
 			tx.Rollback()
 			return 0, err
 		}
@@ -101,8 +101,8 @@ func (r *repo) Count(ctx context.Context, queries map[string]interface{}) (int, 
 	return int(count), nil
 }
 
-func (r *repo) GetById(ctx context.Context, id int) (*entity.Article, error) {
-	record := &entity.Article{}
+func (r *repo) GetById(ctx context.Context, id int) (*entity.ArticleCategory, error) {
+	record := &entity.ArticleCategory{}
 	result := r.db.Find(&record, id).Limit(1)
 	if result.Error != nil {
 		return nil, result.Error
@@ -110,8 +110,8 @@ func (r *repo) GetById(ctx context.Context, id int) (*entity.Article, error) {
 	return record, nil
 }
 
-func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.Article, error) {
-	record := &entity.Article{}
+func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.ArticleCategory, error) {
+	record := &entity.ArticleCategory{}
 	query := r.initQuery(ctx, queries)
 	result := query.Limit(1).Find(&record)
 	if result.Error != nil {
@@ -120,8 +120,8 @@ func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*ent
 	return record, nil
 }
 
-func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*entity.Article, error) {
-	records := []*entity.Article{}
+func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*entity.ArticleCategory, error) {
+	records := []*entity.ArticleCategory{}
 	query := r.initQuery(ctx, queries)
 	if err := query.Scan(&records).Error; err != nil {
 		return nil, err
@@ -129,8 +129,8 @@ func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*
 	return records, nil
 }
 
-func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Article, error) {
-	records := []*entity.Article{}
+func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.ArticleCategory, error) {
+	records := []*entity.ArticleCategory{}
 
 	page := konversion.ReadInterface(queries, "page", constant.DEFAULT_PAGE).(int)
 	size := konversion.ReadInterface(queries, "size", constant.DEFAULT_SIZE).(int)
@@ -145,7 +145,7 @@ func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}
 }
 
 func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *gorm.DB {
-	query := r.db.Debug().Model(&entity.Article{})
+	query := r.db.Model(&entity.ArticleCategory{})
 	query = r.join(query, queries)
 	query = r.filter(query, queries)
 	query = r.sort(query, queries)
@@ -155,13 +155,10 @@ func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *g
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	query = query.
-		Joins("inner join \"initiaRe_status\" irs on \"initiaRe_article\".status_id = irs.status_id and irs.category = 'article'").
-		Joins("inner join \"initiaRe_category\" irc on \"initiaRe_article\".category_id = irc.id")
+		Joins("inner join \"initiaRe_category\" irc on \"initiaRe_article_category\".category_id = irc.id")
 
 	query = query.Select(
-		"\"initiaRe_article\".*",
-		"irs.status_name",
-		"irc.category_name",
+		"\"initiaRe_article_category\".*",
 	)
 	return query
 }
@@ -172,42 +169,26 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	switch sortBy {
 	default:
-		query = query.Order("\"initiaRe_article\".id " + orderBy)
+		query = query.Order("\"initiaRe_article_category\".id " + orderBy)
 	}
 	return query
 }
 
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
-	tbName := (&entity.Article{}).TableName()
-	title := konversion.ReadInterface(queries, "title", "").(string)
-	categoryIds := konversion.ReadInterface(queries, "category_ids", []int{}).([]int)
-	statusId := konversion.ReadInterface(queries, "status_id", 0).(int)
-	typeId := konversion.ReadInterface(queries, "type_id", 0).(int)
-	fromDate := konversion.ReadInterface(queries, "from_date", 0).(int)
-	toDate := konversion.ReadInterface(queries, "to_date", 0).(int)
-	createdBy := konversion.ReadInterface(queries, "created_by", 0).(int)
+	tbName := (&entity.ArticleCategory{}).TableName()
+	articleId := konversion.ReadInterface(queries, "article_id", 0).(int)
+	categoryId := konversion.ReadInterface(queries, "category_id", 0).(int)
+	_type := konversion.ReadInterface(queries, "type", 0).(int)
 
-	if title != "" {
-		query = query.Where(fmt.Sprintf("\"%s\".title ilike ?", tbName), "%"+title+"%")
+	if articleId != 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".article_id = ?", tbName), articleId)
 	}
-	if statusId != 0 {
-		query = query.Where(fmt.Sprintf("\"%s\".status_id = ?", tbName), statusId)
+	if categoryId != 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".category_id = ?", tbName), categoryId)
 	}
-	if typeId != 0 {
-		query = query.Where(fmt.Sprintf("\"%s\".type_id = ?", tbName), typeId)
-	}
-	if createdBy != 0 {
-		query = query.Where(fmt.Sprintf("\"%s\".created_by = ?", tbName), createdBy)
-	}
-	if fromDate != 0 {
-		query = query.Where(fmt.Sprintf("\"%s\".created_at >= timestamp(?)", tbName), konversion.FormatUnixToString(fromDate, konversion.DD_MM_YYYY_HH_MM_SS))
-	}
-	if toDate != 0 {
-		query = query.Where(fmt.Sprintf("\"%s\".created_at < timestamp(?)", tbName), konversion.FormatUnixToString(toDate, konversion.DD_MM_YYYY_HH_MM_SS))
-	}
-	if len(categoryIds) > 0 {
-		query = query.Where(fmt.Sprintf("\"%s\".category_id in ?", tbName), categoryIds)
+	if _type != 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".type = ?", tbName), _type)
 	}
 	return query
 }

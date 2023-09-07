@@ -35,6 +35,30 @@ const docTemplate = `{
                 "summary": "Get list article",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Title",
+                        "name": "Title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Status",
+                        "name": "StatusId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Type",
+                        "name": "TypeId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category",
+                        "name": "CategoryIds",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Page",
                         "name": "Page",
@@ -683,11 +707,17 @@ const docTemplate = `{
                 "short_brief": {
                     "type": "string"
                 },
+                "sub_category_ids": {
+                    "type": "string"
+                },
                 "thumbnail": {
                     "type": "string"
                 },
                 "title": {
                     "type": "string"
+                },
+                "type_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -717,6 +747,9 @@ const docTemplate = `{
                 "category_id": {
                     "type": "integer"
                 },
+                "category_name": {
+                    "type": "string"
+                },
                 "content": {
                     "type": "string"
                 },
@@ -741,10 +774,26 @@ const docTemplate = `{
                 "status_id": {
                     "type": "integer"
                 },
+                "status_name": {
+                    "description": "Custom fields",
+                    "type": "string"
+                },
+                "sub_categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response"
+                    }
+                },
                 "thumbnail": {
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "type_id": {
+                    "type": "integer"
+                },
+                "type_name": {
                     "type": "string"
                 },
                 "updated_at": {
@@ -778,6 +827,9 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                },
+                "type_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -814,7 +866,7 @@ const docTemplate = `{
         "github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest": {
             "type": "object",
             "properties": {
-                "category": {
+                "category_name": {
                     "type": "string"
                 }
             }
@@ -842,7 +894,7 @@ const docTemplate = `{
         "github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response": {
             "type": "object",
             "properties": {
-                "category": {
+                "category_name": {
                     "type": "string"
                 },
                 "created_at": {
@@ -865,7 +917,7 @@ const docTemplate = `{
         "github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest": {
             "type": "object",
             "properties": {
-                "category": {
+                "category_name": {
                     "type": "string"
                 }
             }

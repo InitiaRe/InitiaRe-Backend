@@ -668,7 +668,25 @@ const docTemplate = `{
         "github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest": {
             "type": "object",
             "properties": {
+                "category_id": {
+                    "type": "integer"
+                },
                 "content": {
+                    "type": "string"
+                },
+                "pre_publish_content": {
+                    "type": "string"
+                },
+                "publish_date": {
+                    "type": "string"
+                },
+                "short_brief": {
+                    "type": "string"
+                },
+                "thumbnail": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -711,11 +729,23 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "pre_publish_content": {
+                    "type": "string"
+                },
                 "publish_date": {
+                    "type": "string"
+                },
+                "short_brief": {
                     "type": "string"
                 },
                 "status_id": {
                     "type": "integer"
+                },
+                "thumbnail": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "updated_at": {
                     "type": "string"
@@ -732,6 +762,21 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "content": {
+                    "type": "string"
+                },
+                "pre_publish_content": {
+                    "type": "string"
+                },
+                "publish_date": {
+                    "type": "string"
+                },
+                "short_brief": {
+                    "type": "string"
+                },
+                "thumbnail": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -756,6 +801,10 @@ const docTemplate = `{
                 },
                 "school": {
                     "type": "string"
+                },
+                "status": {
+                    "description": "Custom fields",
+                    "type": "integer"
                 },
                 "user_id": {
                     "type": "string"

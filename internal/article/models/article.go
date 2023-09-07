@@ -27,24 +27,32 @@ func (r *RequestList) ToMap() map[string]interface{} {
 }
 
 type Response struct {
-	Id          int    `json:"id"`
-	CategoryId  int    `json:"category_id"`
-	StatusId    int    `json:"status_id"`
-	Content     string `json:"content"`
-	PublishDate string `json:"publish_date"`
-	TypeId      int    `json:"type_id"`
-	TypeName    string `json:"type_name"`
-	CreatedAt   string `json:"created_at"`
-	CreatedBy   int    `json:"created_by"`
-	UpdatedAt   string `json:"updated_at"`
-	UpdatedBy   int    `json:"updated_by"`
+	Id                int    `json:"id"`
+	CategoryId        int    `json:"category_id"`
+	StatusId          int    `json:"status_id"`
+	Title             string `json:"title"`
+	ShortBrief        string `json:"short_brief,omitempty"`
+	Content           string `json:"content"`
+	Thumbnail         string `json:"thumbnail,omitempty"`
+	PrePublishContent string `json:"pre_publish_content,omitempty"`
+	PublishDate       string `json:"publish_date"`
+	TypeId            int    `json:"type_id,omitempty"`
+	TypeName          string `json:"type_name,omitempty"`
+	CreatedAt         string `json:"created_at"`
+	CreatedBy         int    `json:"created_by"`
+	UpdatedAt         string `json:"updated_at"`
+	UpdatedBy         int    `json:"updated_by"`
 }
 
 type SaveRequest struct {
-	Id          int       `json:"id"`
-	CategoryId  int       `json:"category_id"`
-	Content     string    `json:"content"`
-	PublishDate time.Time `json:"publish_date"`
+	Id                int       `json:"id"`
+	CategoryId        int       `json:"category_id"`
+	Content           string    `json:"content"`
+	Title             string    `json:"title"`
+	ShortBrief        string    `json:"short_brief"`
+	Thumbnail         string    `json:"thumbnail"`
+	PrePublishContent string    `json:"pre_publish_content"`
+	PublishDate       time.Time `json:"publish_date"`
 }
 
 type ListPaging struct {
@@ -53,7 +61,13 @@ type ListPaging struct {
 }
 
 type CreateRequest struct {
-	Content string `json:"content"`
+	Content           string    `json:"content"`
+	CategoryId        int       `json:"category_id"`
+	Title             string    `json:"title"`
+	ShortBrief        string    `json:"short_brief"`
+	Thumbnail         string    `json:"thumbnail"`
+	PrePublishContent string    `json:"pre_publish_content"`
+	PublishDate       time.Time `json:"publish_date"`
 }
 
 func (r *CreateRequest) ToSaveRequest() *SaveRequest {
@@ -63,8 +77,13 @@ func (r *CreateRequest) ToSaveRequest() *SaveRequest {
 }
 
 type UpdateRequest struct {
-	Content    string `json:"content"`
-	CategoryId int    `json:"category_id"`
+	Content           string    `json:"content"`
+	CategoryId        int       `json:"category_id"`
+	Title             string    `json:"title"`
+	ShortBrief        string    `json:"short_brief"`
+	Thumbnail         string    `json:"thumbnail"`
+	PrePublishContent string    `json:"pre_publish_content"`
+	PublishDate       time.Time `json:"publish_date"`
 }
 
 func (r *UpdateRequest) ToSaveRequest(id int) *SaveRequest {

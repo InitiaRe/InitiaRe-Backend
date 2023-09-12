@@ -154,7 +154,7 @@ func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *g
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	query = query.
-		Joins("inner join \"initiaRe_article_category\" irac on \"initiaRe_category\".id = irac.category_id")
+		Joins("left join \"initiaRe_article_category\" irac on \"initiaRe_category\".id = irac.category_id")
 
 	query = query.Select(
 		"\"initiaRe_category\".*",

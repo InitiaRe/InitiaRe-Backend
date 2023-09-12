@@ -84,15 +84,15 @@ type ListPaging struct {
 }
 
 type CreateRequest struct {
-	Content           string    `json:"content"`
-	CategoryId        int       `json:"category_id"`
-	SubCategoryIds    string    `json:"sub_category_ids"`
-	Title             string    `json:"title"`
-	ShortBrief        string    `json:"short_brief"`
-	Thumbnail         string    `json:"thumbnail"`
-	PrePublishContent string    `json:"pre_publish_content"`
-	TypeId            int       `json:"type_id"`
-	PublishDate       time.Time `json:"publish_date"`
+	Content           string `json:"content"`
+	CategoryId        int    `json:"category_id"`
+	SubCategoryIds    string `json:"sub_category_ids"`
+	Title             string `json:"title"`
+	ShortBrief        string `json:"short_brief"`
+	Thumbnail         string `json:"thumbnail"`
+	PrePublishContent string `json:"pre_publish_content"`
+	TypeId            int    `json:"type_id"`
+	PublishDate       string `json:"publish_date"`
 }
 
 func (r *CreateRequest) ToSaveRequest() *SaveRequest {
@@ -101,6 +101,9 @@ func (r *CreateRequest) ToSaveRequest() *SaveRequest {
 
 	if r.SubCategoryIds != "" {
 		req.SubCategoryIds = utils.StringToArrayInt(r.SubCategoryIds, ",")
+	}
+	if r.PublishDate != "" {
+		req.PublishDate, _ = time.Parse("2006-01-02 15:04:05", r.PublishDate)
 	}
 
 	return req

@@ -20,6 +20,6 @@ type IUseCase interface {
 	GetOne(ctx context.Context, params *models.RequestList) (*models.Response, error)
 
 	// Custom usecase
-	Enable(ctx context.Context, userId int) error
-	Disable(ctx context.Context, userId int) error
+	Enable(ctx context.Context, userId int) (int, error)
+	Disable(ctx context.Context, userId int) (int, error)
 }

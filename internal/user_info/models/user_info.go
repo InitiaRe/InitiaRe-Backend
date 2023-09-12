@@ -19,6 +19,10 @@ func (r *RequestList) ToMap() map[string]interface{} {
 	}
 }
 
+type UserIdReq struct {
+	Id int
+}
+
 type Response struct {
 	UserId             int `json:"user_id"`
 	NumberUploaded     int `json:"number_uploaded"`

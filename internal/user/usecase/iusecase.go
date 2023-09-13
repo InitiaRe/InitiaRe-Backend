@@ -18,4 +18,8 @@ type IUseCase interface {
 	GetList(ctx context.Context, params *models.RequestList) ([]*models.Response, error)
 	GetListPaging(ctx context.Context, params *models.RequestList) (*models.ListPaging, error)
 	GetOne(ctx context.Context, params *models.RequestList) (*models.Response, error)
+
+	// Custom usecase
+	Enable(ctx context.Context, userId int) (int, error)
+	Disable(ctx context.Context, userId int) (int, error)
 }

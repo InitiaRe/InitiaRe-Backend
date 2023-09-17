@@ -15,16 +15,16 @@ import (
 )
 
 type Handler struct {
-	cfg *config.Config
+	cfg     *config.Config
+	mw      middleware.IMiddlewareManager
 	usecase usecase.IUseCase
-	mw  middleware.IMiddlewareManager
 }
 
-func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMiddlewareManager) IHandler {
+func InitHandler(cfg *config.Config, mw middleware.IMiddlewareManager, usecase usecase.IUseCase) IHandler {
 	return Handler{
-		cfg: cfg,
+		cfg:     cfg,
+		mw:      mw,
 		usecase: usecase,
-		mw:  mw,
 	}
 }
 
@@ -55,11 +55,10 @@ func (h Handler) Enable() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
 		user := c.Get("user").(*userModel.Response)
-		res, err := h.usecase.Enable(ctx, user.Id)
-		if err != nil {
+		if err := h.usecase.Enable(ctx, user.Id); err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, 1))
 	}
 }
 
@@ -67,10 +66,9 @@ func (h Handler) Disable() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
 		user := c.Get("user").(*userModel.Response)
-		res, err := h.usecase.Disable(ctx, user.Id)
-		if err != nil {
+		if err := h.usecase.Disable(ctx, user.Id); err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, 1))
 	}
 }

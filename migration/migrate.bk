@@ -35,15 +35,15 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	cfg := migrateCfg{
-		seedData:            false,
-		migrateSchema:       false,
+		seedData:            true,
+		migrateSchema:       true,
 		migrateRelationship: true,
 	}
 
 	// Connect to database
 	c := config.GetConfig()
-
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", c.PostgreSQL.Host, c.PostgreSQL.User, c.PostgreSQL.Password, c.PostgreSQL.DBName, c.PostgreSQL.Port)
+	sslrootcert := "./cert/db_pub_cert.pem"
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=verify-full sslrootcert=%s", c.PostgreSQL.Host, c.PostgreSQL.User, c.PostgreSQL.Password, c.PostgreSQL.DBName, c.PostgreSQL.Port, sslrootcert)
 
 	log.Info().Msg("Connect to database ...")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
@@ -156,7 +156,7 @@ func main() {
 	if cfg.seedData {
 		log.Info().Msg("Seeding data ...")
 		seedingCategory(db)
-		// seedingStatus(db)
+		seedingStatus(db)
 		log.Info().Msg("Seeding successfully")
 	}
 }
@@ -164,14 +164,14 @@ func main() {
 func seedingCategory(db *gorm.DB) {
 	objs := []*category.Category{
 		{Id: 1, CategoryName: "Mathematics"},
-		{Id: 1, CategoryName: "English Literature"},
-		{Id: 1, CategoryName: "Vietnamese Literature"},
-		{Id: 1, CategoryName: "Physics"},
-		{Id: 1, CategoryName: "Chemistry"},
-		{Id: 1, CategoryName: "Biology"},
-		{Id: 1, CategoryName: "Social Study"},
-		{Id: 1, CategoryName: "History"},
-		{Id: 1, CategoryName: "IR & Politics"},
+		{Id: 2, CategoryName: "English Literature"},
+		{Id: 3, CategoryName: "Vietnamese Literature"},
+		{Id: 4, CategoryName: "Physics"},
+		{Id: 5, CategoryName: "Chemistry"},
+		{Id: 6, CategoryName: "Biology"},
+		{Id: 7, CategoryName: "Social Study"},
+		{Id: 8, CategoryName: "History"},
+		{Id: 9, CategoryName: "IR & Politics"},
 	}
 	result := db.Create(&objs)
 	if result.Error != nil {

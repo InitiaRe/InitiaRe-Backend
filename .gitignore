@@ -1,6 +1,5 @@
 # private
 .env
-cert
 config/*.yml
 config/*.yaml
 

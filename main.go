@@ -32,7 +32,7 @@ import (
 //	@in							header
 //	@name						Authorization
 
-//	@BasePath	/api/v1
+// @BasePath	/api/v1
 func main() {
 	cfg := config.GetConfig()
 
@@ -67,11 +67,12 @@ func initDB(cfg *config.PostgreSQLConfig) *gorm.DB {
 			SlowThreshold:             time.Second,   // Slow SQL threshold
 			LogLevel:                  logger.Silent, // Log level
 			IgnoreRecordNotFoundError: true,          // Ignore ErrRecordNotFound error for logger
-			ParameterizedQueries:      false,          // Don't include params in the SQL log
+			ParameterizedQueries:      false,         // Don't include params in the SQL log
 			Colorful:                  true,          // Disable color
 		},
 	)
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", cfg.Host, cfg.User, cfg.Password, cfg.DBName, cfg.Port)
+	sslrootcert := "./cert/db_pub_cert.pem"
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=verify-full sslrootcert=%s", cfg.Host, cfg.User, cfg.Password, cfg.DBName, cfg.Port, sslrootcert)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})

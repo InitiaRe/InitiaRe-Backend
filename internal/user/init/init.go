@@ -4,12 +4,15 @@ import (
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
 	handler "github.com/Ho-Minh/InitiaRe-website/internal/user/delivery/http"
-
+	"github.com/Ho-Minh/InitiaRe-website/internal/user/usecase"
+	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
 	"gorm.io/gorm"
 )
 
 type Init struct {
-	Handler handler.IHandler
+	Repository repository.IRepository
+	Usecase    usecase.IUseCase
+	Handler    handler.IHandler
 }
 
 func NewInit(
@@ -17,8 +20,11 @@ func NewInit(
 	cfg *config.Config,
 	mw *initMW.Init,
 ) *Init {
-	handler := handler.InitHandler(cfg, mw.MiddlewareManager)
+	repo := repository.InitRepo(db)
+	usecase := usecase.InitUsecase(repo)
+	handler := handler.InitHandler(cfg, mw.MiddlewareManager, usecase)
 	return &Init{
+		Usecase: usecase,
 		Handler: handler,
 	}
 }

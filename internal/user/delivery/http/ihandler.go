@@ -6,4 +6,6 @@ import "github.com/labstack/echo/v4"
 type IHandler interface {
 	MapRoutes(group *echo.Group)
 	GetMe() echo.HandlerFunc
+	Enable() echo.HandlerFunc
+	Disable() echo.HandlerFunc
 }

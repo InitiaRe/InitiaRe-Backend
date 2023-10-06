@@ -2,6 +2,7 @@ package init
 
 import (
 	"github.com/Ho-Minh/InitiaRe-website/config"
+	handler "github.com/Ho-Minh/InitiaRe-website/internal/user_info/delivery/http"
 	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
 	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/usecase"
 
@@ -11,6 +12,7 @@ import (
 type Init struct {
 	Repository repository.IRepository
 	Usecase    usecase.IUseCase
+	Handler    handler.IHandler
 }
 
 func NewInit(
@@ -19,8 +21,10 @@ func NewInit(
 ) *Init {
 	repo := repository.InitRepo(db)
 	usecase := usecase.InitUsecase(repo)
+	handler := handler.InitHandler(cfg, usecase)
 	return &Init{
 		Repository: repo,
 		Usecase:    usecase,
+		Handler: handler,
 	}
 }

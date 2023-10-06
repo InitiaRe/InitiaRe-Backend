@@ -9,6 +9,7 @@ import (
 	authModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/auth/repository"
 	userInfoModel "github.com/Ho-Minh/InitiaRe-website/internal/user_info/models"
+	userInfoRepo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
 	userInfoUc "github.com/Ho-Minh/InitiaRe-website/internal/user_info/usecase"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
@@ -18,14 +19,16 @@ import (
 type usecase struct {
 	cfg        *config.Config
 	repo       repository.IRepository
+	userInfoRepo userInfoRepo.IRepository
 	cacheRepo  repository.ICacheRepository
 	userInfoUc userInfoUc.IUseCase
 }
 
-func InitUsecase(cfg *config.Config, repo repository.IRepository, cacheRepo repository.ICacheRepository, userInfoUc userInfoUc.IUseCase) IUseCase {
+func InitUsecase(cfg *config.Config, repo repository.IRepository, cacheRepo repository.ICacheRepository, userInfoRepo userInfoRepo.IRepository, userInfoUc userInfoUc.IUseCase) IUseCase {
 	return &usecase{
 		cfg:        cfg,
 		repo:       repo,
+		userInfoRepo: userInfoRepo,
 		cacheRepo:  cacheRepo,
 		userInfoUc: userInfoUc,
 	}
@@ -95,6 +98,21 @@ func (u *usecase) Login(ctx context.Context, params *authModel.LoginRequest) (*a
 		return nil, utils.NewError(constant.STATUS_CODE_UNAUTHORIZED, constant.STATUS_MESSAGE_INVALID_EMAIL_OR_PASSWORD)
 	}
 	// end validation
+
+	foundUserInfo, err := u.userInfoRepo.GetOne(ctx, (&userInfoModel.RequestList{UserId: foundUser.Id}).ToMap())
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "UserInfo").Str("service", "usecase.userInfoRepo.GetOne").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_BAD_REQUEST, constant.STATUS_MESSAGE_INTERNAL_SERVER_ERROR)
+	}
+	if foundUserInfo == nil {
+		log.Error().Str("prefix", "UserInfo").Msgf("User not found with userId: %v", foundUser.Id)
+		return nil, utils.NewError(constant.STATUS_CODE_BAD_REQUEST, constant.STATUS_MESSAGE_USER_NOT_FOUND)
+	}
+
+	if foundUserInfo.Status == constant.USER_STATUS_INACTIVE {
+		log.Error().Str("prefix", "UserInfo").Msgf("User is not activated with userId: %v", foundUser.Id)
+		return nil, utils.NewError(constant.STATUS_CODE_FORBIDDEN, constant.STATUS_MESSAGE_USER_INACTIVE)
+	}
 
 	// generate token
 	token, err := utils.GenerateJWTToken(foundUser.Export(), u.cfg.Auth.Secret, u.cfg.Auth.Expire)

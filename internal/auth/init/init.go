@@ -6,6 +6,7 @@ import (
 	"github.com/Ho-Minh/InitiaRe-website/internal/auth/repository"
 	authUc "github.com/Ho-Minh/InitiaRe-website/internal/auth/usecase"
 	userInfoInit "github.com/Ho-Minh/InitiaRe-website/internal/user_info/init"
+	userInfoRepo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
 
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
@@ -26,7 +27,8 @@ func NewInit(
 ) *Init {
 	repo := repository.InitRepo(db)
 	cacheRepo := repository.NewCacheRepo(cache)
-	usecase := authUc.InitUsecase(cfg, repo, cacheRepo, userInfoInit.Usecase)
+	userInfoRepoO := userInfoRepo.InitRepo(db)
+	usecase := authUc.InitUsecase(cfg, repo, cacheRepo, userInfoRepoO, userInfoInit.Usecase)
 	handler := handler.InitHandler(cfg, usecase)
 	return &Init{
 		CacheRepository: cacheRepo,

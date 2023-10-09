@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"time"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/constant"
@@ -128,6 +129,11 @@ func (u *usecase) Login(ctx context.Context, params *authModel.LoginRequest) (*a
 	}
 
 	foundUser.SanitizePassword()
+	foundUser.LoginDate = time.Now()
+	if _, err := u.repo.Update(ctx, foundUser); err != nil {
+		log.Error().Str("prefix", "User").Msgf("Cannot update login_date with userId: %v", foundUser.Id)
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, constant.STATUS_MESSAGE_INTERNAL_SERVER_ERROR)
+	}
 
 	return &authModel.UserWithToken{
 		User:  foundUser.Export(),

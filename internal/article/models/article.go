@@ -11,13 +11,14 @@ import (
 
 type RequestList struct {
 	commonModel.RequestPaging
-	Title       string
-	CategoryIds string
-	TypeId      int
-	StatusId    int
-	FromDate    int
-	ToDate      int
-	CreatedBy   int
+	Title       string `json:"title"`
+	CategoryId  int    `json:"category_id"`
+	CategoryIds string `json:"category_ids"`
+	TypeId      int    `json:"type_id"`
+	StatusId    int    `json:"status_id"`
+	FromDate    int    `json:"from_date"`
+	ToDate      int    `json:"to_date"`
+	CreatedBy   int    `json:"created_by"`
 }
 
 func (r *RequestList) ToMap() map[string]interface{} {
@@ -25,6 +26,9 @@ func (r *RequestList) ToMap() map[string]interface{} {
 	categoryIds := []int{}
 	if r.CategoryIds != "" {
 		categoryIds = utils.StringToArrayInt(r.CategoryIds, ",")
+	}
+	if r.CategoryId != 0 {
+		categoryIds = append(categoryIds, r.CategoryId)
 	}
 
 	return map[string]interface{}{

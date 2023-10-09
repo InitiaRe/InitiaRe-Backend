@@ -7,10 +7,10 @@ import (
 
 type RequestList struct {
 	commonModel.RequestPaging
-	ArticleId int
-	FromDate  int
-	ToDate    int
-	CreatedBy int
+	ArticleId int	`json:"article_id"`
+	FromDate  int	`json:"from_date"`
+	ToDate    int	`json:"to_date"`
+	CreatedBy int	`json:"created_by"`
 }
 
 func (r *RequestList) ToMap() map[string]interface{} {

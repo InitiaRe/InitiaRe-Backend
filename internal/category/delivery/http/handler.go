@@ -75,8 +75,8 @@ func (h Handler) Create() echo.HandlerFunc {
 //	@Tags			Category
 //	@Accept			json
 //	@Produce		json
-//	@Param			Page	query		int	true	"Page"
-//	@Param			Size	query		int	true	"Size"
+//	@Param			page	query		int	true	"Page"
+//	@Param			size	query		int	true	"Size"
 //	@Success		200		{object}	models.ListPaging
 //	@Router			/categories [get]
 func (h Handler) GetListPaging() echo.HandlerFunc {

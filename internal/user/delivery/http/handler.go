@@ -5,7 +5,7 @@ import (
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/constant"
-	userModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
+	"github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
 	"github.com/Ho-Minh/InitiaRe-website/internal/user/usecase"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
@@ -54,7 +54,7 @@ func (h Handler) GetMe() echo.HandlerFunc {
 func (h Handler) Enable() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		user := c.Get("user").(*userModel.Response)
+		user := c.Get("user").(*models.Response)
 		if err := h.usecase.Enable(ctx, user.Id); err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
@@ -65,7 +65,7 @@ func (h Handler) Enable() echo.HandlerFunc {
 func (h Handler) Disable() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
-		user := c.Get("user").(*userModel.Response)
+		user := c.Get("user").(*models.Response)
 		if err := h.usecase.Disable(ctx, user.Id); err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}

@@ -77,13 +77,14 @@ func (h Handler) Create() echo.HandlerFunc {
 //	@Tags			Article
 //	@Accept			json
 //	@Produce		json
-//	@Param			Title		query		string	false	"Title"
-//	@Param			StatusId	query		int		false	"Status"
-//	@Param			TypeId		query		int		false	"Type"
-//	@Param			CategoryIds	query		string	false	"Category"
-//	@Param			Page		query		int		true	"Page"
-//	@Param			Size		query		int		true	"Size"
-//	@Success		200			{object}	models.ListPaging
+//	@Param			title			query		string	false	"Title"
+//	@Param			status_id		query		int		false	"Status"
+//	@Param			type_id			query		int		false	"Type"
+//	@Param			category_id		query		int		false	"Category"
+//	@Param			category_ids	query		string	false	"Category"
+//	@Param			page			query		int		true	"Page"
+//	@Param			size			query		int		true	"Size"
+//	@Success		200				{object}	models.ListPaging
 //	@Router			/articles [get]
 func (h Handler) GetListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -178,11 +179,16 @@ func (h Handler) GetById() echo.HandlerFunc {
 //	@Security		ApiKeyAuth
 //	@Summary		Get list current user articles
 //	@Description	Get list current user articles by token
-//	@Tags			Articles
+//	@Tags			Article
 //	@Produce		json
-//	@Param			Page	query		int	true	"Page"
-//	@Param			Size	query		int	true	"Size"
-//	@Success		200		{object}	models.Response
+//	@Param			title			query		string	false	"Title"
+//	@Param			status_id		query		int		false	"Status"
+//	@Param			type_id			query		int		false	"Type"
+//	@Param			category_id		query		int		false	"Category"
+//	@Param			category_ids	query		string	false	"Category"
+//	@Param			page			query		int		true	"Page"
+//	@Param			size			query		int		true	"Size"
+//	@Success		200				{object}	models.Response
 //	@Router			/articles/me [get]
 func (h Handler) GetByMe() echo.HandlerFunc {
 	return func(c echo.Context) error {

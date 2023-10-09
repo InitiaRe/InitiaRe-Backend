@@ -250,28 +250,32 @@ paths:
       parameters:
       - description: Title
         in: query
-        name: Title
+        name: title
         type: string
       - description: Status
         in: query
-        name: StatusId
+        name: status_id
         type: integer
       - description: Type
         in: query
-        name: TypeId
+        name: type_id
         type: integer
       - description: Category
         in: query
-        name: CategoryIds
+        name: category_id
+        type: integer
+      - description: Category
+        in: query
+        name: category_ids
         type: string
       - description: Page
         in: query
-        name: Page
+        name: page
         required: true
         type: integer
       - description: Size
         in: query
-        name: Size
+        name: size
         required: true
         type: integer
       produces:
@@ -356,6 +360,52 @@ paths:
       summary: Update article
       tags:
       - Article
+  /articles/me:
+    get:
+      description: Get list current user articles by token
+      parameters:
+      - description: Title
+        in: query
+        name: title
+        type: string
+      - description: Status
+        in: query
+        name: status_id
+        type: integer
+      - description: Type
+        in: query
+        name: type_id
+        type: integer
+      - description: Category
+        in: query
+        name: category_id
+        type: integer
+      - description: Category
+        in: query
+        name: category_ids
+        type: string
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Size
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get list current user articles
+      tags:
+      - Article
   /auth/login:
     post:
       consumes:
@@ -408,12 +458,12 @@ paths:
       parameters:
       - description: Page
         in: query
-        name: Page
+        name: page
         required: true
         type: integer
       - description: Size
         in: query
-        name: Size
+        name: size
         required: true
         type: integer
       produces:

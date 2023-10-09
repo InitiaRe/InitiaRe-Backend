@@ -37,38 +37,44 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Title",
-                        "name": "Title",
+                        "name": "title",
                         "in": "query"
                     },
                     {
                         "type": "integer",
                         "description": "Status",
-                        "name": "StatusId",
+                        "name": "status_id",
                         "in": "query"
                     },
                     {
                         "type": "integer",
                         "description": "Type",
-                        "name": "TypeId",
+                        "name": "type_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Category",
+                        "name": "category_id",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "Category",
-                        "name": "CategoryIds",
+                        "name": "category_ids",
                         "in": "query"
                     },
                     {
                         "type": "integer",
                         "description": "Page",
-                        "name": "Page",
+                        "name": "page",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "Size",
-                        "name": "Size",
+                        "name": "size",
                         "in": "query",
                         "required": true
                     }
@@ -113,6 +119,77 @@ const docTemplate = `{
                 "responses": {
                     "201": {
                         "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/articles/me": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list current user articles by token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "Get list current user articles",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Status",
+                        "name": "status_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Type",
+                        "name": "type_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Category",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category",
+                        "name": "category_ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
                         }
@@ -288,14 +365,14 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "Page",
-                        "name": "Page",
+                        "name": "page",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "Size",
-                        "name": "Size",
+                        "name": "size",
                         "in": "query",
                         "required": true
                     }

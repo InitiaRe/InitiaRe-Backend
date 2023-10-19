@@ -101,16 +101,16 @@ func (u *usecase) Login(ctx context.Context, params *authModel.LoginRequest) (*a
 
 	foundUserInfo, err := u.userInfoRepo.GetOne(ctx, (&userInfoModel.RequestList{UserId: foundUser.Id}).ToMap())
 	if err != nil {
-		log.Error().Err(err).Str("prefix", "UserInfo").Str("service", "usecase.userInfoRepo.GetOne").Send()
+		log.Error().Err(err).Str("prefix", "Auth").Str("service", "usecase.userInfoRepo.GetOne").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_BAD_REQUEST, constant.STATUS_MESSAGE_INTERNAL_SERVER_ERROR)
 	}
 	if foundUserInfo == nil {
-		log.Error().Str("prefix", "UserInfo").Msgf("User not found with userId: %v", foundUser.Id)
+		log.Error().Str("prefix", "Auth").Msgf("User not found with userId: %v", foundUser.Id)
 		return nil, utils.NewError(constant.STATUS_CODE_BAD_REQUEST, constant.STATUS_MESSAGE_USER_NOT_FOUND)
 	}
 
 	if foundUserInfo.Status == constant.USER_STATUS_INACTIVE {
-		log.Error().Str("prefix", "UserInfo").Msgf("User is not activated with userId: %v", foundUser.Id)
+		log.Error().Str("prefix", "Auth").Msgf("User is not activated with userId: %v", foundUser.Id)
 		return nil, utils.NewError(constant.STATUS_CODE_FORBIDDEN, constant.STATUS_MESSAGE_USER_INACTIVE)
 	}
 

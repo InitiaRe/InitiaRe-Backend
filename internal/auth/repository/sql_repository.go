@@ -18,6 +18,14 @@ func (r *repo) Create(ctx context.Context, obj *entity.User) (*entity.User, erro
 	return obj, nil
 }
 
+func (r *repo) Update(ctx context.Context, obj *entity.User) (*entity.User, error) {
+	result := r.db.Updates(obj)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return obj, nil
+}
+
 func (r *repo) GetById(ctx context.Context, id int) (*entity.User, error) {
 	record := &entity.User{}
 	result := r.db.Limit(1).Find(&record, id)

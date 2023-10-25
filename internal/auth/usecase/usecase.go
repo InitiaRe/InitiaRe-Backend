@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"time"
 
 	"github.com/Ho-Minh/InitiaRe-website/config"
 	"github.com/Ho-Minh/InitiaRe-website/constant"
@@ -17,20 +18,20 @@ import (
 )
 
 type usecase struct {
-	cfg        *config.Config
-	repo       repository.IRepository
+	cfg          *config.Config
+	repo         repository.IRepository
 	userInfoRepo userInfoRepo.IRepository
-	cacheRepo  repository.ICacheRepository
-	userInfoUc userInfoUc.IUseCase
+	cacheRepo    repository.ICacheRepository
+	userInfoUc   userInfoUc.IUseCase
 }
 
 func InitUsecase(cfg *config.Config, repo repository.IRepository, cacheRepo repository.ICacheRepository, userInfoRepo userInfoRepo.IRepository, userInfoUc userInfoUc.IUseCase) IUseCase {
 	return &usecase{
-		cfg:        cfg,
-		repo:       repo,
+		cfg:          cfg,
+		repo:         repo,
 		userInfoRepo: userInfoRepo,
-		cacheRepo:  cacheRepo,
-		userInfoUc: userInfoUc,
+		cacheRepo:    cacheRepo,
+		userInfoUc:   userInfoUc,
 	}
 }
 
@@ -128,6 +129,11 @@ func (u *usecase) Login(ctx context.Context, params *authModel.LoginRequest) (*a
 	}
 
 	foundUser.SanitizePassword()
+	foundUser.LoginDate = time.Now()
+	if _, err := u.repo.Update(ctx, foundUser); err != nil {
+		log.Error().Str("prefix", "Auth").Msgf("Cannot update login_date with userId: %v", foundUser.Id)
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, constant.STATUS_MESSAGE_INTERNAL_SERVER_ERROR)
+	}
 
 	return &authModel.UserWithToken{
 		User:  foundUser.Export(),

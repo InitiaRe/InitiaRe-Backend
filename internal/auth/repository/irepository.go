@@ -8,6 +8,7 @@ import (
 
 type IRepository interface {
 	Create(ctx context.Context, todo *entity.User) (*entity.User, error)
+	Update(ctx context.Context, obj *entity.User) (*entity.User, error)
 	GetById(ctx context.Context, userId int) (*entity.User, error)
 	GetOne(ctx context.Context, queries map[string]interface{}) (*entity.User, error)
 }

@@ -124,6 +124,10 @@ type UpdateRequest struct {
 	PublishDate       time.Time `json:"publish_date"`
 }
 
+type ApproveRequest struct {
+	Id int `json:"id"`
+}
+
 func (r *UpdateRequest) ToSaveRequest(id int) *SaveRequest {
 	req := &SaveRequest{}
 	copier.Copy(req, r)

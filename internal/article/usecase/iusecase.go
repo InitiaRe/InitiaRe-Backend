@@ -17,4 +17,5 @@ type IUseCase interface {
 	GetList(ctx context.Context, params *models.RequestList) ([]*models.Response, error)
 	GetListPaging(ctx context.Context, params *models.RequestList) (*models.ListPaging, error)
 	GetOne(ctx context.Context, params *models.RequestList) (*models.Response, error)
+	ApproveArticle(ctx context.Context, id int) error
 }

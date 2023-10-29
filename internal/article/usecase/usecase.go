@@ -9,8 +9,8 @@ import (
 	"github.com/Ho-Minh/InitiaRe-website/internal/article/repository"
 
 	articleCategoryUc "github.com/Ho-Minh/InitiaRe-website/internal/article_category/usecase"
-	categoryUc "github.com/Ho-Minh/InitiaRe-website/internal/category/usecase"
 	categoryModel "github.com/Ho-Minh/InitiaRe-website/internal/category/models"
+	categoryUc "github.com/Ho-Minh/InitiaRe-website/internal/category/usecase"
 
 	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
@@ -120,6 +120,30 @@ func (u *usecase) DeleteMany(ctx context.Context, ids []int) (int, error) {
 	return 0, nil
 }
 
+func (u *usecase) ApproveArticle(ctx context.Context, id int) error {
+	article, err := u.repo.GetById(ctx, id)
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetOne").Send()
+		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
+	}
+	if article == nil {
+		log.Error().Str("prefix", "Article").Msgf("Article not found with Id: %v", id)
+		return utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Article not found")
+	}
+	log.Info().Str("prefix", "Article").Msgf("Article status: %v && Article status pending: %v", article.StatusId, constant.ARTICLE_STATUS_PENDING)
+	if article.StatusId != constant.ARTICLE_STATUS_PENDING {
+		log.Error().Str("prefix", "Article").Msgf("Article is not pending with Id: %v", id)
+		return utils.NewError(constant.STATUS_CODE_BAD_REQUEST, "Article is not pending")
+	}
+	article.StatusId = constant.ARTICLE_STATUS_APPROVED
+
+	if _, err := u.repo.Update(ctx, article); err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.Update").Send()
+		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when update article")
+	}
+	return nil
+}
+
 func (u *usecase) validateBeforeUpdate(ctx context.Context, id int, userId int) error {
 	record, err := u.GetById(ctx, id)
 	if err != nil {
@@ -131,4 +155,3 @@ func (u *usecase) validateBeforeUpdate(ctx context.Context, id int, userId int) 
 	}
 	return nil
 }
-

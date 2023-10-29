@@ -36,8 +36,8 @@ func main() {
 
 	cfg := migrateCfg{
 		seedData:            true,
-		migrateSchema:       true,
-		migrateRelationship: true,
+		migrateSchema:       false,
+		migrateRelationship: false,
 	}
 
 	// Connect to database
@@ -163,15 +163,15 @@ func main() {
 
 func seedingCategory(db *gorm.DB) {
 	objs := []*category.Category{
-		{Id: 1, CategoryName: "Mathematics"},
-		{Id: 2, CategoryName: "English Literature"},
-		{Id: 3, CategoryName: "Vietnamese Literature"},
-		{Id: 4, CategoryName: "Physics"},
-		{Id: 5, CategoryName: "Chemistry"},
-		{Id: 6, CategoryName: "Biology"},
-		{Id: 7, CategoryName: "Social Study"},
-		{Id: 8, CategoryName: "History"},
-		{Id: 9, CategoryName: "IR & Politics"},
+		{CategoryName: "Mathematics"},
+		{CategoryName: "English Literature"},
+		{CategoryName: "Vietnamese Literature"},
+		{CategoryName: "Physics"},
+		{CategoryName: "Chemistry"},
+		{CategoryName: "Biology"},
+		{CategoryName: "Social Study"},
+		{CategoryName: "History"},
+		{CategoryName: "IR & Politics"},
 	}
 	result := db.Create(&objs)
 	if result.Error != nil {
@@ -192,3 +192,10 @@ func seedingStatus(db *gorm.DB) {
 		log.Fatal().Msg(result.Error.Error())
 	}
 }
+
+
+/*
+	--> SQL:
+		1. Reset sequence (auto increment) of table
+			- alter sequence "seq_name" restart with new_value
+*/

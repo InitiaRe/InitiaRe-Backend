@@ -84,7 +84,7 @@ func (r *repo) DeleteMany(ctx context.Context, ids []int) (int, error) {
 
 func (r *repo) Count(ctx context.Context, queries map[string]interface{}) (int, error) {
 	var count int64
-	if err := r.initQuery(ctx, queries).Count(&count).Error; err != nil {
+	if err := r.initQuery(ctx, queries).Select("count(1)").Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return int(count), nil

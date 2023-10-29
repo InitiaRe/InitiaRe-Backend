@@ -120,7 +120,7 @@ func (u *usecase) DeleteMany(ctx context.Context, ids []int) (int, error) {
 	return 0, nil
 }
 
-func (u *usecase) ApproveArticle(ctx context.Context, id int) error {
+func (u *usecase) Approve(ctx context.Context, id int) error {
 	article, err := u.repo.GetById(ctx, id)
 	if err != nil {
 		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetOne").Send()
@@ -136,6 +136,29 @@ func (u *usecase) ApproveArticle(ctx context.Context, id int) error {
 		return utils.NewError(constant.STATUS_CODE_BAD_REQUEST, "Article is not pending")
 	}
 	article.StatusId = constant.ARTICLE_STATUS_APPROVED
+
+	if _, err := u.repo.Update(ctx, article); err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.Update").Send()
+		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when update article")
+	}
+	return nil
+}
+
+func (u *usecase) Disable(ctx context.Context, id int) error {
+	article, err := u.repo.GetById(ctx, id)
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.GetOne").Send()
+		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
+	}
+	if article == nil {
+		log.Error().Str("prefix", "Article").Msgf("Article not found with Id: %v", id)
+		return utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Article not found")
+	}
+	if article.StatusId == constant.ARTICLE_STATUS_HIDDEN {
+		log.Error().Str("prefix", "Article").Msgf("Article is already disabled with Id: %v", id)
+		return utils.NewError(constant.STATUS_CODE_BAD_REQUEST, "Article is already disabled ")
+	}
+	article.StatusId = constant.ARTICLE_STATUS_HIDDEN
 
 	if _, err := u.repo.Update(ctx, article); err != nil {
 		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.repo.Update").Send()

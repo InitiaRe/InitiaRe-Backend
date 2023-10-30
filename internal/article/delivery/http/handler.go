@@ -40,8 +40,9 @@ func (h Handler) MapRoutes(group *echo.Group) {
 	group.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 	group.GET("/me", h.GetByMe(), h.mw.AuthJWTMiddleware())
 
-	// Approve Article
-	group.POST("/approve", h.ApproveArticle(), h.mw.AuthJWTMiddleware())
+	// Admin role
+	group.POST("/approve", h.Approve(), h.mw.AuthJWTMiddleware())
+	group.POST("/disable", h.Disable(), h.mw.AuthJWTMiddleware())
 }
 
 // Create godoc
@@ -213,9 +214,7 @@ func (h Handler) GetByMe() echo.HandlerFunc {
 	}
 }
 
-// Approve godoc
-
-func (h Handler) ApproveArticle() echo.HandlerFunc {
+func (h Handler) Approve() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
 		req := &models.ApproveRequest{}
@@ -223,7 +222,22 @@ func (h Handler) ApproveArticle() echo.HandlerFunc {
 			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
-		if err := h.usecase.ApproveArticle(ctx, req.Id); err != nil {
+		if err := h.usecase.Approve(ctx, req.Id); err != nil {
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
+		}
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, 1))
+	}
+}
+
+func (h Handler) Disable() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+		req := &models.DisableRequest{}
+		if err := utils.ReadBodyRequest(c, req); err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+		if err := h.usecase.Disable(ctx, req.Id); err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, 1))

@@ -10,5 +10,6 @@ type IHandler interface {
 	GetById() echo.HandlerFunc
 	Update() echo.HandlerFunc
 	GetByMe() echo.HandlerFunc
-	ApproveArticle() echo.HandlerFunc
+	Approve() echo.HandlerFunc
+	Disable() echo.HandlerFunc
 }

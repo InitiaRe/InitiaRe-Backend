@@ -128,6 +128,10 @@ type ApproveRequest struct {
 	Id int `json:"id"`
 }
 
+type DisableRequest struct {
+	Id int `json:"id"`
+}
+
 func (r *UpdateRequest) ToSaveRequest(id int) *SaveRequest {
 	req := &SaveRequest{}
 	copier.Copy(req, r)

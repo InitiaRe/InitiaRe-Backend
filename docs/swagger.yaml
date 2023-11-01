@@ -204,6 +204,24 @@ definitions:
       content:
         type: string
     type: object
+  httpResponse.RestResponse:
+    properties:
+      message:
+        type: string
+      res: {}
+      status:
+        type: integer
+    type: object
+  models.ApproveRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  models.DisableRequest:
+    properties:
+      id:
+        type: integer
+    type: object
   models.LoginRequest:
     properties:
       email:
@@ -358,6 +376,54 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Update article
+      tags:
+      - Article
+  /articles/approve:
+    post:
+      consumes:
+      - application/json
+      description: Approve article by Id
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.ApproveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httpResponse.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Approve article
+      tags:
+      - Article
+  /articles/disable:
+    post:
+      consumes:
+      - application/json
+      description: Disable article by Id
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.DisableRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httpResponse.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Disable article
       tags:
       - Article
   /articles/me:

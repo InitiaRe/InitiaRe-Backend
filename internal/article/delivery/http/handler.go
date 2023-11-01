@@ -214,6 +214,17 @@ func (h Handler) GetByMe() echo.HandlerFunc {
 	}
 }
 
+// Approve godoc
+//
+//	@Security		ApiKeyAuth
+//	@Summary		Approve article
+//	@Description	Approve article by Id
+//	@Tags			Article
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		models.ApproveRequest	true	"body"
+//	@Success		200		{object}	httpResponse.RestResponse
+//	@Router			/articles/approve [post]
 func (h Handler) Approve() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
@@ -229,6 +240,17 @@ func (h Handler) Approve() echo.HandlerFunc {
 	}
 }
 
+// Disable godoc
+//
+//	@Security		ApiKeyAuth
+//	@Summary		Disable article
+//	@Description	Disable article by Id
+//	@Tags			Article
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		models.DisableRequest	true	"body"
+//	@Success		200		{object}	httpResponse.RestResponse
+//	@Router			/articles/disable [post]
 func (h Handler) Disable() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)

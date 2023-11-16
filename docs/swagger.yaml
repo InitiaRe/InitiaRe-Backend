@@ -217,6 +217,15 @@ definitions:
       id:
         type: integer
     type: object
+  models.ApprovedList:
+    properties:
+      records:
+        items:
+          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+        type: array
+      total:
+        type: integer
+    type: object
   models.DisableRequest:
     properties:
       id:
@@ -400,6 +409,19 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Approve article
+      tags:
+      - Article
+  /articles/approved-article:
+    get:
+      description: Get the list of approved articles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ApprovedList'
+      summary: Get approved article
       tags:
       - Article
   /articles/disable:

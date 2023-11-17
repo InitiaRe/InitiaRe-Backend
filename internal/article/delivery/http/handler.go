@@ -35,8 +35,11 @@ func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMi
 // Map routes
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("", h.Create(), h.mw.AuthJWTMiddleware())
+
 	group.GET("/:id", h.GetById())
+	group.GET("/approved-article", h.GetApprovedArticle())
 	group.GET("", h.GetListPaging())
+
 	group.PUT("/:id", h.Update(), h.mw.AuthJWTMiddleware())
 	group.GET("/me", h.GetByMe(), h.mw.AuthJWTMiddleware())
 
@@ -100,6 +103,27 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 		}
 
 		res, err := h.usecase.GetListPaging(ctx, req)
+		if err != nil {
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
+		}
+
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+	}
+}
+
+// GetApprovedArticle godoc
+//
+//	@Summary		Get approved article
+//	@Description	Get the list of approved articles
+//	@Tags			Article
+//	@Produce		json
+//	@Success		200	{object}	models.ApprovedList
+//	@Router			/articles/approved-article [get]
+func (h Handler) GetApprovedArticle() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+
+		res, err := h.usecase.GetApprovedArticle(ctx)
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}

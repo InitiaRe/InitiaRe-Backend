@@ -56,6 +56,28 @@ func (u *usecase) GetById(ctx context.Context, id int) (*models.Response, error)
 	return res, nil
 }
 
+func (u *usecase) GetApprovedArticle(ctx context.Context) (*models.ApprovedList, error) {
+	queries := map[string]interface{}{
+		"status_id": constant.ARTICLE_STATUS_APPROVED,
+	}
+
+	record, err := u.repo.GetList(ctx, queries)
+	if err != nil {
+		log.Error().Err(err).Str("service", "usecase.repo.GetList").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get approved article list")
+	}
+	count, err := u.repo.Count(ctx, queries)
+	if err != nil {
+		log.Error().Err(err).Str("service", "usecase.repo.Count").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get approved article list")
+	}
+
+	return &models.ApprovedList{
+		Total:   count,
+		Records: (&entity.Article{}).ExportList(record),
+	}, nil
+}
+
 func (u *usecase) GetList(ctx context.Context, params *models.RequestList) ([]*models.Response, error) {
 	return nil, nil
 }

@@ -164,6 +164,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/articles/approved-article": {
+            "get": {
+                "description": "Get the list of approved articles",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "Get approved article",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApprovedList"
+                        }
+                    }
+                }
+            }
+        },
         "/articles/disable": {
             "post": {
                 "security": [
@@ -1171,6 +1191,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ApprovedList": {
+            "type": "object",
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                    }
+                },
+                "total": {
                     "type": "integer"
                 }
             }

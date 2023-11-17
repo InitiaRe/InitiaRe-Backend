@@ -87,6 +87,11 @@ type ListPaging struct {
 	Records []*Response
 }
 
+type ApprovedList struct {
+	Total   int
+	Records []*Response
+}
+
 type CreateRequest struct {
 	Content           string `json:"content"`
 	CategoryId        int    `json:"category_id"`

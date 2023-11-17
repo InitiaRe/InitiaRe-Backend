@@ -7,6 +7,7 @@ type IHandler interface {
 	MapRoutes(group *echo.Group)
 	Create() echo.HandlerFunc
 	GetListPaging() echo.HandlerFunc
+	GetApprovedArticle() echo.HandlerFunc
 	GetById() echo.HandlerFunc
 	Update() echo.HandlerFunc
 	GetByMe() echo.HandlerFunc

@@ -8,12 +8,13 @@ import (
 )
 
 type UserInfo struct {
-	Id                 int `gorm:"primarykey;column:id" json:"id"`
-	UserId             int `gorm:"column:user_id" json:"user_id"`
-	NumberUploaded     int `gorm:"column:number_uploaded" json:"number_uploaded"`
-	NumberPeerReviewed int `gorm:"column:number_peer_reviewed" json:"number_peer_reviewed"`
-	NumberSpecReviewed int `gorm:"column:number_spec_reviewed" json:"number_spec_reviewed"`
-	Status             int `gorm:"column:status;default:(-)" json:"status"`
+	Id                 int `gorm:"primarykey;column:id"`
+	UserId             int `gorm:"column:user_id"`
+	NumberUploaded     int `gorm:"column:number_uploaded"`
+	NumberPeerReviewed int `gorm:"column:number_peer_reviewed"`
+	NumberSpecReviewed int `gorm:"column:number_spec_reviewed"`
+	Status             int `gorm:"column:status;default:(-)"`
+	Role               int `gorm:"column:role;default:(-)"`
 }
 
 func (u *UserInfo) TableName() string {
@@ -40,7 +41,12 @@ func (u *UserInfo) ParseFromSaveRequest(req *models.SaveRequest) {
 
 func (u *UserInfo) ParseForCreate(req *models.SaveRequest, userId int) {
 	u.ParseFromSaveRequest(req)
-	u.Status = constant.USER_STATUS_ACTIVE
+	if u.Status == 0 {
+		u.Status = constant.USER_STATUS_ACTIVE
+	}
+	if u.Role == 0 {
+		u.Role = constant.USER_ROLE_NORMAL
+	}
 }
 
 func (u *UserInfo) ParseForCreateMany(reqs []*models.SaveRequest, userId int) []*UserInfo {

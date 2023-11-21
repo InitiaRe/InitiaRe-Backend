@@ -238,6 +238,11 @@ definitions:
       password:
         type: string
     type: object
+  models.PromoteRequest:
+    properties:
+      email:
+        type: string
+    type: object
   models.RegisterRequest:
     properties:
       email:
@@ -800,6 +805,26 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get user info
+      tags:
+      - User
+  /users/promote/admin:
+    post:
+      consumes:
+      - application/json
+      description: Promote normal user to admin, guest not allowed
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.PromoteRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Promote normal user to admin
       tags:
       - User
 securityDefinitions:

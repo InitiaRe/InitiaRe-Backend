@@ -20,10 +20,13 @@ func (r *RequestList) ToMap() map[string]interface{} {
 }
 
 type Response struct {
+	Id                 int `json:"id"`
 	UserId             int `json:"user_id"`
 	NumberUploaded     int `json:"number_uploaded"`
 	NumberPeerReviewed int `json:"number_peer_reviewed"`
 	NumberSpecReviewed int `json:"number_spec_reviewed"`
+	Status             int `json:"status"`
+	Role               int `json:"role"`
 }
 
 type SaveRequest struct {
@@ -32,6 +35,8 @@ type SaveRequest struct {
 	NumberUploaded     int
 	NumberPeerReviewed int
 	NumberSpecReviewed int
+	Status             int
+	Role               int
 }
 
 type ListPaging struct {

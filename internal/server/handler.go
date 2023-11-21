@@ -42,7 +42,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	article := initArticle.NewInit(s.db, s.cfg, mw, category, articleCategory)
 
 	// Init User
-	user := initUser.NewInit(s.db, s.cfg, mw)
+	user := initUser.NewInit(s.db, s.cfg, mw, auth, userInfo)
 
 	// Init Storage
 	storage := initStorage.NewInit(s.db, s.cfg, mw, s.ctn)

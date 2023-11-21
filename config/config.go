@@ -44,6 +44,7 @@ type ServerConfig struct {
 	WriteTimeout      int
 	SSL               bool
 	CtxDefaultTimeout int
+	SuperAdmin        string
 }
 
 type AuthConfig struct {

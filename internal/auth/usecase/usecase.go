@@ -140,3 +140,13 @@ func (u *usecase) Login(ctx context.Context, params *authModel.LoginRequest) (*a
 		Token: token,
 	}, nil
 }
+
+func (u *usecase) GetOne(ctx context.Context, params *authModel.RequestList) (*authModel.Response, error) {
+	queries := params.ToMap()
+	record, err := u.repo.GetOne(ctx, queries)
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Auth").Str("service", "usecase.repo.GetOne").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get user")
+	}
+	return record.Export(), nil
+}

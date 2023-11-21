@@ -8,4 +8,5 @@ type IHandler interface {
 	GetMe() echo.HandlerFunc
 	Enable() echo.HandlerFunc
 	Disable() echo.HandlerFunc
+	PromoteAdmin() echo.HandlerFunc
 }

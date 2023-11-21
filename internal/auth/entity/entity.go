@@ -3,6 +3,7 @@ package entity
 import (
 	"time"
 
+	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
 
 	"github.com/google/uuid"
@@ -26,7 +27,7 @@ type User struct {
 	LoginDate time.Time `gorm:"column:login_date;default:(-)" json:"login_date,omitempty"`
 
 	// Custom fields
-	Status int `gorm:"->" json:"status,omitempty"`
+	Status int `gorm:"->;-:migration" json:"status,omitempty"`
 }
 
 func (u *User) TableName() string {
@@ -61,6 +62,9 @@ func (u *User) Export() *models.Response {
 
 func (u *User) ParseFromSaveRequest(req *models.SaveRequest) {
 	copier.Copy(u, req) //nolint
+	if u.Status == 0 {
+		u.Status = constant.USER_STATUS_ACTIVE
+	}
 	u.newUUID()
 	u.HashPassword()
 }

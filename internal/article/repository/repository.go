@@ -173,6 +173,16 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	orderBy := conversion.ReadInterface(queries, "order_by", constant.DEFAULT_SORT_ORDER).(string)
 
 	switch sortBy {
+	case "title":
+		query = query.Order("\"initiaRe_article\".title " + orderBy)
+	case "category_id":
+		query = query.Order("\"initiaRe_article\".category_id " + orderBy)
+	case "status_id":
+		query = query.Order("\"initiaRe_article\".status_id " + orderBy)
+	case "created_at":
+		query = query.Order("\"initiaRe_article\".created_at " + orderBy)
+	case "email":
+		query = query.Order("iru.email " + orderBy)
 	default:
 		query = query.Order("\"initiaRe_article\".id " + orderBy)
 	}
@@ -180,7 +190,6 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 }
 
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
-
 	tbName := (&entity.Article{}).TableName()
 	title := conversion.ReadInterface(queries, "title", "").(string)
 	email := conversion.ReadInterface(queries, "email", "").(string)

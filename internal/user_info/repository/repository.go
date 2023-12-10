@@ -6,7 +6,7 @@ import (
 
 	"github.com/Ho-Minh/InitiaRe-website/constant"
 	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/entity"
-	"github.com/vukyn/go-kuery/konversion"
+	"github.com/vukyn/kuery/conversion"
 
 	"gorm.io/gorm"
 )
@@ -132,8 +132,8 @@ func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*
 func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.UserInfo, error) {
 	records := []*entity.UserInfo{}
 
-	page := konversion.ReadInterface(queries, "page", constant.DEFAULT_PAGE).(int)
-	size := konversion.ReadInterface(queries, "size", constant.DEFAULT_SIZE).(int)
+	page := conversion.ReadInterface(queries, "page", constant.DEFAULT_PAGE).(int)
+	size := conversion.ReadInterface(queries, "size", constant.DEFAULT_SIZE).(int)
 
 	query := r.initQuery(ctx, queries)
 
@@ -160,8 +160,8 @@ func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 }
 
 func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
-	sortBy := konversion.ReadInterface(queries, "sort_by", "").(string)
-	orderBy := konversion.ReadInterface(queries, "order_by", constant.DEFAULT_SORT_ORDER).(string)
+	sortBy := conversion.ReadInterface(queries, "sort_by", "").(string)
+	orderBy := conversion.ReadInterface(queries, "order_by", constant.DEFAULT_SORT_ORDER).(string)
 
 	switch sortBy {
 	default:
@@ -173,7 +173,7 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	tbName := (&entity.UserInfo{}).TableName()
-	userId := konversion.ReadInterface(queries, "user_id", 0).(int)
+	userId := conversion.ReadInterface(queries, "user_id", 0).(int)
 
 	if userId != 0 {
 		query = query.Where(fmt.Sprintf("\"%s\".user_id = ?", tbName), userId)

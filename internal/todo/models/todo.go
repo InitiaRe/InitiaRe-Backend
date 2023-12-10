@@ -29,7 +29,7 @@ type Response struct {
 	Content   string `json:"content,omitempty"`
 	CreatedBy int    `json:"created_by,omitempty"`
 	CreatedAt string `json:"created_at,omitempty"`
-	UpdateBy  int    `json:"update_by,omitempty"`
+	UpdatedBy int    `json:"updated_by,omitempty"`
 	UpdatedAt string `json:"updated_at,omitempty"`
 }
 

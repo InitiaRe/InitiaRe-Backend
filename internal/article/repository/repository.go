@@ -156,12 +156,14 @@ func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	query = query.
 		Joins("left join \"initiaRe_status\" irs on \"initiaRe_article\".status_id = irs.status_id and irs.category = 'article'").
-		Joins("left join \"initiaRe_category\" irc on \"initiaRe_article\".category_id = irc.id")
+		Joins("left join \"initiaRe_category\" irc on \"initiaRe_article\".category_id = irc.id").
+		Joins("left join \"initiaRe_user\" iru on \"initiaRe_article\".created_by = iru.id")
 
 	query = query.Select(
 		"\"initiaRe_article\".*",
 		"irs.status_name",
 		"irc.category_name",
+		"iru.email",
 	)
 	return query
 }
@@ -181,6 +183,7 @@ func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	tbName := (&entity.Article{}).TableName()
 	title := konversion.ReadInterface(queries, "title", "").(string)
+	email := konversion.ReadInterface(queries, "email", "").(string)
 	categoryIds := konversion.ReadInterface(queries, "category_ids", []int{}).([]int)
 	statusId := konversion.ReadInterface(queries, "status_id", 0).(int)
 	typeId := konversion.ReadInterface(queries, "type_id", 0).(int)
@@ -190,6 +193,9 @@ func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	if title != "" {
 		query = query.Where(fmt.Sprintf("\"%s\".title ilike ?", tbName), "%"+title+"%")
+	}
+	if email != "" {
+		query = query.Where("iru.email ilike ?", "%"+email+"%")
 	}
 	if statusId != 0 {
 		query = query.Where(fmt.Sprintf("\"%s\".status_id = ?", tbName), statusId)

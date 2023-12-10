@@ -65,6 +65,12 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Page",
                         "name": "page",
@@ -965,6 +971,9 @@ const docTemplate = `{
                 "created_by": {
                     "type": "integer"
                 },
+                "email": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -1191,11 +1200,11 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "update_by": {
-                    "type": "integer"
-                },
                 "updated_at": {
                     "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
                 }
             }
         },

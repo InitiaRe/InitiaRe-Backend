@@ -86,8 +86,8 @@ func (u *usecase) PromoteAdmin(ctx context.Context, userId int, email string) er
 	if userInfo.Role == constant.USER_ROLE_ADMIN {
 		return nil
 	}
-	if userInfo.Role == constant.USER_ROLE_GUEST {
-		return utils.NewError(constant.STATUS_CODE_BAD_REQUEST, "Not allowed to promote guest user to admin")
+	if userInfo.Role != constant.USER_ROLE_NORMAL {
+		return utils.NewError(constant.STATUS_CODE_BAD_REQUEST, "Only allowed promote from normal user to admin")
 	}
 	if _, err := u.userInfoUc.Update(ctx, userId, &userInfoModel.SaveRequest{
 		Id:   user.Id,

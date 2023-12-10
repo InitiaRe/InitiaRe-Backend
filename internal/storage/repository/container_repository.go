@@ -8,7 +8,7 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/Ho-Minh/InitiaRe-website/internal/storage/models"
-	"github.com/vukyn/go-kuery/krypto"
+	"github.com/vukyn/kuery/crypto"
 )
 
 func (c *ctnRepo) Upload(ctx context.Context, req *models.UploadRequest) (string, error) {
@@ -36,7 +36,7 @@ func (c *ctnRepo) Upload(ctx context.Context, req *models.UploadRequest) (string
 		return "", err
 	}
 
-	blobName := krypto.HashedToken() + "-" + req.File.Filename
+	blobName := crypto.HashedToken() + "-" + req.File.Filename
 	if _, err := c.ctn.UploadFile(ctx, c.cfg.Storage.Container, blobName, dst, &azblob.UploadBufferOptions{}); err != nil {
 		return "", err
 	}

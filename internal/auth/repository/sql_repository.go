@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
-	"github.com/vukyn/go-kuery/konversion"
+	"github.com/vukyn/kuery/conversion"
 
 	"gorm.io/gorm"
 )
@@ -65,7 +65,7 @@ func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	tbName := (&entity.User{}).TableName()
-	email := konversion.ReadInterface(queries, "email", "").(string)
+	email := conversion.ReadInterface(queries, "email", "").(string)
 
 	if email != "" {
 		query = query.Where(fmt.Sprintf("\"%s\".email = ?", tbName), email)

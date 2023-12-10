@@ -21,12 +21,13 @@ type Article struct {
 	TypeId            int       `gorm:"column:type_id;default:(-)"` // 1: research, 2: review, 3: research proposal
 	CreatedBy         int       `gorm:"column:created_by"`
 	CreatedAt         time.Time `gorm:"autoCreateTime"`
-	UpdatedBy         int       `gorm:"column:update_by;default:(-)"`
+	UpdatedBy         int       `gorm:"column:updated_by;default:(-)"`
 	UpdatedAt         time.Time `gorm:"autoUpdateTime;default:(-)"`
 
 	// Custom fields
 	StatusName   string `gorm:"->;-:migration"`
 	CategoryName string `gorm:"->;-:migration"`
+	Email        string `gorm:"->;-:migration"`
 }
 
 func (a *Article) TableName() string {

@@ -12,7 +12,7 @@ type Category struct {
 	CategoryName string    `gorm:"column:category_name"`
 	CreatedBy    int       `gorm:"column:created_by"`
 	CreatedAt    time.Time `gorm:"autoCreateTime"`
-	UpdatedBy    int       `gorm:"column:update_by;default:(-)"`
+	UpdatedBy    int       `gorm:"column:updated_by;default:(-)"`
 	UpdatedAt    time.Time `gorm:"autoUpdateTime;default:(-)"`
 }
 

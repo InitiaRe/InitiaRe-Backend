@@ -11,6 +11,7 @@ import (
 
 type RequestList struct {
 	commonModel.RequestPaging
+	Email       string `json:"email"`
 	Title       string `json:"title"`
 	CategoryId  int    `json:"category_id"`
 	CategoryIds string `json:"category_ids"`
@@ -38,6 +39,7 @@ func (r *RequestList) ToMap() map[string]interface{} {
 		"status_id":    r.StatusId,
 		"type_id":      r.TypeId,
 		"title":        r.Title,
+		"email":        r.Email,
 		"category_ids": categoryIds,
 		"page":         r.Page,
 		"size":         r.Size,
@@ -66,6 +68,7 @@ type Response struct {
 	// Custom fields
 	StatusName    string                    `json:"status_name,omitempty"`
 	CategoryName  string                    `json:"category_name,omitempty"`
+	Email         string                    `json:"email,omitempty"`
 	SubCategories []*categoryModel.Response `json:"sub_categories,omitempty"`
 }
 

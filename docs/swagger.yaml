@@ -46,6 +46,8 @@ definitions:
         type: string
       created_by:
         type: integer
+      email:
+        type: string
       id:
         type: integer
       pre_publish_content:
@@ -194,10 +196,10 @@ definitions:
         type: integer
       id:
         type: integer
-      update_by:
-        type: integer
       updated_at:
         type: string
+      updated_by:
+        type: integer
     type: object
   github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest:
     properties:
@@ -299,6 +301,10 @@ paths:
       - description: Category
         in: query
         name: category_ids
+        type: string
+      - description: Email
+        in: query
+        name: email
         type: string
       - description: Page
         in: query

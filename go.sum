@@ -264,8 +264,8 @@ github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyC
 github.com/valyala/fasttemplate v1.2.1/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQD0Loo=
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
-github.com/vukyn/go-kuery v0.0.0-20230816071025-2917841200eb h1:UKzoF7Zczklu8fRqbaOgspPdlS6dBgZio/aIpRGbdZ4=
-github.com/vukyn/go-kuery v0.0.0-20230816071025-2917841200eb/go.mod h1:G4pHOQoOpU/sYahYOm8GPhTNhQroaYbahO0YtlRLyIw=
+github.com/vukyn/kuery v1.0.1 h1:FiHQKmqefm9bvWcymTBOhMjA0rp4ByFXeKu2ANjTjDA=
+github.com/vukyn/kuery v1.0.1/go.mod h1:cIjbkssTdWl6hlEvIBXAkQCLRzMbEA0z5qSIlycqTr0=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

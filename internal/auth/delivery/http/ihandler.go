@@ -7,4 +7,5 @@ type IHandler interface {
 	MapRoutes(group *echo.Group)
 	Login() echo.HandlerFunc
 	Register() echo.HandlerFunc
+	ResetPassword() echo.HandlerFunc
 }

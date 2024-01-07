@@ -12,6 +12,7 @@ import (
 	userInfoModel "github.com/Ho-Minh/InitiaRe-website/internal/user_info/models"
 	userInfoRepo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
 	userInfoUc "github.com/Ho-Minh/InitiaRe-website/internal/user_info/usecase"
+	"github.com/Ho-Minh/InitiaRe-website/pkg/generate"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
 
 	"github.com/rs/zerolog/log"
@@ -59,7 +60,6 @@ func (u *usecase) Register(ctx context.Context, params *authModel.SaveRequest) (
 
 	// create new user
 	user := &authEntity.User{}
-	user.HashPassword()
 	user.ParseFromSaveRequest(params)
 	resUser, err := u.repo.Create(ctx, user)
 	if err != nil {
@@ -149,4 +149,48 @@ func (u *usecase) GetOne(ctx context.Context, params *authModel.RequestList) (*a
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get user")
 	}
 	return record.Export(), nil
+}
+
+func (u *usecase) ResetPassword(ctx context.Context, params *authModel.ResetPasswordRequest) (*authModel.Response, error) {
+	log.Info().Str("prefix", "Auth").Msgf("Reset password with params: {Email: %s}", params.Email)
+
+	// validation
+
+	// check if user already exists
+	foundUser, err := u.repo.GetOne(ctx, (&authModel.RequestList{Email: params.Email}).ToMap())
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Auth").Str("service", "usecase.repo.GetOne").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_BAD_REQUEST, constant.STATUS_MESSAGE_INTERNAL_SERVER_ERROR)
+	}
+	if foundUser == nil {
+		log.Error().Str("prefix", "Auth").Msgf("User not found with email: %v", params.Email)
+		return nil, utils.NewError(constant.STATUS_CODE_BAD_REQUEST, constant.STATUS_MESSAGE_USER_NOT_FOUND)
+	}
+	if foundUser.Status == constant.USER_STATUS_INACTIVE {
+		log.Error().Str("prefix", "Auth").Msgf("User is not activated with userId: %v", foundUser.Id)
+		return nil, utils.NewError(constant.STATUS_CODE_FORBIDDEN, constant.STATUS_MESSAGE_USER_INACTIVE)
+	}
+
+	// end validation
+
+	// update password
+	foundUser.Password = generate.RandomPassword(8)
+	log.Info().Str("prefix", "Auth").Msgf("Reset password: %s", foundUser.Password)
+	foundUser.HashPassword()
+	
+	if _, err := u.repo.Update(ctx, &authEntity.User{
+		Id:       foundUser.Id,
+		Password: foundUser.Password,
+	}); err != nil {
+		log.Error().Err(err).Str("prefix", "Auth").Str("service", "usecase.repo.Update").Send()
+		return nil, err
+	}
+
+	// delete from cache
+	if err = u.cacheRepo.DeleteUser(ctx, utils.GenerateUserKey(foundUser.Id)); err != nil {
+		log.Error().Err(err).Str("prefix", "Auth").Str("service", "usecase.redisRepo.DeleteUser").Send()
+		return nil, err
+	}
+
+	return foundUser.Export(), nil
 }

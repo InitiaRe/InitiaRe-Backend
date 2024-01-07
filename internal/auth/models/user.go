@@ -73,3 +73,7 @@ type UserWithToken struct {
 	User  *Response `json:"user,omitempty"`
 	Token string    `json:"token"`
 }
+
+type ResetPasswordRequest struct {
+	Email string `json:"email"`
+}

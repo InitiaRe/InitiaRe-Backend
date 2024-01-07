@@ -16,4 +16,5 @@ type IRepository interface {
 type ICacheRepository interface {
 	GetById(ctx context.Context, key string) (*entity.User, error)
 	SetUser(ctx context.Context, key string, seconds int, user *entity.User) error
+	DeleteUser(ctx context.Context, key string) error
 }

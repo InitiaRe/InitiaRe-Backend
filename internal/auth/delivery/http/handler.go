@@ -30,6 +30,7 @@ func InitHandler(cfg *config.Config, usecase usecase.IUseCase) IHandler {
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("/register", h.Register())
 	group.POST("/login", h.Login())
+	group.POST("/reset-password", h.ResetPassword())
 }
 
 // Login godoc
@@ -85,5 +86,21 @@ func (h Handler) Register() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusCreated, httpResponse.NewRestResponse(http.StatusCreated, constant.STATUS_MESSAGE_CREATED, res))
+	}
+}
+
+func (h Handler) ResetPassword() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := utils.GetRequestCtx(c)
+		req := &models.ResetPasswordRequest{}
+		if err := utils.ReadBodyRequest(c, req); err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+		res, err := h.usecase.ResetPassword(ctx, req)
+		if err != nil {
+			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
+		}
+		return c.JSON(http.StatusCreated, httpResponse.NewRestResponse(http.StatusCreated, constant.STATUS_MESSAGE_OK, res))
 	}
 }

@@ -87,7 +87,7 @@ func (u *usecase) CreateMany(ctx context.Context, userId int, params []*models.S
 		log.Error().Err(err).Str("prefix", "User Info").Str("service", "usecase.repo.CreateMany").Send()
 		return 0, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when create user info")
 	}
-	return res, nil
+	return len(res), nil
 }
 
 func (u *usecase) Update(ctx context.Context, userId int, params *models.SaveRequest) (*models.Response, error) {

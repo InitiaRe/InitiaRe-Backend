@@ -104,7 +104,7 @@ func main() {
 			db.Migrator().CreateTable(&models.Status{})
 		}
 
-		log.Info().Msg("Migrate successfully")
+		log.Info().Msg("Migrate schemas successfully")
 	}
 
 	// Migrate relationship
@@ -149,7 +149,7 @@ func main() {
 			}
 		}
 
-		log.Info().Msg("Migrate successfully")
+		log.Info().Msg("Migrate relationships successfully")
 	}
 
 	// Seeding data

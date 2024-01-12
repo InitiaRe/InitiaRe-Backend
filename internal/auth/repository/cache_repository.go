@@ -34,3 +34,10 @@ func (c *cacheRepo) SetUser(ctx context.Context, key string, seconds int, user *
 	}
 	return nil
 }
+
+func (c *cacheRepo) DeleteUser(ctx context.Context, key string) error {
+	if err := c.cache.Del(ctx, key).Err(); err != nil {
+		return err
+	}
+	return nil
+}

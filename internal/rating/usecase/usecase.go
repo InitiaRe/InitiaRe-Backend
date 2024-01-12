@@ -29,7 +29,7 @@ func (u *usecase) Vote(ctx context.Context, params *models.SaveRequest) (*models
 }
 
 func (u *usecase) GetRating(ctx context.Context, articleId int) (int, error) {
-	return 0, nil
+	return u.repo.GetArticleRating(ctx, articleId)
 }
 
 func (u *usecase) Upsert(ctx context.Context, articleId, userId int) (int, error) {

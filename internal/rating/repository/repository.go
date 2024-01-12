@@ -200,6 +200,7 @@ func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 func (r *repo) GetArticleRating(ctx context.Context, articleId int) (int, error) {
 	var count int64
 	if err := r.db.
+		Model(&entity.Rating{}).
 		Where("article_id = ? and status = 1", articleId).
 		Select("count(1)").
 		Count(&count).Error; err != nil {

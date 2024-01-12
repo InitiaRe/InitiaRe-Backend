@@ -7,6 +7,7 @@ import (
 	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
 	initCategory "github.com/Ho-Minh/InitiaRe-website/internal/category/init"
 	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
+	initRating "github.com/Ho-Minh/InitiaRe-website/internal/rating/init"
 	initStorage "github.com/Ho-Minh/InitiaRe-website/internal/storage/init"
 	initTodo "github.com/Ho-Minh/InitiaRe-website/internal/todo/init"
 	initUser "github.com/Ho-Minh/InitiaRe-website/internal/user/init"
@@ -32,6 +33,9 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	// Init Todo
 	todo := initTodo.NewInit(s.db, s.cfg, mw)
 
+	// Init Rating
+	rating := initRating.NewInit(s.db, s.cfg, mw)
+
 	// Init Category
 	category := initCategory.NewInit(s.db, s.cfg, mw)
 
@@ -39,7 +43,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	articleCategory := initArticleCategory.NewInit(s.db, s.cfg)
 
 	// Init Article
-	article := initArticle.NewInit(s.db, s.cfg, mw, category, articleCategory)
+	article := initArticle.NewInit(s.db, s.cfg, mw, rating, category, articleCategory)
 
 	// Init User
 	user := initUser.NewInit(s.db, s.cfg, mw, auth, userInfo)

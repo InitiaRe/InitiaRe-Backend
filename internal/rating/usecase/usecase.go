@@ -32,7 +32,7 @@ func (u *usecase) GetRating(ctx context.Context, articleId int) (int, error) {
 	return 0, nil
 }
 
-func (u *usecase) upsert(ctx context.Context, articleId, userId int) (int, error) {
+func (u *usecase) Upsert(ctx context.Context, articleId, userId int) (int, error) {
 	res, err := u.repo.GetOne(ctx, map[string]interface{}{
 		"article_id": articleId,
 		"user_id":    userId,

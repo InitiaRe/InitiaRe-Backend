@@ -13,7 +13,7 @@ require (
 	github.com/spf13/viper v1.16.0
 	github.com/swaggo/echo-swagger v1.4.0
 	github.com/swaggo/swag v1.16.1
-	github.com/vukyn/kuery v1.0.1
+	github.com/vukyn/kuery v1.1.1
 	golang.org/x/crypto v0.12.0
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.2

@@ -29,12 +29,12 @@ func (r *repo) Create(ctx context.Context, obj *entity.Todo) (*entity.Todo, erro
 	return obj, nil
 }
 
-func (r *repo) CreateMany(ctx context.Context, objs []*entity.Todo) (int, error) {
+func (r *repo) CreateMany(ctx context.Context, objs []*entity.Todo) ([]*entity.Todo, error) {
 	result := r.db.Create(objs)
 	if result.Error != nil {
-		return 0, result.Error
+		return nil, result.Error
 	}
-	return int(result.RowsAffected), nil
+	return objs, nil
 }
 
 func (r *repo) Update(ctx context.Context, obj *entity.Todo) (*entity.Todo, error) {
@@ -147,12 +147,17 @@ func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}
 func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *gorm.DB {
 	query := r.db.Model(&entity.Todo{})
 	query = r.join(query, queries)
+	query = r.column(query, queries)
 	query = r.filter(query, queries)
 	query = r.sort(query, queries)
 	return query
 }
 
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
+	return query
+}
+
+func (r *repo) column(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	query = query.Select(
 		"*",
 	)

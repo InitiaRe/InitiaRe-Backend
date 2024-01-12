@@ -111,6 +111,13 @@ func main() {
 	if cfg.migrateRelationship {
 		log.Info().Msg("Run migrate relationship ...")
 
+		if db.Migrator().HasTable(&models.Rating{}) {
+			if !db.Migrator().HasConstraint(&models.Rating{}, "initiare_rating_un") {
+				log.Info().Msg("Create constraint table rating (user-article-un) ...")
+				db.Exec("ALTER TABLE public."initiaRe_rating" ADD CONSTRAINT initiare_rating_un UNIQUE (user_id,article_id)")
+			}
+		}
+
 		if db.Migrator().HasTable(&article.Article{}) && db.Migrator().HasTable(&category.Category{}) {
 			if !db.Migrator().HasConstraint(&article.Article{}, "initiare_article_category_id_fk") {
 				log.Info().Msg("Create constraint table article (category-id-fk) ...")

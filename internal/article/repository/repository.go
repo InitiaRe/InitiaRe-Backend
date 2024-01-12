@@ -29,12 +29,12 @@ func (r *repo) Create(ctx context.Context, obj *entity.Article) (*entity.Article
 	return obj, nil
 }
 
-func (r *repo) CreateMany(ctx context.Context, objs []*entity.Article) (int, error) {
+func (r *repo) CreateMany(ctx context.Context, objs []*entity.Article) ([]*entity.Article, error) {
 	result := r.db.Create(objs)
 	if result.Error != nil {
-		return 0, result.Error
+		return nil, result.Error
 	}
-	return int(result.RowsAffected), nil
+	return objs, nil
 }
 
 func (r *repo) Update(ctx context.Context, obj *entity.Article) (*entity.Article, error) {
@@ -147,18 +147,21 @@ func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}
 func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *gorm.DB {
 	query := r.db.Debug().Model(&entity.Article{})
 	query = r.join(query, queries)
+	query = r.column(query, queries)
 	query = r.filter(query, queries)
 	query = r.sort(query, queries)
 	return query
 }
 
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
-
 	query = query.
 		Joins("left join \"initiaRe_status\" irs on \"initiaRe_article\".status_id = irs.status_id and irs.category = 'article'").
 		Joins("left join \"initiaRe_category\" irc on \"initiaRe_article\".category_id = irc.id").
 		Joins("left join \"initiaRe_user\" iru on \"initiaRe_article\".created_by = iru.id")
+	return query
+}
 
+func (r *repo) column(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	query = query.Select(
 		"\"initiaRe_article\".*",
 		"irs.status_name",

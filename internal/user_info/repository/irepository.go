@@ -8,7 +8,7 @@ import (
 
 type IRepository interface {
 	Create(ctx context.Context, obj *entity.UserInfo) (*entity.UserInfo, error)
-	CreateMany(ctx context.Context, objs []*entity.UserInfo) (int, error)
+	CreateMany(ctx context.Context, objs []*entity.UserInfo) ([]*entity.UserInfo, error)
 	Update(ctx context.Context, obj *entity.UserInfo) (*entity.UserInfo, error)
 	UpdateMany(ctx context.Context, objs []*entity.UserInfo) (int, error)
 	Delete(ctx context.Context, id int) (int, error)

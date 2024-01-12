@@ -48,13 +48,17 @@ func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*ent
 func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *gorm.DB {
 	query := r.db.Model(&entity.User{})
 	query = r.join(query, queries)
+	query = r.column(query, queries)
 	query = r.filter(query, queries)
 	return query
 }
 
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	query = query.Joins("join \"initiaRe_user_info\" iui on iui.user_id = \"initiaRe_user\".id")
+	return query
+}
 
+func (r *repo) column(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	query = query.Select(
 		"\"initiaRe_user\".*",
 		"iui.status",

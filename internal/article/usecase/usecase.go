@@ -11,6 +11,7 @@ import (
 	articleCategoryUc "github.com/Ho-Minh/InitiaRe-website/internal/article_category/usecase"
 	categoryModel "github.com/Ho-Minh/InitiaRe-website/internal/category/models"
 	categoryUc "github.com/Ho-Minh/InitiaRe-website/internal/category/usecase"
+	ratingUc "github.com/Ho-Minh/InitiaRe-website/internal/rating/usecase"
 
 	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
 	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
@@ -19,17 +20,20 @@ import (
 
 type usecase struct {
 	repo              repository.IRepository
+	ratingUc          ratingUc.IUseCase
 	categoryUc        categoryUc.IUseCase
 	articleCategoryUc articleCategoryUc.IUseCase
 }
 
 func InitUsecase(
 	repo repository.IRepository,
+	ratingUc ratingUc.IUseCase,
 	categoryUc categoryUc.IUseCase,
 	articleCategoryUc articleCategoryUc.IUseCase,
 ) IUseCase {
 	return &usecase{
 		repo:              repo,
+		ratingUc:          ratingUc,
 		categoryUc:        categoryUc,
 		articleCategoryUc: articleCategoryUc,
 	}
@@ -53,6 +57,14 @@ func (u *usecase) GetById(ctx context.Context, id int) (*models.Response, error)
 		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.categoryUc.GetList").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get article")
 	}
+
+	rating, err := u.ratingUc.GetRating(ctx, id)
+	if err != nil {
+		log.Error().Err(err).Str("prefix", "Article").Str("service", "usecase.ratingUc.GetRating").Send()
+		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get rating for article")
+	}
+	res.Rating = rating
+
 	return res, nil
 }
 

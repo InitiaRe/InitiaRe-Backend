@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article_category/entity"
+	"github.com/Ho-Minh/InitiaRe-website/internal/rating/entity"
 	"github.com/vukyn/kuery/conversion"
 
 	"gorm.io/gorm"
@@ -21,7 +21,7 @@ func InitRepo(db *gorm.DB) IRepository {
 	}
 }
 
-func (r *repo) Create(ctx context.Context, obj *entity.ArticleCategory) (*entity.ArticleCategory, error) {
+func (r *repo) Create(ctx context.Context, obj *entity.Rating) (*entity.Rating, error) {
 	result := r.db.Create(obj)
 	if result.Error != nil {
 		return nil, result.Error
@@ -29,7 +29,7 @@ func (r *repo) Create(ctx context.Context, obj *entity.ArticleCategory) (*entity
 	return obj, nil
 }
 
-func (r *repo) CreateMany(ctx context.Context, objs []*entity.ArticleCategory) ([]*entity.ArticleCategory, error) {
+func (r *repo) CreateMany(ctx context.Context, objs []*entity.Rating) ([]*entity.Rating, error) {
 	result := r.db.Create(objs)
 	if result.Error != nil {
 		return nil, result.Error
@@ -37,7 +37,7 @@ func (r *repo) CreateMany(ctx context.Context, objs []*entity.ArticleCategory) (
 	return objs, nil
 }
 
-func (r *repo) Update(ctx context.Context, obj *entity.ArticleCategory) (*entity.ArticleCategory, error) {
+func (r *repo) Update(ctx context.Context, obj *entity.Rating) (*entity.Rating, error) {
 	result := r.db.Updates(obj)
 	if result.Error != nil {
 		return nil, result.Error
@@ -45,7 +45,7 @@ func (r *repo) Update(ctx context.Context, obj *entity.ArticleCategory) (*entity
 	return obj, nil
 }
 
-func (r *repo) UpdateMany(ctx context.Context, objs []*entity.ArticleCategory) (int, error) {
+func (r *repo) UpdateMany(ctx context.Context, objs []*entity.Rating) (int, error) {
 	tx := r.db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -66,7 +66,7 @@ func (r *repo) UpdateMany(ctx context.Context, objs []*entity.ArticleCategory) (
 }
 
 func (r *repo) Delete(ctx context.Context, id int) (int, error) {
-	result := r.db.Delete(&entity.ArticleCategory{}, id)
+	result := r.db.Delete(&entity.Rating{}, id)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -81,7 +81,7 @@ func (r *repo) DeleteMany(ctx context.Context, ids []int) (int, error) {
 		}
 	}()
 	for _, id := range ids {
-		if err := tx.Delete(&entity.ArticleCategory{}, id).Error; err != nil {
+		if err := tx.Delete(&entity.Rating{}, id).Error; err != nil {
 			tx.Rollback()
 			return 0, err
 		}
@@ -101,8 +101,8 @@ func (r *repo) Count(ctx context.Context, queries map[string]interface{}) (int, 
 	return int(count), nil
 }
 
-func (r *repo) GetById(ctx context.Context, id int) (*entity.ArticleCategory, error) {
-	record := &entity.ArticleCategory{}
+func (r *repo) GetById(ctx context.Context, id int) (*entity.Rating, error) {
+	record := &entity.Rating{}
 	result := r.db.Find(&record, id).Limit(1)
 	if result.Error != nil {
 		return nil, result.Error
@@ -110,8 +110,8 @@ func (r *repo) GetById(ctx context.Context, id int) (*entity.ArticleCategory, er
 	return record, nil
 }
 
-func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.ArticleCategory, error) {
-	record := &entity.ArticleCategory{}
+func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*entity.Rating, error) {
+	record := &entity.Rating{}
 	query := r.initQuery(ctx, queries)
 	result := query.Limit(1).Find(&record)
 	if result.Error != nil {
@@ -120,8 +120,8 @@ func (r *repo) GetOne(ctx context.Context, queries map[string]interface{}) (*ent
 	return record, nil
 }
 
-func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*entity.ArticleCategory, error) {
-	records := []*entity.ArticleCategory{}
+func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*entity.Rating, error) {
+	records := []*entity.Rating{}
 	query := r.initQuery(ctx, queries)
 	if err := query.Scan(&records).Error; err != nil {
 		return nil, err
@@ -129,8 +129,8 @@ func (r *repo) GetList(ctx context.Context, queries map[string]interface{}) ([]*
 	return records, nil
 }
 
-func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.ArticleCategory, error) {
-	records := []*entity.ArticleCategory{}
+func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Rating, error) {
+	records := []*entity.Rating{}
 
 	page := conversion.ReadInterface(queries, "page", constant.DEFAULT_PAGE).(int)
 	size := conversion.ReadInterface(queries, "size", constant.DEFAULT_SIZE).(int)
@@ -145,7 +145,7 @@ func (r *repo) GetListPaging(ctx context.Context, queries map[string]interface{}
 }
 
 func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *gorm.DB {
-	query := r.db.Model(&entity.ArticleCategory{})
+	query := r.db.Debug().Model(&entity.Rating{})
 	query = r.join(query, queries)
 	query = r.column(query, queries)
 	query = r.filter(query, queries)
@@ -154,13 +154,12 @@ func (r *repo) initQuery(ctx context.Context, queries map[string]interface{}) *g
 }
 
 func (r *repo) join(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
-	query = query.Joins("inner join \"initiaRe_category\" irc on \"initiaRe_article_category\".category_id = irc.id")
 	return query
 }
 
 func (r *repo) column(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 	query = query.Select(
-		"\"initiaRe_article_category\".*",
+		"\"initiaRe_rating\".*",
 	)
 	return query
 }
@@ -171,26 +170,41 @@ func (r *repo) sort(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
 
 	switch sortBy {
 	default:
-		query = query.Order("\"initiaRe_article_category\".id " + orderBy)
+		query = query.Order("\"initiaRe_rating\".id " + orderBy)
 	}
 	return query
 }
 
 func (r *repo) filter(query *gorm.DB, queries map[string]interface{}) *gorm.DB {
-
-	tbName := (&entity.ArticleCategory{}).TableName()
-	articleId := conversion.ReadInterface(queries, "article_id", 0).(int)
-	categoryId := conversion.ReadInterface(queries, "category_id", 0).(int)
-	_type := conversion.ReadInterface(queries, "type", 0).(int)
+	tbName := (&entity.Rating{}).TableName()
+	articleId := conversion.ReadInterfaceV2(queries, "article_id", 0)
+	userId := conversion.ReadInterfaceV2(queries, "user_id", 0)
+	rating := conversion.ReadInterfaceV2(queries, "rating", 0)
+	status := conversion.ReadInterfaceV2(queries, "status", 0)
 
 	if articleId != 0 {
 		query = query.Where(fmt.Sprintf("\"%s\".article_id = ?", tbName), articleId)
 	}
-	if categoryId != 0 {
-		query = query.Where(fmt.Sprintf("\"%s\".category_id = ?", tbName), categoryId)
+	if userId != 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".user_id = ?", tbName), userId)
 	}
-	if _type != 0 {
-		query = query.Where(fmt.Sprintf("\"%s\".type = ?", tbName), _type)
+	if rating != 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".rating = ?", tbName), rating)
+	}
+	if status != 0 {
+		query = query.Where(fmt.Sprintf("\"%s\".status = ?", tbName), status)
 	}
 	return query
+}
+
+func (r *repo) GetArticleRating(ctx context.Context, articleId int) (int, error) {
+	var count int64
+	if err := r.db.
+		Model(&entity.Rating{}).
+		Where("article_id = ? and status = 1", articleId).
+		Select("count(1)").
+		Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
 }

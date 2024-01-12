@@ -975,6 +975,9 @@
                 "publish_date": {
                     "type": "string"
                 },
+                "rating": {
+                    "type": "integer"
+                },
                 "short_brief": {
                     "type": "string"
                 },

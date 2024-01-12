@@ -70,6 +70,7 @@ type Response struct {
 	CategoryName  string                    `json:"category_name,omitempty"`
 	Email         string                    `json:"email,omitempty"`
 	SubCategories []*categoryModel.Response `json:"sub_categories,omitempty"`
+	Rating        int                       `json:"rating,omitempty"`
 }
 
 type SaveRequest struct {

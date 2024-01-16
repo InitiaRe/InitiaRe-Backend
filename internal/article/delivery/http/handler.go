@@ -67,6 +67,9 @@ func (h Handler) Create() echo.HandlerFunc {
 			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
+		if req.TypeId <= 0 {
+			return c.JSON(http.StatusBadRequest, httpResponse.NewBadRequestError("Invalid TypeId"))
+		}
 		user := c.Get("user").(*userModel.Response)
 		res, err := h.usecase.Create(ctx, user.Id, req.ToSaveRequest())
 		if err != nil {

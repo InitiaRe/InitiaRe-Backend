@@ -68,12 +68,11 @@ func (u *usecase) GetById(ctx context.Context, id int) (*models.Response, error)
 	return res, nil
 }
 
-func (u *usecase) GetApprovedArticle(ctx context.Context) (*models.ApprovedList, error) {
-	queries := map[string]interface{}{
-		"status_id": constant.ARTICLE_STATUS_APPROVED,
-	}
+func (u *usecase) GetApprovedArticle(ctx context.Context, params *models.RequestList) (*models.ApprovedList, error) {
+	queries := params.ToMap()
+	queries["status_id"] = constant.ARTICLE_STATUS_APPROVED
 
-	record, err := u.repo.GetList(ctx, queries)
+	record, err := u.repo.GetListPaging(ctx, queries)
 	if err != nil {
 		log.Error().Err(err).Str("service", "usecase.repo.GetList").Send()
 		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get approved article list")

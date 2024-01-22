@@ -15,7 +15,7 @@ type IUseCase interface {
 	DeleteMany(ctx context.Context, ids []int) (int, error)
 	GetById(ctx context.Context, id int) (*models.Response, error)
 	GetList(ctx context.Context, params *models.RequestList) ([]*models.Response, error)
-	GetApprovedArticle(ctx context.Context) (*models.ApprovedList, error)
+	GetApprovedArticle(ctx context.Context, params *models.RequestList) (*models.ApprovedList, error)
 	GetListPaging(ctx context.Context, params *models.RequestList) (*models.ListPaging, error)
 	GetOne(ctx context.Context, params *models.RequestList) (*models.Response, error)
 	Approve(ctx context.Context, id int) error

@@ -126,8 +126,13 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 func (h Handler) GetApprovedArticle() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
+		req := &models.RequestList{}
+		if err := utils.ReadQueryRequest(c, req); err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
 
-		res, err := h.usecase.GetApprovedArticle(ctx)
+		res, err := h.usecase.GetApprovedArticle(ctx, req)
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}

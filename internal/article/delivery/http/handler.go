@@ -120,8 +120,16 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 //	@Summary		Get approved article
 //	@Description	Get the list of approved articles
 //	@Tags			Article
+//	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	models.ApprovedList
+//	@Param			title			query		string	false	"Title"
+//	@Param			type_id			query		int		false	"Type"
+//	@Param			category_id		query		int		false	"Category"
+//	@Param			category_ids	query		string	false	"Category"
+//	@Param			email			query		string	false	"Email"
+//	@Param			page			query		int		true	"Page"
+//	@Param			size			query		int		true	"Size"
+//	@Success		200				{object}	models.ListPaging
 //	@Router			/articles/approved-article [get]
 func (h Handler) GetApprovedArticle() echo.HandlerFunc {
 	return func(c echo.Context) error {

@@ -173,6 +173,9 @@ const docTemplate = `{
         "/articles/approved-article": {
             "get": {
                 "description": "Get the list of approved articles",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -180,11 +183,57 @@ const docTemplate = `{
                     "Article"
                 ],
                 "summary": "Get approved article",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Type",
+                        "name": "type_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Category",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category",
+                        "name": "category_ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ApprovedList"
+                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging"
                         }
                     }
                 }
@@ -1234,20 +1283,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.ApprovedList": {
-            "type": "object",
-            "properties": {
-                "records": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
-                    }
-                },
-                "total": {
                     "type": "integer"
                 }
             }

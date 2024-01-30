@@ -67,6 +67,9 @@ func (h Handler) Create() echo.HandlerFunc {
 			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
+		if req.TypeId <= 0 {
+			return c.JSON(http.StatusBadRequest, httpResponse.NewBadRequestError("Invalid TypeId"))
+		}
 		user := c.Get("user").(*userModel.Response)
 		res, err := h.usecase.Create(ctx, user.Id, req.ToSaveRequest())
 		if err != nil {
@@ -117,14 +120,27 @@ func (h Handler) GetListPaging() echo.HandlerFunc {
 //	@Summary		Get approved article
 //	@Description	Get the list of approved articles
 //	@Tags			Article
+//	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	models.ApprovedList
+//	@Param			title			query		string	false	"Title"
+//	@Param			type_id			query		int		false	"Type"
+//	@Param			category_id		query		int		false	"Category"
+//	@Param			category_ids	query		string	false	"Category"
+//	@Param			email			query		string	false	"Email"
+//	@Param			page			query		int		true	"Page"
+//	@Param			size			query		int		true	"Size"
+//	@Success		200				{object}	models.ListPaging
 //	@Router			/articles/approved-article [get]
 func (h Handler) GetApprovedArticle() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)
+		req := &models.RequestList{}
+		if err := utils.ReadQueryRequest(c, req); err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
 
-		res, err := h.usecase.GetApprovedArticle(ctx)
+		res, err := h.usecase.GetApprovedArticle(ctx, req)
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}

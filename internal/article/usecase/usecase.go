@@ -163,11 +163,6 @@ func (u *usecase) Approve(ctx context.Context, id int) error {
 		log.Error().Str("prefix", "Article").Msgf("Article not found with Id: %v", id)
 		return utils.NewError(constant.STATUS_CODE_NOT_FOUND, "Article not found")
 	}
-	log.Info().Str("prefix", "Article").Msgf("Article status: %v && Article status pending: %v", article.StatusId, constant.ARTICLE_STATUS_PENDING)
-	if article.StatusId != constant.ARTICLE_STATUS_PENDING {
-		log.Error().Str("prefix", "Article").Msgf("Article is not pending with Id: %v", id)
-		return utils.NewError(constant.STATUS_CODE_BAD_REQUEST, "Article is not pending")
-	}
 	article.StatusId = constant.ARTICLE_STATUS_APPROVED
 
 	if _, err := u.repo.Update(ctx, article); err != nil {

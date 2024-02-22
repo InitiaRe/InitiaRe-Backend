@@ -33,6 +33,7 @@ func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMi
 
 // Map routes
 func (h Handler) MapRoutes(group *echo.Group) {
+	group.POST("/vote/:id", h.Vote(), h.mw.AuthJWTMiddleware())
 }
 
 func (h Handler) Vote() echo.HandlerFunc {
@@ -43,6 +44,13 @@ func (h Handler) Vote() echo.HandlerFunc {
 			log.Error().Err(err).Send()
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
+
+		articleId, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+		req.ArticleId = articleId
 
 		user := c.Get("user").(*userModel.Response)
 		res, err := h.usecase.Vote(ctx, req.ToSaveRequest(user.Id))

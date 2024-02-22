@@ -1,14 +1,14 @@
 package init
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	handler "github.com/Ho-Minh/InitiaRe-website/internal/article/delivery/http"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/repository"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/usecase"
-	initArticleCategory "github.com/Ho-Minh/InitiaRe-website/internal/article_category/init"
-	initCategory "github.com/Ho-Minh/InitiaRe-website/internal/category/init"
-	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
-	initRating "github.com/Ho-Minh/InitiaRe-website/internal/rating/init"
+	"InitiaRe-website/config"
+	handler "InitiaRe-website/internal/article/delivery/http"
+	"InitiaRe-website/internal/article/repository"
+	"InitiaRe-website/internal/article/usecase"
+	initArticleCategory "InitiaRe-website/internal/article_category/init"
+	initCategory "InitiaRe-website/internal/category/init"
+	initMW "InitiaRe-website/internal/middleware/init"
+	initRating "InitiaRe-website/internal/rating/init"
 
 	"gorm.io/gorm"
 )

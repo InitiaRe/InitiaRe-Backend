@@ -3,12 +3,13 @@ package usecase
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/rating/entity"
-	"github.com/Ho-Minh/InitiaRe-website/internal/rating/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/rating/repository"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/config"
+	"InitiaRe-website/constant"
+	"InitiaRe-website/internal/rating/entity"
+	"InitiaRe-website/internal/rating/models"
+	"InitiaRe-website/internal/rating/repository"
+	"InitiaRe-website/pkg/utils"
+
 	"github.com/rs/zerolog/log"
 )
 

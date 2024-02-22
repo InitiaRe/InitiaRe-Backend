@@ -3,12 +3,12 @@ package usecase
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	authModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
-	authUc "github.com/Ho-Minh/InitiaRe-website/internal/auth/usecase"
-	userInfoModel "github.com/Ho-Minh/InitiaRe-website/internal/user_info/models"
-	userInfoUc "github.com/Ho-Minh/InitiaRe-website/internal/user_info/usecase"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/constant"
+	authModel "InitiaRe-website/internal/auth/models"
+	authUc "InitiaRe-website/internal/auth/usecase"
+	userInfoModel "InitiaRe-website/internal/user_info/models"
+	userInfoUc "InitiaRe-website/internal/user_info/usecase"
+	"InitiaRe-website/pkg/utils"
 )
 
 type usecase struct {

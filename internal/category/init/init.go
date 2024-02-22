@@ -1,11 +1,11 @@
 package init
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	handler "github.com/Ho-Minh/InitiaRe-website/internal/category/delivery/http"
-	"github.com/Ho-Minh/InitiaRe-website/internal/category/repository"
-	"github.com/Ho-Minh/InitiaRe-website/internal/category/usecase"
-	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
+	"InitiaRe-website/config"
+	handler "InitiaRe-website/internal/category/delivery/http"
+	"InitiaRe-website/internal/category/repository"
+	"InitiaRe-website/internal/category/usecase"
+	initMW "InitiaRe-website/internal/middleware/init"
 
 	"gorm.io/gorm"
 )

@@ -1,10 +1,10 @@
 package init
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	handler "github.com/Ho-Minh/InitiaRe-website/internal/user_info/delivery/http"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/usecase"
+	"InitiaRe-website/config"
+	handler "InitiaRe-website/internal/user_info/delivery/http"
+	"InitiaRe-website/internal/user_info/repository"
+	"InitiaRe-website/internal/user_info/usecase"
 
 	"gorm.io/gorm"
 )
@@ -25,6 +25,6 @@ func NewInit(
 	return &Init{
 		Repository: repo,
 		Usecase:    usecase,
-		Handler: handler,
+		Handler:    handler,
 	}
 }

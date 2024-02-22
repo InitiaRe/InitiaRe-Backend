@@ -3,7 +3,8 @@ package models
 import (
 	"time"
 
-	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
+	commonModel "InitiaRe-website/internal/models"
+
 	"github.com/jinzhu/copier"
 
 	"github.com/google/uuid"

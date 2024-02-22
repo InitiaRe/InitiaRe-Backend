@@ -1,13 +1,14 @@
 package init
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
-	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
-	handler "github.com/Ho-Minh/InitiaRe-website/internal/user/delivery/http"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user/usecase"
-	initUserInfo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/init"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
+	"InitiaRe-website/config"
+	initAuth "InitiaRe-website/internal/auth/init"
+	initMW "InitiaRe-website/internal/middleware/init"
+	handler "InitiaRe-website/internal/user/delivery/http"
+	"InitiaRe-website/internal/user/usecase"
+	initUserInfo "InitiaRe-website/internal/user_info/init"
+	"InitiaRe-website/internal/user_info/repository"
+
 	"gorm.io/gorm"
 )
 

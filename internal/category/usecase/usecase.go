@@ -3,12 +3,12 @@ package usecase
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/category/entity"
-	"github.com/Ho-Minh/InitiaRe-website/internal/category/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/category/repository"
-	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/constant"
+	"InitiaRe-website/internal/category/entity"
+	"InitiaRe-website/internal/category/models"
+	"InitiaRe-website/internal/category/repository"
+	commonModel "InitiaRe-website/internal/models"
+	"InitiaRe-website/pkg/utils"
 
 	"github.com/rs/zerolog/log"
 )

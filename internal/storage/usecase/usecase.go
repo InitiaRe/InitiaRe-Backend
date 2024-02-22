@@ -4,12 +4,12 @@ import (
 	"context"
 	"mime/multipart"
 
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/storage/entity"
-	"github.com/Ho-Minh/InitiaRe-website/internal/storage/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/storage/repository"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/config"
+	"InitiaRe-website/constant"
+	"InitiaRe-website/internal/storage/entity"
+	"InitiaRe-website/internal/storage/models"
+	"InitiaRe-website/internal/storage/repository"
+	"InitiaRe-website/pkg/utils"
 
 	"github.com/rs/zerolog/log"
 )

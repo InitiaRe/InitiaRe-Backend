@@ -1,8 +1,8 @@
 package entity
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/models"
+	"InitiaRe-website/constant"
+	"InitiaRe-website/internal/user_info/models"
 
 	"github.com/jinzhu/copier"
 )

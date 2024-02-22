@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
+	"InitiaRe-website/internal/article/models"
 )
 
 type IUseCase interface {

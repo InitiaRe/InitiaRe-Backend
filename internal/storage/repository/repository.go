@@ -1,8 +1,9 @@
 package repository
 
 import (
+	"InitiaRe-website/config"
+
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
-	"github.com/Ho-Minh/InitiaRe-website/config"
 	"gorm.io/gorm"
 )
 

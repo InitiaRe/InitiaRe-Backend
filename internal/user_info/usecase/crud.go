@@ -3,11 +3,11 @@ package usecase
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/entity"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/models"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/constant"
+	commonModel "InitiaRe-website/internal/models"
+	"InitiaRe-website/internal/user_info/entity"
+	"InitiaRe-website/internal/user_info/models"
+	"InitiaRe-website/pkg/utils"
 
 	"github.com/rs/zerolog/log"
 )

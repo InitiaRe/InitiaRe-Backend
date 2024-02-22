@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	authRepo "github.com/Ho-Minh/InitiaRe-website/internal/auth/repository"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
+	"InitiaRe-website/config"
+	authRepo "InitiaRe-website/internal/auth/repository"
+	"InitiaRe-website/pkg/httpResponse"
+
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 )

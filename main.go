@@ -7,9 +7,10 @@ import (
 	"strconv"
 	"time"
 
+	"InitiaRe-website/config"
+	"InitiaRe-website/internal/server"
+
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	"github.com/Ho-Minh/InitiaRe-website/internal/server"
 
 	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
@@ -32,7 +33,7 @@ import (
 //	@in							header
 //	@name						Authorization
 
-//	@BasePath	/api/v1
+// @BasePath	/api/v1
 func main() {
 	cfg := config.GetConfig()
 

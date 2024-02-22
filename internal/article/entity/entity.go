@@ -3,8 +3,9 @@ package entity
 import (
 	"time"
 
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
+	"InitiaRe-website/constant"
+	"InitiaRe-website/internal/article/models"
+
 	"github.com/jinzhu/copier"
 )
 

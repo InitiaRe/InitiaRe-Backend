@@ -3,9 +3,10 @@ package models
 import (
 	"time"
 
-	categoryModel "github.com/Ho-Minh/InitiaRe-website/internal/category/models"
-	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	categoryModel "InitiaRe-website/internal/category/models"
+	commonModel "InitiaRe-website/internal/models"
+	"InitiaRe-website/pkg/utils"
+
 	"github.com/jinzhu/copier"
 )
 

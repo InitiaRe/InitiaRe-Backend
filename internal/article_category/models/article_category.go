@@ -1,7 +1,7 @@
 package models
 
 import (
-	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
+	commonModel "InitiaRe-website/internal/models"
 )
 
 type RequestList struct {

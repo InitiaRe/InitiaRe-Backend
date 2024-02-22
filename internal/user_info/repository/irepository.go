@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/entity"
+	"InitiaRe-website/internal/user_info/entity"
 )
 
 type IRepository interface {

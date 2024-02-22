@@ -1,4 +1,4 @@
-module github.com/Ho-Minh/InitiaRe-website
+module InitiaRe-website
 
 go 1.20
 

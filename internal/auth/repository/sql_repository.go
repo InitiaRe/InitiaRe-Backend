@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
+	"InitiaRe-website/internal/auth/entity"
+
 	"github.com/vukyn/kuery/conversion"
 
 	"gorm.io/gorm"

@@ -1,9 +1,9 @@
 package init
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
-	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
+	"InitiaRe-website/config"
+	initAuth "InitiaRe-website/internal/auth/init"
+	"InitiaRe-website/internal/middleware"
 )
 
 type Init struct {

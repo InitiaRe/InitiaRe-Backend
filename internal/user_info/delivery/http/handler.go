@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/usecase"
+	"InitiaRe-website/config"
+	"InitiaRe-website/internal/user_info/usecase"
 
 	"github.com/labstack/echo/v4"
 )

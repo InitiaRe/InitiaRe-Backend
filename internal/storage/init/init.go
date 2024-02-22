@@ -1,12 +1,13 @@
 package init
 
 import (
+	"InitiaRe-website/config"
+	initMW "InitiaRe-website/internal/middleware/init"
+	handler "InitiaRe-website/internal/storage/delivery/http"
+	"InitiaRe-website/internal/storage/repository"
+	"InitiaRe-website/internal/storage/usecase"
+
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
-	handler "github.com/Ho-Minh/InitiaRe-website/internal/storage/delivery/http"
-	"github.com/Ho-Minh/InitiaRe-website/internal/storage/repository"
-	"github.com/Ho-Minh/InitiaRe-website/internal/storage/usecase"
 
 	"gorm.io/gorm"
 )

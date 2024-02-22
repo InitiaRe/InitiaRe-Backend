@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/internal/article_category/models"
+	"InitiaRe-website/internal/article_category/models"
 
 	"github.com/jinzhu/copier"
 )

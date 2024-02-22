@@ -3,18 +3,19 @@ package usecase
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/entity"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article/repository"
+	"InitiaRe-website/constant"
+	"InitiaRe-website/internal/article/entity"
+	"InitiaRe-website/internal/article/models"
+	"InitiaRe-website/internal/article/repository"
 
-	articleCategoryUc "github.com/Ho-Minh/InitiaRe-website/internal/article_category/usecase"
-	categoryModel "github.com/Ho-Minh/InitiaRe-website/internal/category/models"
-	categoryUc "github.com/Ho-Minh/InitiaRe-website/internal/category/usecase"
-	ratingUc "github.com/Ho-Minh/InitiaRe-website/internal/rating/usecase"
+	articleCategoryUc "InitiaRe-website/internal/article_category/usecase"
+	categoryModel "InitiaRe-website/internal/category/models"
+	categoryUc "InitiaRe-website/internal/category/usecase"
+	ratingUc "InitiaRe-website/internal/rating/usecase"
 
-	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	commonModel "InitiaRe-website/internal/models"
+	"InitiaRe-website/pkg/utils"
+
 	"github.com/rs/zerolog/log"
 )
 

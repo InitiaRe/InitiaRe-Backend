@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 
-	"github.com/Ho-Minh/InitiaRe-website/constant"
+	"InitiaRe-website/constant"
 )
 
 func GenerateUserKey(userId int) string {

@@ -3,14 +3,15 @@ package handler
 import (
 	"net/http"
 
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	authModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/middleware"
-	userModel "github.com/Ho-Minh/InitiaRe-website/internal/user/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/user/usecase"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/httpResponse"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/config"
+	"InitiaRe-website/constant"
+	authModel "InitiaRe-website/internal/auth/models"
+	"InitiaRe-website/internal/middleware"
+	userModel "InitiaRe-website/internal/user/models"
+	"InitiaRe-website/internal/user/usecase"
+	"InitiaRe-website/pkg/httpResponse"
+	"InitiaRe-website/pkg/utils"
+
 	"github.com/rs/zerolog/log"
 
 	"github.com/labstack/echo/v4"

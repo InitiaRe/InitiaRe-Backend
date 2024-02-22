@@ -1,9 +1,9 @@
 package init
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article_category/repository"
-	"github.com/Ho-Minh/InitiaRe-website/internal/article_category/usecase"
+	"InitiaRe-website/config"
+	"InitiaRe-website/internal/article_category/repository"
+	"InitiaRe-website/internal/article_category/usecase"
 
 	"gorm.io/gorm"
 )

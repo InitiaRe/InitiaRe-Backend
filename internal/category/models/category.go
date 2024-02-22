@@ -1,16 +1,17 @@
 package models
 
 import (
-	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
+	commonModel "InitiaRe-website/internal/models"
+
 	"github.com/jinzhu/copier"
 )
 
 type RequestList struct {
 	commonModel.RequestPaging
-	ArticleId int	`json:"article_id"`
-	FromDate  int	`json:"from_date"`
-	ToDate    int	`json:"to_date"`
-	CreatedBy int	`json:"created_by"`
+	ArticleId int `json:"article_id"`
+	FromDate  int `json:"from_date"`
+	ToDate    int `json:"to_date"`
+	CreatedBy int `json:"created_by"`
 }
 
 func (r *RequestList) ToMap() map[string]interface{} {

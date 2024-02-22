@@ -3,7 +3,7 @@ package utils
 import (
 	"time"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
+	"InitiaRe-website/internal/auth/models"
 
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"

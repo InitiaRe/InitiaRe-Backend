@@ -3,8 +3,8 @@ package middleware
 import (
 	"errors"
 
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/constant"
+	"InitiaRe-website/pkg/utils"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"

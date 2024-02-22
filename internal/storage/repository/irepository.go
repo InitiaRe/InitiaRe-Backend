@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/storage/entity"
-	"github.com/Ho-Minh/InitiaRe-website/internal/storage/models"
+	"InitiaRe-website/internal/storage/entity"
+	"InitiaRe-website/internal/storage/models"
 )
 
 type IRepository interface {
@@ -19,7 +19,6 @@ type IRepository interface {
 	GetList(ctx context.Context, queries map[string]interface{}) ([]*entity.Storage, error)
 	GetListPaging(ctx context.Context, queries map[string]interface{}) ([]*entity.Storage, error)
 	Count(ctx context.Context, queries map[string]interface{}) (int, error)
-	
 }
 
 type IContainerRepository interface {

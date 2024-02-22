@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
+	"InitiaRe-website/internal/auth/entity"
 )
 
 // Get user by id

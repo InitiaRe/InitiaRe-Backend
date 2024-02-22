@@ -1,17 +1,17 @@
 package server
 
 import (
-	_ "github.com/Ho-Minh/InitiaRe-website/docs"
-	initArticle "github.com/Ho-Minh/InitiaRe-website/internal/article/init"
-	initArticleCategory "github.com/Ho-Minh/InitiaRe-website/internal/article_category/init"
-	initAuth "github.com/Ho-Minh/InitiaRe-website/internal/auth/init"
-	initCategory "github.com/Ho-Minh/InitiaRe-website/internal/category/init"
-	initMW "github.com/Ho-Minh/InitiaRe-website/internal/middleware/init"
-	initRating "github.com/Ho-Minh/InitiaRe-website/internal/rating/init"
-	initStorage "github.com/Ho-Minh/InitiaRe-website/internal/storage/init"
-	initTodo "github.com/Ho-Minh/InitiaRe-website/internal/todo/init"
-	initUser "github.com/Ho-Minh/InitiaRe-website/internal/user/init"
-	initUserInfo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/init"
+	_ "InitiaRe-website/docs"
+	initArticle "InitiaRe-website/internal/article/init"
+	initArticleCategory "InitiaRe-website/internal/article_category/init"
+	initAuth "InitiaRe-website/internal/auth/init"
+	initCategory "InitiaRe-website/internal/category/init"
+	initMW "InitiaRe-website/internal/middleware/init"
+	initRating "InitiaRe-website/internal/rating/init"
+	initStorage "InitiaRe-website/internal/storage/init"
+	initTodo "InitiaRe-website/internal/todo/init"
+	initUser "InitiaRe-website/internal/user/init"
+	initUserInfo "InitiaRe-website/internal/user_info/init"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"

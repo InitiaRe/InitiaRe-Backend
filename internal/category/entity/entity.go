@@ -3,7 +3,8 @@ package entity
 import (
 	"time"
 
-	"github.com/Ho-Minh/InitiaRe-website/internal/category/models"
+	"InitiaRe-website/internal/category/models"
+
 	"github.com/jinzhu/copier"
 )
 

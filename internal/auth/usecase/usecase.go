@@ -4,16 +4,16 @@ import (
 	"context"
 	"time"
 
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	authEntity "github.com/Ho-Minh/InitiaRe-website/internal/auth/entity"
-	authModel "github.com/Ho-Minh/InitiaRe-website/internal/auth/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/auth/repository"
-	userInfoModel "github.com/Ho-Minh/InitiaRe-website/internal/user_info/models"
-	userInfoRepo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
-	userInfoUc "github.com/Ho-Minh/InitiaRe-website/internal/user_info/usecase"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/generate"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/config"
+	"InitiaRe-website/constant"
+	authEntity "InitiaRe-website/internal/auth/entity"
+	authModel "InitiaRe-website/internal/auth/models"
+	"InitiaRe-website/internal/auth/repository"
+	userInfoModel "InitiaRe-website/internal/user_info/models"
+	userInfoRepo "InitiaRe-website/internal/user_info/repository"
+	userInfoUc "InitiaRe-website/internal/user_info/usecase"
+	"InitiaRe-website/pkg/generate"
+	"InitiaRe-website/pkg/utils"
 
 	"github.com/rs/zerolog/log"
 )
@@ -177,7 +177,7 @@ func (u *usecase) ResetPassword(ctx context.Context, params *authModel.ResetPass
 	foundUser.Password = generate.RandomPassword(8)
 	log.Info().Str("prefix", "Auth").Msgf("Reset password: %s", foundUser.Password)
 	foundUser.HashPassword()
-	
+
 	if _, err := u.repo.Update(ctx, &authEntity.User{
 		Id:       foundUser.Id,
 		Password: foundUser.Password,

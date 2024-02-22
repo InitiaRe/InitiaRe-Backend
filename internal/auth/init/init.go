@@ -1,12 +1,12 @@
 package init
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/config"
-	handler "github.com/Ho-Minh/InitiaRe-website/internal/auth/delivery/http"
-	"github.com/Ho-Minh/InitiaRe-website/internal/auth/repository"
-	authUc "github.com/Ho-Minh/InitiaRe-website/internal/auth/usecase"
-	userInfoInit "github.com/Ho-Minh/InitiaRe-website/internal/user_info/init"
-	userInfoRepo "github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
+	"InitiaRe-website/config"
+	handler "InitiaRe-website/internal/auth/delivery/http"
+	"InitiaRe-website/internal/auth/repository"
+	authUc "InitiaRe-website/internal/auth/usecase"
+	userInfoInit "InitiaRe-website/internal/user_info/init"
+	userInfoRepo "InitiaRe-website/internal/user_info/repository"
 
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"

@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/Ho-Minh/InitiaRe-website/internal/user_info/repository"
+	"InitiaRe-website/internal/user_info/repository"
 )
 
 type usecase struct {

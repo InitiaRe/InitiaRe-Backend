@@ -3,12 +3,12 @@ package usecase
 import (
 	"context"
 
-	"github.com/Ho-Minh/InitiaRe-website/constant"
-	commonModel "github.com/Ho-Minh/InitiaRe-website/internal/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/todo/entity"
-	"github.com/Ho-Minh/InitiaRe-website/internal/todo/models"
-	"github.com/Ho-Minh/InitiaRe-website/internal/todo/repository"
-	"github.com/Ho-Minh/InitiaRe-website/pkg/utils"
+	"InitiaRe-website/constant"
+	commonModel "InitiaRe-website/internal/models"
+	"InitiaRe-website/internal/todo/entity"
+	"InitiaRe-website/internal/todo/models"
+	"InitiaRe-website/internal/todo/repository"
+	"InitiaRe-website/pkg/utils"
 
 	"github.com/rs/zerolog/log"
 )
@@ -159,7 +159,6 @@ func (u *usecase) DeleteMany(ctx context.Context, userId int, ids []int) (int, e
 	}
 	return res, nil
 }
-
 
 func (u *usecase) validateBeforeUpdate(ctx context.Context, id int) error {
 	if _, err := u.GetById(ctx, id); err != nil {

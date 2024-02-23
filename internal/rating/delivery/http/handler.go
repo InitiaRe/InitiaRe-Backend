@@ -53,12 +53,12 @@ func (h Handler) Vote() echo.HandlerFunc {
 		req.ArticleId = articleId
 
 		user := c.Get("user").(*userModel.Response)
-		res, err := h.usecase.Vote(ctx, req.ToSaveRequest(user.Id))
+		err = h.usecase.Vote(ctx, req.ToSaveRequest(user.Id))
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, nil))
 	}
 }
 

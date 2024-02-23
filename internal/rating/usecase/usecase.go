@@ -25,23 +25,14 @@ func InitUsecase(cfg *config.Config, repo repository.IRepository) IUseCase {
 	}
 }
 
-func (u *usecase) Vote(ctx context.Context, params *models.SaveRequest) (*models.Response, error) {
+func (u *usecase) Vote(ctx context.Context, params *models.SaveRequest) error {
 	_, err := u.upsert(ctx, params.ArticleId, params.UserId)
 	if err != nil {
 		log.Error().Err(err).Str("prefix", "Rating").Str("service", "usecase.upsert").Send()
-		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when upsert rating")
+		return utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when upsert rating")
 	}
 
-	article, err := u.repo.GetOne(ctx, map[string]interface{}{
-		"article_id": params.ArticleId,
-		"user_id":    params.UserId,
-	})
-	if err != nil {
-		log.Error().Err(err).Str("prefix", "Rating").Str("service", "usecase.repo.GetOne").Send()
-		return nil, utils.NewError(constant.STATUS_CODE_INTERNAL_SERVER, "Error when get rating")
-	}
-
-	return article.Export(), nil
+	return nil
 }
 
 func (u *usecase) GetRating(ctx context.Context, articleId int) (int, error) {

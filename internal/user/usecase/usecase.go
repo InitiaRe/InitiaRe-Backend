@@ -113,3 +113,34 @@ func (u *usecase) IsAdmin(ctx context.Context, userId int) (bool, error) {
 	}
 	return true, nil
 }
+
+func (u *usecase) Login(ctx context.Context, email, password string) (*authModel.User, error) {
+    // Get user by email
+    user, err := u.authUc.GetOne(ctx, &authModel.RequestList{
+        Email: email,
+    })
+    if err != nil {
+        return nil, err
+    }
+    if user.Id == 0 {
+        return nil, utils.NewError(constant.STATUS_CODE_BAD_REQUEST, constant.STATUS_MESSAGE_USER_NOT_FOUND)
+    }
+    // Check if user is active
+    userInfo, err := u.userInfoUc.GetOne(ctx, &userInfoModel.RequestList{
+        UserId: user.Id,
+    })
+    if err != nil {
+        return nil, err
+    }
+    if userInfo.UserId == 0 {
+        return nil, utils.NewError(constant.STATUS_CODE_BAD_REQUEST, constant.STATUS_MESSAGE_USER_NOT_FOUND)
+    }
+    if userInfo.Status != constant.USER_STATUS_ACTIVE {
+        return nil, utils.NewError(constant.STATUS_CODE_UNAUTHORIZED, "User is not active")
+    }
+    // Check password
+    if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+        return nil, utils.NewError(constant.STATUS_CODE_UNAUTHORIZED, "Invalid password")
+    }
+    return user, nil
+}

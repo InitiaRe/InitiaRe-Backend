@@ -34,6 +34,7 @@ func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMi
 // Map routes
 func (h Handler) MapRoutes(group *echo.Group) {
 	group.POST("/vote/:id", h.Vote(), h.mw.AuthJWTMiddleware())
+	group.GET("/vote/:id", h.GetRating())
 }
 
 func (h Handler) Vote() echo.HandlerFunc {
@@ -75,6 +76,8 @@ func (h Handler) GetRating() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
+
+		log.Debug().Int("get vote: ", res).Send()
 
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
 	}

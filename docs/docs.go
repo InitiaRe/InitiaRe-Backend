@@ -88,7 +88,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging"
+                            "$ref": "#/definitions/InitiaRe-website_internal_article_models.ListPaging"
                         }
                     }
                 }
@@ -117,7 +117,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest"
+                            "$ref": "#/definitions/InitiaRe-website_internal_article_models.CreateRequest"
                         }
                     }
                 ],
@@ -125,7 +125,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_article_models.Response"
                         }
                     }
                 }
@@ -233,7 +233,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging"
+                            "$ref": "#/definitions/InitiaRe-website_internal_article_models.ListPaging"
                         }
                     }
                 }
@@ -343,7 +343,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_article_models.Response"
                         }
                     }
                 }
@@ -377,7 +377,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_article_models.Response"
                         }
                     }
                 }
@@ -413,7 +413,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest"
+                            "$ref": "#/definitions/InitiaRe-website_internal_article_models.UpdateRequest"
                         }
                     }
                 ],
@@ -421,7 +421,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_article_models.Response"
                         }
                     }
                 }
@@ -489,7 +489,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_auth_models.Response"
                         }
                     }
                 }
@@ -533,7 +533,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging"
+                            "$ref": "#/definitions/InitiaRe-website_internal_category_models.ListPaging"
                         }
                     }
                 }
@@ -562,7 +562,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest"
+                            "$ref": "#/definitions/InitiaRe-website_internal_category_models.CreateRequest"
                         }
                     }
                 ],
@@ -570,7 +570,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_category_models.Response"
                         }
                     }
                 }
@@ -608,7 +608,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest"
+                            "$ref": "#/definitions/InitiaRe-website_internal_category_models.UpdateRequest"
                         }
                     }
                 ],
@@ -616,8 +616,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_category_models.Response"
                         }
+                    }
+                }
+            }
+        },
+        "/rating/:id": {
+            "get": {
+                "description": "Get article vote",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Get article vote",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -653,7 +670,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_storage_models.Response"
                         }
                     }
                 }
@@ -694,7 +711,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging"
+                            "$ref": "#/definitions/InitiaRe-website_internal_todo_models.ListPaging"
                         }
                     }
                 }
@@ -723,7 +740,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest"
+                            "$ref": "#/definitions/InitiaRe-website_internal_todo_models.CreateRequest"
                         }
                     }
                 ],
@@ -731,7 +748,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_todo_models.Response"
                         }
                     }
                 }
@@ -772,7 +789,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_todo_models.Response"
                         }
                     }
                 }
@@ -806,7 +823,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_todo_models.Response"
                         }
                     }
                 }
@@ -842,7 +859,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest"
+                            "$ref": "#/definitions/InitiaRe-website_internal_todo_models.UpdateRequest"
                         }
                     }
                 ],
@@ -850,7 +867,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_todo_models.Response"
                         }
                     }
                 }
@@ -885,7 +902,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_todo_models.Response"
                         }
                     }
                 }
@@ -910,7 +927,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response"
+                            "$ref": "#/definitions/InitiaRe-website_internal_auth_models.Response"
                         }
                     }
                 }
@@ -949,7 +966,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest": {
+        "InitiaRe-website_internal_article_models.CreateRequest": {
             "type": "object",
             "properties": {
                 "category_id": {
@@ -981,7 +998,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging": {
+        "InitiaRe-website_internal_article_models.ListPaging": {
             "type": "object",
             "properties": {
                 "page": {
@@ -990,7 +1007,7 @@ const docTemplate = `{
                 "records": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response"
+                        "$ref": "#/definitions/InitiaRe-website_internal_article_models.Response"
                     }
                 },
                 "size": {
@@ -1001,7 +1018,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response": {
+        "InitiaRe-website_internal_article_models.Response": {
             "type": "object",
             "properties": {
                 "category_id": {
@@ -1047,7 +1064,7 @@ const docTemplate = `{
                 "sub_categories": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response"
+                        "$ref": "#/definitions/InitiaRe-website_internal_category_models.Response"
                     }
                 },
                 "thumbnail": {
@@ -1070,7 +1087,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest": {
+        "InitiaRe-website_internal_article_models.UpdateRequest": {
             "type": "object",
             "properties": {
                 "category_id": {
@@ -1099,7 +1116,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response": {
+        "InitiaRe-website_internal_auth_models.Response": {
             "type": "object",
             "properties": {
                 "email": {
@@ -1129,7 +1146,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest": {
+        "InitiaRe-website_internal_category_models.CreateRequest": {
             "type": "object",
             "properties": {
                 "category_name": {
@@ -1137,7 +1154,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging": {
+        "InitiaRe-website_internal_category_models.ListPaging": {
             "type": "object",
             "properties": {
                 "page": {
@@ -1146,7 +1163,7 @@ const docTemplate = `{
                 "records": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response"
+                        "$ref": "#/definitions/InitiaRe-website_internal_category_models.Response"
                     }
                 },
                 "size": {
@@ -1157,7 +1174,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response": {
+        "InitiaRe-website_internal_category_models.Response": {
             "type": "object",
             "properties": {
                 "category_name": {
@@ -1180,7 +1197,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest": {
+        "InitiaRe-website_internal_category_models.UpdateRequest": {
             "type": "object",
             "properties": {
                 "category_name": {
@@ -1188,7 +1205,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response": {
+        "InitiaRe-website_internal_storage_models.Response": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1208,7 +1225,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest": {
+        "InitiaRe-website_internal_todo_models.CreateRequest": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1216,7 +1233,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging": {
+        "InitiaRe-website_internal_todo_models.ListPaging": {
             "type": "object",
             "properties": {
                 "page": {
@@ -1225,7 +1242,7 @@ const docTemplate = `{
                 "records": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response"
+                        "$ref": "#/definitions/InitiaRe-website_internal_todo_models.Response"
                     }
                 },
                 "size": {
@@ -1236,7 +1253,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response": {
+        "InitiaRe-website_internal_todo_models.Response": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1259,7 +1276,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest": {
+        "InitiaRe-website_internal_todo_models.UpdateRequest": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1344,7 +1361,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response"
+                    "$ref": "#/definitions/InitiaRe-website_internal_auth_models.Response"
                 }
             }
         }

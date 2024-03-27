@@ -63,6 +63,14 @@ func (h Handler) Vote() echo.HandlerFunc {
 	}
 }
 
+// GetRating godoc
+//
+//	@Summary		Get article vote
+//	@Description	Get article vote
+//	@Tags			Rating
+//	@Produce		json
+//	@Success		200
+//	@Router			/rating/:id [get]
 func (h Handler) GetRating() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)

@@ -1,6 +1,6 @@
 basePath: /api/v1
 definitions:
-  github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest:
+  InitiaRe-website_internal_article_models.CreateRequest:
     properties:
       category_id:
         type: integer
@@ -21,20 +21,20 @@ definitions:
       type_id:
         type: integer
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging:
+  InitiaRe-website_internal_article_models.ListPaging:
     properties:
       page:
         type: integer
       records:
         items:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+          $ref: '#/definitions/InitiaRe-website_internal_article_models.Response'
         type: array
       size:
         type: integer
       total:
         type: integer
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response:
+  InitiaRe-website_internal_article_models.Response:
     properties:
       category_id:
         type: integer
@@ -65,7 +65,7 @@ definitions:
         type: string
       sub_categories:
         items:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+          $ref: '#/definitions/InitiaRe-website_internal_category_models.Response'
         type: array
       thumbnail:
         type: string
@@ -80,7 +80,7 @@ definitions:
       updated_by:
         type: integer
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest:
+  InitiaRe-website_internal_article_models.UpdateRequest:
     properties:
       category_id:
         type: integer
@@ -99,7 +99,7 @@ definitions:
       type_id:
         type: integer
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response:
+  InitiaRe-website_internal_auth_models.Response:
     properties:
       email:
         type: string
@@ -119,25 +119,25 @@ definitions:
       user_id:
         type: string
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest:
+  InitiaRe-website_internal_category_models.CreateRequest:
     properties:
       category_name:
         type: string
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging:
+  InitiaRe-website_internal_category_models.ListPaging:
     properties:
       page:
         type: integer
       records:
         items:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+          $ref: '#/definitions/InitiaRe-website_internal_category_models.Response'
         type: array
       size:
         type: integer
       total:
         type: integer
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response:
+  InitiaRe-website_internal_category_models.Response:
     properties:
       category_name:
         type: string
@@ -152,12 +152,12 @@ definitions:
       updated_by:
         type: integer
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest:
+  InitiaRe-website_internal_category_models.UpdateRequest:
     properties:
       category_name:
         type: string
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response:
+  InitiaRe-website_internal_storage_models.Response:
     properties:
       created_at:
         type: string
@@ -170,25 +170,25 @@ definitions:
       type:
         type: string
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest:
+  InitiaRe-website_internal_todo_models.CreateRequest:
     properties:
       content:
         type: string
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging:
+  InitiaRe-website_internal_todo_models.ListPaging:
     properties:
       page:
         type: integer
       records:
         items:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+          $ref: '#/definitions/InitiaRe-website_internal_todo_models.Response'
         type: array
       size:
         type: integer
       total:
         type: integer
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response:
+  InitiaRe-website_internal_todo_models.Response:
     properties:
       content:
         type: string
@@ -203,7 +203,7 @@ definitions:
       updated_by:
         type: integer
     type: object
-  github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest:
+  InitiaRe-website_internal_todo_models.UpdateRequest:
     properties:
       content:
         type: string
@@ -258,7 +258,7 @@ definitions:
       token:
         type: string
       user:
-        $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response'
+        $ref: '#/definitions/InitiaRe-website_internal_auth_models.Response'
     type: object
 info:
   contact:
@@ -315,7 +315,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging'
+            $ref: '#/definitions/InitiaRe-website_internal_article_models.ListPaging'
       summary: Get list article
       tags:
       - Article
@@ -329,14 +329,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.CreateRequest'
+          $ref: '#/definitions/InitiaRe-website_internal_article_models.CreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_article_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Create article
@@ -357,7 +357,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_article_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Get detail article
@@ -378,14 +378,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.UpdateRequest'
+          $ref: '#/definitions/InitiaRe-website_internal_article_models.UpdateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_article_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Update article
@@ -457,7 +457,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.ListPaging'
+            $ref: '#/definitions/InitiaRe-website_internal_article_models.ListPaging'
       summary: Get approved article
       tags:
       - Article
@@ -525,7 +525,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_article_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_article_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Get list current user articles
@@ -571,7 +571,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_auth_models.Response'
       summary: Create new user
       tags:
       - Auth
@@ -597,7 +597,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.ListPaging'
+            $ref: '#/definitions/InitiaRe-website_internal_category_models.ListPaging'
       security:
       - ApiKeyAuth: []
       summary: Get list category
@@ -613,14 +613,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.CreateRequest'
+          $ref: '#/definitions/InitiaRe-website_internal_category_models.CreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_category_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Create category
@@ -642,19 +642,30 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.UpdateRequest'
+          $ref: '#/definitions/InitiaRe-website_internal_category_models.UpdateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_category_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_category_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Update category
       tags:
       - Category
+  /rating/:id:
+    get:
+      description: Get article vote
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get article vote
+      tags:
+      - Rating
   /storage/media/upload:
     post:
       consumes:
@@ -672,7 +683,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_storage_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_storage_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Upload media
@@ -698,7 +709,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.ListPaging'
+            $ref: '#/definitions/InitiaRe-website_internal_todo_models.ListPaging'
       security:
       - ApiKeyAuth: []
       summary: Get list todo
@@ -714,14 +725,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.CreateRequest'
+          $ref: '#/definitions/InitiaRe-website_internal_todo_models.CreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_todo_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Create todo
@@ -744,7 +755,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_todo_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Delete todo
@@ -764,7 +775,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_todo_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Get detail todo
@@ -785,14 +796,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.UpdateRequest'
+          $ref: '#/definitions/InitiaRe-website_internal_todo_models.UpdateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_todo_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Update todo
@@ -818,7 +829,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_todo_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_todo_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Get list current user todo
@@ -833,7 +844,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Ho-Minh_InitiaRe-website_internal_auth_models.Response'
+            $ref: '#/definitions/InitiaRe-website_internal_auth_models.Response'
       security:
       - ApiKeyAuth: []
       summary: Get user info

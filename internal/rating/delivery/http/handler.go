@@ -85,8 +85,6 @@ func (h Handler) GetRating() echo.HandlerFunc {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		log.Debug().Int("get vote: ", res).Send()
-
 		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
 	}
 }

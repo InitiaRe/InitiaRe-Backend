@@ -66,6 +66,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	categoryGroup := v1.Group("/categories")
 	userGroup := v1.Group("/users")
 	storageGroup := v1.Group("/storage")
+	ratingGroup := v1.Group("/rating")
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	auth.Handler.MapRoutes(authGroup)
@@ -74,6 +75,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	category.Handler.MapRoutes(categoryGroup)
 	user.Handler.MapRoutes(userGroup)
 	storage.Handler.MapRoutes(storageGroup)
+	rating.Handler.MapRoutes(ratingGroup)
 
 	return nil
 }

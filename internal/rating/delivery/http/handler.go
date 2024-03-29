@@ -33,6 +33,8 @@ func InitHandler(cfg *config.Config, usecase usecase.IUseCase, mw middleware.IMi
 
 // Map routes
 func (h Handler) MapRoutes(group *echo.Group) {
+	group.POST("/vote/:id", h.Vote(), h.mw.AuthJWTMiddleware())
+	group.GET("/vote/:id", h.GetRating())
 }
 
 func (h Handler) Vote() echo.HandlerFunc {
@@ -44,16 +46,31 @@ func (h Handler) Vote() echo.HandlerFunc {
 			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
 		}
 
+		articleId, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Error().Err(err).Send()
+			return c.JSON(http.StatusOK, httpResponse.NewInternalServerError(err))
+		}
+		req.ArticleId = articleId
+
 		user := c.Get("user").(*userModel.Response)
-		res, err := h.usecase.Vote(ctx, req.ToSaveRequest(user.Id))
+		err = h.usecase.Vote(ctx, req.ToSaveRequest(user.Id))
 		if err != nil {
 			return c.JSON(http.StatusOK, httpResponse.ParseError(err))
 		}
 
-		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, res))
+		return c.JSON(http.StatusOK, httpResponse.NewRestResponse(http.StatusOK, constant.STATUS_MESSAGE_OK, nil))
 	}
 }
 
+// GetRating godoc
+//
+//	@Summary		Get article vote
+//	@Description	Get article vote
+//	@Tags			Rating
+//	@Produce		json
+//	@Success		200
+//	@Router			/rating/:id [get]
 func (h Handler) GetRating() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := utils.GetRequestCtx(c)

@@ -7,6 +7,6 @@ import (
 )
 
 type IUseCase interface {
-	Vote(ctx context.Context, params *models.SaveRequest) (*models.Response, error)
+	Vote(ctx context.Context, params *models.SaveRequest) error
 	GetRating(ctx context.Context, articleId int) (int, error)
 }

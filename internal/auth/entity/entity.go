@@ -13,18 +13,21 @@ import (
 
 // User model
 type User struct {
-	Id        int       `gorm:"primarykey;column:id" json:"id"`
-	UserId    uuid.UUID `gorm:"column:user_id" json:"user_id"`
-	FirstName string    `gorm:"column:first_name" json:"first_name"`
-	LastName  string    `gorm:"column:last_name" json:"last_name"`
-	Email     string    `gorm:"column:email" json:"email,omitempty"`
-	Password  string    `gorm:"column:password" json:"password,omitempty"`
-	School    string    `gorm:"column:school" json:"school"`
-	Gender    string    `gorm:"column:gender" json:"gender,omitempty"`
-	Birthday  time.Time `gorm:"column:birthday;default:(-)" json:"birthday,omitempty"`
-	CreatedAt time.Time `gorm:"autoCreatetime" json:"created_at,omitempty"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime;default:(-)" json:"updated_at,omitempty"`
-	LoginDate time.Time `gorm:"column:login_date;default:(-)" json:"login_date,omitempty"`
+	Id          int       `gorm:"primarykey;column:id" json:"id"`
+	UserId      uuid.UUID `gorm:"column:user_id" json:"user_id"`
+	FirstName   string    `gorm:"column:first_name" json:"first_name"`
+	LastName    string    `gorm:"column:last_name" json:"last_name"`
+	Email       string    `gorm:"column:email" json:"email,omitempty"`
+	Password    string    `gorm:"column:password" json:"password,omitempty"`
+	School      string    `gorm:"column:school" json:"school"`
+	Gender      string    `gorm:"column:gender" json:"gender,omitempty"`
+	Phone       string    `gorm:"column:phone" json:"phone,omitempty"`
+	SocialMedia string    `gorm:"column:social_media" json:"social_media,omitempty"`
+	Preferences string    `gorm:"column:preferences" json:"preferences,omitempty"`
+	Birthday    time.Time `gorm:"column:birthday;default:(-)" json:"birthday,omitempty"`
+	CreatedAt   time.Time `gorm:"autoCreatetime" json:"created_at,omitempty"`
+	UpdatedAt   time.Time `gorm:"autoUpdateTime;default:(-)" json:"updated_at,omitempty"`
+	LoginDate   time.Time `gorm:"column:login_date;default:(-)" json:"login_date,omitempty"`
 
 	// Custom fields
 	Status int `gorm:"->;-:migration" json:"status,omitempty"`

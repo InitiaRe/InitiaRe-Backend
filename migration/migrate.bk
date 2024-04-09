@@ -12,6 +12,8 @@ import (
 	"InitiaRe-website/internal/models"
 	storage "InitiaRe-website/internal/storage/entity"
 	todo "InitiaRe-website/internal/todo/entity"
+	school "InitiaRe-website/internal/school/entity"
+	rating "InitiaRe-website/internal/rating/entity"
 	userInfo "InitiaRe-website/internal/user_info/entity"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -35,8 +37,8 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	cfg := migrateCfg{
-		seedData:            true,
-		migrateSchema:       false,
+		seedData:            false,
+		migrateSchema:       true,
 		migrateRelationship: false,
 	}
 
@@ -45,7 +47,7 @@ func main() {
 	sslrootcert := "./cert/db_pub_cert.pem"
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=verify-full sslrootcert=%s", c.PostgreSQL.Host, c.PostgreSQL.User, c.PostgreSQL.Password, c.PostgreSQL.DBName, c.PostgreSQL.Port, sslrootcert)
 
-	log.Info().Msg("Connect to database ...")
+	log.Info().Msg("Connecting database ...")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Error),
 	})
@@ -53,7 +55,7 @@ func main() {
 		log.Fatal().Msg("failed to connect database")
 	}
 
-	log.Info().Msgf("Connect to database [%v] successfully", c.PostgreSQL.DBName)
+	log.Info().Msgf("Connected to database [%v] successfully", c.PostgreSQL.DBName)
 
 	// Migrate the schema
 	if cfg.migrateSchema {
@@ -84,9 +86,9 @@ func main() {
 			db.Migrator().CreateTable(&articleCategory.ArticleCategory{})
 		}
 
-		if !db.Migrator().HasTable(&models.Rating{}) {
+		if !db.Migrator().HasTable(&rating.Rating{}) {
 			log.Info().Msg("Create table rating ...")
-			db.Migrator().CreateTable(&models.Rating{})
+			db.Migrator().CreateTable(&rating.Rating{})
 		}
 
 		if !db.Migrator().HasTable(&category.Category{}) {
@@ -104,17 +106,22 @@ func main() {
 			db.Migrator().CreateTable(&models.Status{})
 		}
 
-		log.Info().Msg("Migrate schemas successfully")
+		if !db.Migrator().HasTable(&school.School{}) {
+			log.Info().Msg("Create table school ...")
+			db.Migrator().CreateTable(&school.School{})
+		}
+
+		log.Info().Msg("Migrate schemas done")
 	}
 
 	// Migrate relationship
 	if cfg.migrateRelationship {
 		log.Info().Msg("Run migrate relationship ...")
 
-		if db.Migrator().HasTable(&models.Rating{}) {
-			if !db.Migrator().HasConstraint(&models.Rating{}, "initiare_rating_un") {
+		if db.Migrator().HasTable(&rating.Rating{}) {
+			if !db.Migrator().HasConstraint(&rating.Rating{}, "initiare_rating_un") {
 				log.Info().Msg("Create constraint table rating (user-article-un) ...")
-				db.Exec("ALTER TABLE public."initiaRe_rating" ADD CONSTRAINT initiare_rating_un UNIQUE (user_id,article_id)")
+				db.Exec("ALTER TABLE public.\"initiaRe_rating\" ADD CONSTRAINT initiare_rating_un UNIQUE (user_id,article_id)")
 			}
 		}
 
@@ -137,13 +144,13 @@ func main() {
 			}
 		}
 
-		if db.Migrator().HasTable(&models.Rating{}) && db.Migrator().HasTable(&article.Article{}) && db.Migrator().HasTable(&user.User{}) {
-			if !db.Migrator().HasConstraint(&models.Rating{}, "initiare_user_id_fk") {
+		if db.Migrator().HasTable(&rating.Rating{}) && db.Migrator().HasTable(&article.Article{}) && db.Migrator().HasTable(&user.User{}) {
+			if !db.Migrator().HasConstraint(&rating.Rating{}, "initiare_user_id_fk") {
 				log.Info().Msg("Create constraint table rating (user-id-fk) ...")
 				db.Exec("ALTER TABLE public.\"initiaRe_rating\" ADD CONSTRAINT initiare_user_id_fk FOREIGN KEY (user_id) REFERENCES public.\"initiaRe_user\"(id) ON DELETE CASCADE")
 			}
 
-			if !db.Migrator().HasConstraint(&models.Rating{}, "initiare_article_id_fk") {
+			if !db.Migrator().HasConstraint(&rating.Rating{}, "initiare_article_id_fk") {
 				log.Info().Msg("Create constraint table rating (article-id-fk) ...")
 				db.Exec("ALTER TABLE public.\"initiaRe_rating\" ADD CONSTRAINT initiare_article_id_fk FOREIGN KEY (article_id) REFERENCES public.\"initiaRe_article\"(id) ON DELETE CASCADE")
 			}
@@ -156,7 +163,7 @@ func main() {
 			}
 		}
 
-		log.Info().Msg("Migrate relationships successfully")
+		log.Info().Msg("Migrate relationships done")
 	}
 
 	// Seeding data
@@ -164,7 +171,7 @@ func main() {
 		log.Info().Msg("Seeding data ...")
 		seedingCategory(db)
 		seedingStatus(db)
-		log.Info().Msg("Seeding successfully")
+		log.Info().Msg("Seeding done")
 	}
 }
 

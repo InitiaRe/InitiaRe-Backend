@@ -1,8 +1,7 @@
 package entity
 
 import (
-	"InitiaRe-website/constant"
-	"InitiaRe-website/internal/article/models"
+	"InitiaRe-website/internal/school/models"
 
 	"github.com/jinzhu/copier"
 )
@@ -35,35 +34,35 @@ func (a *School) ExportList(in []*School) []*models.Response {
 	return objs
 }
 
-func (a *School) parseFromSaveRequest(req *models.SaveRequest) {
-	copier.Copy(a, req) //nolint
-}
-
-func (a *School) ParseForCreate(req *models.SaveRequest, userId int) {
-	a.parseFromSaveRequest(req)
-	a.StatusId = constant.SCHOOL_STATUS_PENDING
-}
-
-func (a *School) ParseForCreateMany(reqs []*models.SaveRequest, userId int) []*School {
-	objs := make([]*School, 0)
-	for _, v := range reqs {
-		obj := &School{}
-		obj.ParseForCreate(v, userId)
-		objs = append(objs, obj)
-	}
-	return objs
-}
-
-func (a *School) ParseForUpdate(req *models.SaveRequest, userId int) {
-	a.parseFromSaveRequest(req)
-}
-
-func (a *School) ParseForUpdateMany(reqs []*models.SaveRequest, userId int) []*School {
-	objs := make([]*School, 0)
-	for _, v := range reqs {
-		obj := &School{}
-		obj.ParseForUpdate(v, userId)
-		objs = append(objs, obj)
-	}
-	return objs
-}
+// func (a *School) parseFromSaveRequest(req *models.SaveRequest) {
+// 	copier.Copy(a, req) //nolint
+// }
+//
+// func (a *School) ParseForCreate(req *models.SaveRequest, userId int) {
+// 	a.parseFromSaveRequest(req)
+// 	a.StatusId = constant.SCHOOL_STATUS_PENDING
+// }
+//
+// func (a *School) ParseForCreateMany(reqs []*models.SaveRequest, userId int) []*School {
+// 	objs := make([]*School, 0)
+// 	for _, v := range reqs {
+// 		obj := &School{}
+// 		obj.ParseForCreate(v, userId)
+// 		objs = append(objs, obj)
+// 	}
+// 	return objs
+// }
+//
+// func (a *School) ParseForUpdate(req *models.SaveRequest, userId int) {
+// 	a.parseFromSaveRequest(req)
+// }
+//
+// func (a *School) ParseForUpdateMany(reqs []*models.SaveRequest, userId int) []*School {
+// 	objs := make([]*School, 0)
+// 	for _, v := range reqs {
+// 		obj := &School{}
+// 		obj.ParseForUpdate(v, userId)
+// 		objs = append(objs, obj)
+// 	}
+// 	return objs
+// }

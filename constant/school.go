@@ -1,0 +1,13 @@
+package constant
+
+const (
+	SCHOOL_STATUS_PENDING int = iota + 1
+	SCHOOL_STATUS_REJECTED
+	SCHOOL_STATUS_VERIFIED
+)
+
+var SCHOOL_STATUS = map[int]string{
+	SCHOOL_STATUS_PENDING:  "Pending",
+	SCHOOL_STATUS_REJECTED: "Rejected",
+	SCHOOL_STATUS_VERIFIED: "Verified",
+}

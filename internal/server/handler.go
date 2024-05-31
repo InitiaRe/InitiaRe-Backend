@@ -8,6 +8,7 @@ import (
 	initCategory "InitiaRe-website/internal/category/init"
 	initMW "InitiaRe-website/internal/middleware/init"
 	initRating "InitiaRe-website/internal/rating/init"
+	initSchool "InitiaRe-website/internal/school/init"
 	initStorage "InitiaRe-website/internal/storage/init"
 	initTodo "InitiaRe-website/internal/todo/init"
 	initUser "InitiaRe-website/internal/user/init"
@@ -20,7 +21,6 @@ import (
 
 // Map Server Handlers
 func (s *Server) MapHandlers(e *echo.Echo) error {
-
 	// Init UserInfo
 	userInfo := initUserInfo.NewInit(s.db, s.cfg)
 
@@ -48,6 +48,9 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	// Init User
 	user := initUser.NewInit(s.db, s.cfg, mw, auth, userInfo)
 
+	// Init school
+	school := initSchool.NewInit(s.db, s.cfg, mw)
+
 	// Init Storage
 	storage := initStorage.NewInit(s.db, s.cfg, mw, s.ctn)
 
@@ -65,6 +68,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	articleGroup := v1.Group("/articles")
 	categoryGroup := v1.Group("/categories")
 	userGroup := v1.Group("/users")
+	schoolGroup := v1.Group("/schools")
 	storageGroup := v1.Group("/storage")
 	ratingGroup := v1.Group("/rating")
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
@@ -74,6 +78,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	article.Handler.MapRoutes(articleGroup)
 	category.Handler.MapRoutes(categoryGroup)
 	user.Handler.MapRoutes(userGroup)
+	school.Handler.MapRoutes(schoolGroup)
 	storage.Handler.MapRoutes(storageGroup)
 	rating.Handler.MapRoutes(ratingGroup)
 

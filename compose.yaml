@@ -1,0 +1,28 @@
+services:
+  initiare-backend:
+    container_name: initiare-backend
+    build: .
+    ports:
+      - 5001:5001
+    depends_on:
+      - postgres
+    command: ["go", "run", "."]
+
+  redis:
+    container_name: initiare-redis
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+
+  postgres:
+    container_name: initiare-postgres
+    image: postgres:alpine
+    hostname: postgres
+    restart: unless-stopped
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: initiare
+      POSTGRES_PASSWORD: password

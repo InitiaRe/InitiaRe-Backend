@@ -74,6 +74,11 @@ func initDB(cfg *config.PostgreSQLConfig) *gorm.DB {
 	)
 	sslrootcert := "./cert/db_pub_cert.pem"
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=verify-full sslrootcert=%s", cfg.Host, cfg.User, cfg.Password, cfg.DBName, cfg.Port, sslrootcert)
+
+	if !cfg.SSL {
+		dsn = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d", cfg.Host, cfg.User, cfg.Password, cfg.DBName, cfg.Port)
+	}
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})

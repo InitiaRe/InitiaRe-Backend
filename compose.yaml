@@ -6,7 +6,8 @@ services:
       - 5001:5001
     depends_on:
       - postgres
-    command: ["go", "run", "."]
+      - redis
+    command: go run .
 
   redis:
     container_name: initiare-redis

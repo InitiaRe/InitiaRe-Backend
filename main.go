@@ -90,6 +90,7 @@ func initDB(cfg *config.PostgreSQLConfig) *gorm.DB {
 
 func initRedis(cfg *config.RedisConfig) *redis.Client {
 	log.Info().Msg("Init Redis")
+
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:        fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		Username:    cfg.Username,
@@ -97,8 +98,20 @@ func initRedis(cfg *config.RedisConfig) *redis.Client {
 		DB:          cfg.DB,
 		PoolSize:    cfg.PoolSize,
 		PoolTimeout: time.Duration(cfg.PoolTimeout) * time.Second,
-		TLSConfig:   &tls.Config{MinVersion: tls.VersionTLS12},
 	})
+
+	if cfg.TLS {
+		redisClient = redis.NewClient(&redis.Options{
+			Addr:        fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+			Username:    cfg.Username,
+			Password:    cfg.Password,
+			DB:          cfg.DB,
+			PoolSize:    cfg.PoolSize,
+			PoolTimeout: time.Duration(cfg.PoolTimeout) * time.Second,
+			TLSConfig:   &tls.Config{MinVersion: tls.VersionTLS12},
+		})
+	}
+
 	return redisClient
 }
 

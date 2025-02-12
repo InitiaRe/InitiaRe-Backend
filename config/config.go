@@ -35,6 +35,7 @@ type RedisConfig struct {
 	DB           int
 	Username     string
 	Password     string
+	TLS          bool
 }
 
 type ServerConfig struct {

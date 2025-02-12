@@ -7,6 +7,10 @@ services:
     depends_on:
       - postgres
       - redis
+    volumes:
+      - .:/code
+      - go_mod_cache:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
     command: go run .
 
   redis:
@@ -27,3 +31,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: initiare
       POSTGRES_PASSWORD: password
+
+volumes:
+  go_build_cache:
+  go_mod_cache:

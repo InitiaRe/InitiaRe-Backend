@@ -23,6 +23,7 @@ type PostgreSQLConfig struct {
 	User     string
 	Password string
 	DBName   string
+	SSL      bool
 }
 
 type RedisConfig struct {
@@ -34,6 +35,7 @@ type RedisConfig struct {
 	DB           int
 	Username     string
 	Password     string
+	TLS          bool
 }
 
 type ServerConfig struct {

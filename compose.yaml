@@ -1,0 +1,37 @@
+services:
+  initiare-backend:
+    container_name: initiare-backend
+    build: .
+    ports:
+      - 5001:5001
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/code
+      - go_mod_cache:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
+    command: go run .
+
+  redis:
+    container_name: initiare-redis
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+
+  postgres:
+    container_name: initiare-postgres
+    image: postgres:alpine
+    hostname: postgres
+    restart: unless-stopped
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: initiare
+      POSTGRES_PASSWORD: password
+
+volumes:
+  go_build_cache:
+  go_mod_cache:
